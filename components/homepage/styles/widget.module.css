@@ -1,0 +1,145 @@
+
+.widget {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 45rem;
+    height: 30rem;
+    background-color: #000009;
+    border: 2px solid #ffffff;
+    border-radius: 0.5rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+}
+
+.title_container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 5%;
+    width: 100%;
+    border-bottom: 1px solid #ffffff;
+    padding: 1rem;
+    background-color: #0a0a0a;
+    align-content: center;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-family: 'Fira', monospace;
+}
+
+.buttons_container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 10%;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.button[data-type="move"] {
+    background: url('../../../public/assets/move.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.button[data-type="close"] {
+    background: url('../../../public/assets/close.svg') no-repeat center center;
+    background-size: contain;
+}
+/* ==================== */
+
+.center_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 100%;
+    gap: 0.5rem;
+    flex-direction: row;
+}
+
+
+/* ==================== */
+
+.footer_container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 15%;
+    width: 100%;
+    border-top: 1px solid #ffffff;
+    background-color: #0a0a0a;
+    align-content: center;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    gap: 3rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 10%;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.footerBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 35px;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #000000;
+}
+
+.footerBtn[data-type="history"] {
+    background: url('../../../public/assets/history.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.footerBtn[data-type="accounts"] {
+    background: url('../../../public/assets/account.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.footerBtn[data-type="graph"] {
+    background: url('../../../public/assets/graph.svg') no-repeat center center;
+    background-size: contain;
+}
