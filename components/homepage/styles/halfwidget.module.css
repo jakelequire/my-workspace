@@ -4,7 +4,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 45rem;
+    width: 20.5rem;
     height: 28rem;
     background-color: #000009;
     border: 3px solid #fff;
@@ -48,6 +48,11 @@
     font-weight: 400;
     font-family: 'Fira', monospace;
     width: 25%;
+}
+
+.title_container[data-type="reminders"] {
+    background-color: #00ff80;
+    color: #000;
 }
 
 .buttons_container {
@@ -137,39 +142,4 @@
 
 .btn:hover {
     background-color: #000000;
-}
-
-.footerBtn[data-type="history"] {
-    background: url('../../../public/assets/history.svg') no-repeat center center;
-    background-size: contain;
-}
-
-.footerBtn[data-type="accounts"] {
-    background: url('../../../public/assets/account.svg') no-repeat center center;
-    background-size: contain;
-}
-
-.footerBtn[data-type="graph"] {
-    background: url('../../../public/assets/graph.svg') no-repeat center center;
-    background-size: contain;
-}
-
-.footerBtn[data-type="all"] {
-    background: url('../../../public/assets/all.svg') no-repeat center center;
-    background-size: contain;
-}
-
-.footerBtn[data-type="important"] {
-    background: url('../../../public/assets/important.svg') no-repeat center center;
-    background-size: contain;
-}
-
-.footerBtn[data-type="soon"] {
-    background: url('../../../public/assets/soon.svg') no-repeat center center;
-    background-size: contain;
-}
-
-.footerBtn[data-type="checkpoint"] {
-    background: url('../../../public/assets/checkpoint.svg') no-repeat center center;
-    background-size: contain;
 }

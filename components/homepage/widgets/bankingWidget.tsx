@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import style from '../styles/widget.module.css';
 
-import Transactions from './banking/transactions';
+import { Transactions } from './banking/transactions';
 
 import _DOLLARSIGN from '@/public/assets/dollar.svg';
 
@@ -9,7 +9,7 @@ export default function BankingWidget(): JSX.Element {
 	return (
 		<main className={style.widget}>
 			<div className={style.container}>
-				<div className={style.title_container}>
+				<div className={style.title_container} data-type="banking">
 					<Image src={_DOLLARSIGN} height={25} width={25} alt='alt' />
 					<p className={style.title}>Banking</p>
 					<div className={style.buttons_container}>
@@ -17,6 +17,7 @@ export default function BankingWidget(): JSX.Element {
 						<a className={style.button} data-type='close'></a>
 					</div>
 				</div>
+
 
 				<div className={style.center_container}>
                     <Transactions />

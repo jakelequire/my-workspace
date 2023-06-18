@@ -14,6 +14,10 @@
 }
 
 .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     background-color: #101010;
     color: #fff;
     padding: 1rem;
@@ -22,6 +26,20 @@
 .header {
     font-size: 1.2rem;
     font-weight: bold;
+}
+
+.header_link {
+    font-size: 1rem;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border: 1px dashed #fff;
+    transition: all 0.2s ease-in-out;
+}
+
+.header_link:hover {
+    background-color: #fff;
+    color: #000;
 }
 
 .itemlist {
@@ -33,7 +51,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border-bottom: 1px solid #ddd;
+    background-color: #1d1d1d;
+    border-bottom: 1px dashed #606060;
+    transition: all 0.2s ease-in-out;
+}
+
+.item:hover {
+    background-color: #242424;
 }
 
 .item:last-child {
@@ -52,26 +76,44 @@
 }
 
 .item_title {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     margin: 0;
 }
 
 .item_subtitle {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #666;
     margin: 0;
 }
 
 .amount {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     text-align: right;
     padding-right: 2rem;
 }
 
 .balance {
-    font-size: 1rem;
+    font-size: 0.85rem;
     text-align: right;
     color: #666;
+}
+
+.transaction_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+}
+
+
+
+.deposit {
+    color: #00ff00;
+}
+
+.withdrawal {
+    color: #ff0000;
 }

@@ -3,10 +3,14 @@
 .landingContainer {
     display: flex;
     justify-content: flex-start;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
-    align-content: center;
     height: 100%;
     width: 100%;
-    padding: 3rem;
+    padding: 3rem 4rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+    overflow: scroll;
+    overflow-x: hidden;
+    align-content: flex-start;
 }
