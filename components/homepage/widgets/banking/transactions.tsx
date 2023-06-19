@@ -6,6 +6,7 @@ interface ReceivablesProps {
   subtitle: string;
   balance: string;
   type: "Deposit" | "Withdrawal";
+  key: any;
 }
 
 interface TransactionsProps {
@@ -18,8 +19,9 @@ const TransactionItem = ({
   subtitle,
   balance,
   type,
+  key,
 }: ReceivablesProps) => (
-  <li className={style.item}>
+  <li className={style.item} key={key}>
     <span className={style.itemtype}>
       {/* <Image src={type === 'Deposit' ? depositIcon : withdrawalIcon} height={40} width={40} alt={type} /> */}
     </span>
@@ -51,7 +53,7 @@ export const Transactions = ({ transactions }: TransactionsProps) => (
       </div>
       <ol className={style.itemlist}>
         {exampleTransactions.map((transaction) => (
-          <TransactionItem {...transaction} />
+          <TransactionItem key={transaction.subtitle} {...transaction} />
         ))}
       </ol>
     </div>
@@ -67,7 +69,7 @@ export const RecentPayments = ({ transactions }: TransactionsProps) => (
       </div>
       <ol className={style.itemlist}>
         {exampleTransactions.map((transaction) => (
-          <TransactionItem {...transaction} />
+          <TransactionItem key={transaction.subtitle} {...transaction} />
         ))}
       </ol>
     </div>
@@ -85,7 +87,7 @@ const exampleTransactions = [
   {
     amount: "+ $100.00",
     title: "Deposit",
-    subtitle: "From: John Doe",
+    subtitle: "From: Ann Doe",
     balance: "$200.00",
     type: "Deposit",
   },
@@ -99,7 +101,7 @@ const exampleTransactions = [
   {
     amount: "+ $100.00",
     title: "Deposit",
-    subtitle: "From: John Doe",
+    subtitle: "From: Bob Doe",
     balance: "$250.00",
     type: "Deposit",
   },
