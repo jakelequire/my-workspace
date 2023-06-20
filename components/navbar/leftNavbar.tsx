@@ -1,6 +1,5 @@
 "use client";
 // leftNavbar.tsx
-import usePageState from "../usePageState";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePageStateContext } from "../PageStateContext";
@@ -15,7 +14,7 @@ import _ANALYTICS from "@/public/assets/analytics.svg";
 export default function LeftNavbar(): JSX.Element {
   const [requestedPage, setRequestedPage] = useState<string>("home");
   const { setPage } = usePageStateContext();
-
+  
   const handleClick = (page: string) => {
     setRequestedPage(page);
   };

@@ -2,10 +2,9 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import style from './styles/topnavbar.module.css'
-
+import { usePageStateContext } from "../PageStateContext"
 // SVG
 import _DOCUMENTS from '@/public/assets/documents.svg'
-
 
 export default function TopNavbar(): JSX.Element {
 
@@ -23,8 +22,13 @@ export default function TopNavbar(): JSX.Element {
             clearInterval(timer) // Clear the interval when the component unmounts
         }
     }, [])
-    
 
+    const { page } = usePageStateContext()
+    const [currentPage, setCurrentPage] = useState<string>(page)
+
+    useEffect(() => {
+        setCurrentPage(page)
+    }, [page])
 
     return (
         <nav className={style.topNavbar}>
@@ -35,6 +39,18 @@ export default function TopNavbar(): JSX.Element {
                         <p className={style.title}>Documents</p>
                     </a>
                 </ol>
+                <div className={style.systemMessages}>
+                    <div className={style.currentDir}>    
+                        <p className={style.systemMessagesText}>
+                            /{currentPage}/
+                        </p>
+                    </div>
+                    <div className={style.sysMessages}>
+                        <p className={style.sysMessageText}>
+                            {/* Placeholder */}
+                        </p>
+                    </div>
+                </div>
                 <div className={style.time}>
                     <p className={style.timeText}>
                         {time}
@@ -56,7 +72,8 @@ function currentTime(): string {
 
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? "0"+minutes : minutes;
+    //@ts-ignore
+    minutes = minutes < 10 ? "0"+minutes : minutes
 
     return `${hours}:${minutes}${ampm}`
 }
