@@ -1,5 +1,151 @@
-
+._todo {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
 
 .index {
-    
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.primary_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 25%;
+}
+
+.todo_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    height: 100%;
+    background-color: #000009;
+    border: 3px solid #fff;
+}
+
+.upcoming_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #000009;
+    border: 3px solid #fff;
+}
+
+.completed_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #000009;
+    border: 3px solid #fff;
+    position: relative;
+    z-index: 5;
+}
+
+/* ----------------- */
+
+.list_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 25%;
+    height: 100%;
+    border-right: 1.5px dashed #fff;
+    padding: 1rem;
+}
+
+.todo_wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.top_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 5%;
+    border-bottom: 1.5px dashed #fff;
+}
+
+.form_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+}
+
+.new_list_button {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 5%;
+    border: 1.5px dashed #fff;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.new_list_button:hover {
+    background-color: #fff;
+    font-weight: 600;
+    color: #000;
+    border: 1.5px solid #fff;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 75%;
+    border-bottom: 1.5px dashed #fff;
+}
+
+.list_item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1.5px dotted #fff;
+    padding: 0.5rem;
+}
+
+.list_item_link {
 }
