@@ -2,7 +2,6 @@
 import HomepageInterface from "./homepage/homepageInterface";
 import BankingInterface from "./banking/bankingInterface";
 import ToDoInterface from "./todo/todoInterface";
-import LoggedOutInterface from "./loggedout/loggedoutInterface";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { usePageStateContext } from "./PageStateContext";
 
@@ -16,7 +15,7 @@ export default function PrimaryElement() {
   const { page } = usePageStateContext();
 
   if(status === 'unauthenticated') {
-    return <LoggedOutInterface />
+    return <></>
   }
 
   let currentPage;

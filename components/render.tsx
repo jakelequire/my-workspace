@@ -1,5 +1,9 @@
 "use client"
-// render.tsx
+/* ----------------------------------- */
+/*  Primary / Highest order component  */
+/*             render.tsx              */
+/* Primary content: <PrimaryElement /> */
+/* ----------------------------------- */
 import TopNavbar from "./navbar/topNavbar";
 import LeftNavbar from "./navbar/leftNavbar";
 import PrimaryElement from "./primaryElement";
