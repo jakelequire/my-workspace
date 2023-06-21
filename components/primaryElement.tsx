@@ -13,6 +13,9 @@ import { User } from "firebase/auth";
 
 export default function PrimaryElement() {
   const [user, setUser] = useState<User | null>(null);
+  const [requestedPage, setRequestedPage] = useState<string>("home");
+  const { setPage } = usePageStateContext();
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -20,11 +23,10 @@ export default function PrimaryElement() {
   }, []);
   
   const { data: session, status } = useSession();
-  console.log("<Render> Session-Data:", session);
-  console.log("<Render> Session-Status:", status);
   const { page } = usePageStateContext();
 
-
+  console.log("<Render> Session-Data:", session);
+  console.log("<Render> Session-Status:", status);
 
   let currentPage;
   switch (page) {
@@ -46,6 +48,8 @@ export default function PrimaryElement() {
   }
 
   if (!user) {
+    // @ts-ignore
+    setPage("loggedout")
     return <SignedoutInterface />;
   } else {
     return (

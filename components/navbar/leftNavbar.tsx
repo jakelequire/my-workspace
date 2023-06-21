@@ -75,7 +75,7 @@ export default function LeftNavbar(): JSX.Element {
           </a>
         </ol>
         <div className={style.auth_container}>
-          <button className={style.auth_button} onClick={handleSignout()}>
+          <button className={style.auth_button} onClick={() => handleSignout()}>
             Sign Out
           </button>
         </div>

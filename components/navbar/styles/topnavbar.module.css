@@ -78,15 +78,18 @@
     align-content: center;
     justify-content: flex-start;
     align-items: center;
+    text-align: center;
     width: 50%;
     height: 100%;
+    border-left: 1.5px dashed #fff;
+    border-right: 1.5px dashed #fff;
 }
 
 .systemMessagesText {
     font-size: 1rem;
     font-weight: 400;
     font-family: 'Fira', monospace;
-    color: #c3c3c3;
+    color: #2ad313;
 }
 
 .currentDir {

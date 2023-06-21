@@ -3,15 +3,19 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import style from './styles/topnavbar.module.css'
 import { usePageStateContext } from "../PageStateContext"
+import useSessionState from '../useSessionState'
+import Status from '../errors/status'
 // SVG
 import _DOCUMENTS from '@/public/assets/documents.svg'
 
 export default function TopNavbar(): JSX.Element {
+    const { page } = usePageStateContext()
+    const { loggedIn } = useSessionState();
 
+    const [currentPage, setCurrentPage] = useState<string>(page)
     const [time, setTime] = useState<string>("12:00pm")
     const [date, setDate] = useState<string>("Monday, 1st January 2021")
-
-
+    
     useEffect(() => {
         const timer = setInterval(() => { // Save the interval id to clear it later
             setTime(currentTime())
@@ -23,12 +27,11 @@ export default function TopNavbar(): JSX.Element {
         }
     }, [])
 
-    const { page } = usePageStateContext()
-    const [currentPage, setCurrentPage] = useState<string>(page)
-
     useEffect(() => {
         setCurrentPage(page)
     }, [page])
+
+
 
     return (
         <nav className={style.topNavbar}>
@@ -47,7 +50,7 @@ export default function TopNavbar(): JSX.Element {
                     </div>
                     <div className={style.sysMessages}>
                         <p className={style.sysMessageText}>
-                            {/* Placeholder */}
+                            <Status />
                         </p>
                     </div>
                 </div>
