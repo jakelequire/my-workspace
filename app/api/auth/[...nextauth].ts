@@ -26,7 +26,7 @@ export const authOptions = {
   session: {
     jwt: true,
   },
-  database: process.env.DATABASE_URL,
+  database: process.env.NEXT_PRIVATE_DATABASE_URL,
 };
 
 
