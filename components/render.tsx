@@ -1,6 +1,7 @@
 "use client"
 /* ----------------------------------- */
-/*  Primary / Highest order component  */
+/*            [  /index  ]             */
+/*  Primary & Highest order component  */
 /*             render.tsx              */
 /* Primary content: <PrimaryElement /> */
 /* ----------------------------------- */
@@ -9,15 +10,14 @@ import LeftNavbar from "./navbar/leftNavbar";
 import PrimaryElement from "./primaryElement";
 import { PageStateProvider } from "./PageStateContext";
 import { SessionProvider } from "next-auth/react";
-
-import style from "./render.module.css";
+import { CSSProperties } from "react";
 
 export default function Render() {
   return (
     <PageStateProvider>
-      <main className={style._main}>
+      <main style={_main}>
         <TopNavbar />
-        <div className={style._container}>
+        <div style={_container}>
           <LeftNavbar />
           <SessionProvider>
             <PrimaryElement />
@@ -26,4 +26,23 @@ export default function Render() {
       </main>
     </PageStateProvider>
   );
+}
+// ----------------------------------- //
+//              STYLES                 //
+// (making a file is overkill for now) //
+// ----------------------------------- //
+const _main: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  width: "100%",
+  overflow: "hidden",
+}
+
+const _container: CSSProperties = {
+  display: "flex",
+  flexDirection: "row",
+  height: "100%",
+  width: "100%",
+  overflow: "hidden",
 }

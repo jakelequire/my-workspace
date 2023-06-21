@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePageStateContext } from "../PageStateContext";
+import useSessionState from "../useSessionState";
 // Styles
 import style from "./styles/leftnavbar.module.css";
 // SVGs
@@ -14,28 +15,11 @@ import _ANALYTICS from "@/public/assets/analytics.svg";
 export default function LeftNavbar(): JSX.Element {
   const [requestedPage, setRequestedPage] = useState<string>("home");
   const { setPage } = usePageStateContext();
-  
+  const { user, handleSignout } = useSessionState();
+
   const handleClick = (page: string) => {
     setRequestedPage(page);
   };
-
-  useEffect(() => {
-    setPage(requestedPage);
-  }, [requestedPage]);
-
-  useEffect(() => {
-    const items = document.querySelectorAll("#items a");
-    items.forEach((item) => {
-      item.addEventListener("click", () => {
-        items.forEach((item) => {
-          item.setAttribute("data-active", "false");
-          item.children[1].setAttribute("datatype", "false");
-        });
-        item.setAttribute("data-active", "true");
-        item.children[1].setAttribute("datatype", "true");
-      });
-    });
-  }, []);
 
   return (
     <nav className={style.leftNavbar}>
@@ -86,10 +70,15 @@ export default function LeftNavbar(): JSX.Element {
           >
             <Image src={_ANALYTICS} height={25} width={25} alt="analytics" />
             <h1 className={style.header} id="analytics" datatype="false">
-                Analytics
+              Analytics
             </h1>
           </a>
         </ol>
+        <div className={style.auth_container}>
+          <button className={style.auth_button} onClick={handleSignout()}>
+            Sign Out
+          </button>
+        </div>
       </div>
     </nav>
   );
