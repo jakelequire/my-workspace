@@ -6,7 +6,6 @@ interface ReceivablesProps {
   subtitle: string;
   balance: string;
   type: "Deposit" | "Withdrawal";
-  key: any;
 }
 
 interface TransactionsProps {
@@ -19,9 +18,8 @@ const TransactionItem = ({
   subtitle,
   balance,
   type,
-  key,
 }: ReceivablesProps) => (
-  <li className={style.item} key={key}>
+  <li className={style.item}>
     <span className={style.itemtype}>
       {/* <Image src={type === 'Deposit' ? depositIcon : withdrawalIcon} height={40} width={40} alt={type} /> */}
     </span>

@@ -17,9 +17,11 @@ export default function LeftNavbar(): JSX.Element {
   const { setPage } = usePageStateContext();
   const { user, handleSignout } = useSessionState();
 
-  const handleClick = (page: string) => {
+    const handleClick = (page: string) => {
+    setPage(page);
     setRequestedPage(page);
   };
+
 
   return (
     <nav className={style.leftNavbar}>
@@ -27,7 +29,7 @@ export default function LeftNavbar(): JSX.Element {
         <ol className={style.dashboard_items} id="items">
           <a
             className={style.listItem}
-            data-active="true"
+            data-active={requestedPage === "home" ? "true" : "false"}
             onClick={() => {
               handleClick("home");
             }}
@@ -39,7 +41,7 @@ export default function LeftNavbar(): JSX.Element {
           </a>
           <a
             className={style.listItem}
-            data-active="false"
+            data-active={requestedPage === "banking" ? "true" : "false"}
             onClick={() => {
               handleClick("banking");
             }}
@@ -51,7 +53,7 @@ export default function LeftNavbar(): JSX.Element {
           </a>
           <a
             className={style.listItem}
-            data-active="false"
+            data-active={requestedPage === "todo" ? "true" : "false"}
             onClick={() => {
               handleClick("todo");
             }}
@@ -63,7 +65,7 @@ export default function LeftNavbar(): JSX.Element {
           </a>
           <a
             className={style.listItem}
-            data-active="false"
+            data-active={requestedPage === "analytics" ? "true" : "false"}
             onClick={() => {
               handleClick("analytics");
             }}
