@@ -5,7 +5,7 @@ interface ReceivablesProps {
   title: string;
   subtitle: string;
   balance: string;
-  type: "Deposit" | "Withdrawal";
+  type: string
 }
 
 interface TransactionsProps {

@@ -20,7 +20,7 @@ export default function BankingWidget(): JSX.Element {
 
 
 				<div className={style.center_container}>
-                    <Transactions />
+                    <Transactions transactions={exampleTransactions}/>
                 </div>
 
 				<div className={style.footer_container}>
@@ -46,3 +46,36 @@ export default function BankingWidget(): JSX.Element {
 		</main>
 	);
 }
+
+
+const exampleTransactions = [
+	{
+	  amount: "+ $100.00",
+	  title: "Deposit",
+	  subtitle: "From: John Doe",
+	  balance: "$100.00",
+	  type: "Deposit",
+	},
+	{
+	  amount: "+ $100.00",
+	  title: "Deposit",
+	  subtitle: "From: Ann Doe",
+	  balance: "$200.00",
+	  type: "Deposit",
+	},
+	{
+	  amount: "- $50.00",
+	  title: "Withdrawal",
+	  subtitle: "To: Jane Doe",
+	  balance: "$150.00",
+	  type: "Withdrawal",
+	},
+	{
+	  amount: "+ $100.00",
+	  title: "Deposit",
+	  subtitle: "From: Bob Doe",
+	  balance: "$250.00",
+	  type: "Deposit",
+	},
+  ];
+  
