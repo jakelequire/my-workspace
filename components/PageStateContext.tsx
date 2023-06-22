@@ -3,14 +3,19 @@
 import { createContext, useContext } from 'react';
 import usePageState from './usePageState';
 
-const PageStateContext = createContext(null);
+interface IPageState {
+  page: string;
+  setPage: (page: string) => void;
+}
+
+const PageStateContext = createContext<IPageState | null>(null);
 
 export function PageStateProvider({ children }: any) {
   const pageState = usePageState();
 
   return (
     // @ts-ignore
-    <PageStateContext.Provider value={pageState.page}>
+    <PageStateContext.Provider value={pageState}>
       {children}
     </PageStateContext.Provider>
   );

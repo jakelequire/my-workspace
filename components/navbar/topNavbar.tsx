@@ -49,10 +49,10 @@ export default function TopNavbar(): JSX.Element {
                         </p>
                     </div>
                     <div className={style.sysMessages}>
-                        <p className={style.sysMessageText}>
-                            {/* <Status /> */}
-                        {/* This is broken ^ :) */}
-                        </p>
+                        <div className={style.sysMessageText}>
+                            <Status />
+            {/* This is broken ^ :) */}
+                        </div>
                     </div>
                 </div>
                 <div className={style.time}>

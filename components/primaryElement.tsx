@@ -7,6 +7,7 @@ import LoginInterface from './auth/loginInterface';
 import {useState, useEffect} from 'react';
 import {useSession, signIn, signOut} from 'next-auth/react';
 import {usePageStateContext} from './PageStateContext';
+import usePageState from './usePageState';
 import {onAuthStateChanged} from 'firebase/auth';
 import {auth} from '@/lib/firebase';
 import {User} from 'firebase/auth';
@@ -15,7 +16,7 @@ export default function PrimaryElement() {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [requestedPage, setRequestedPage] = useState<string>('home');
-	const {page, setPage} = usePageStateContext();
+  const { page, setPage } = usePageStateContext();
 	const {data: session, status} = useSession();
 
 	useEffect(() => {
@@ -38,7 +39,7 @@ export default function PrimaryElement() {
         if (session) {
             setPage(requestedPage);
         }
-    }, [session, setPage, requestedPage]);
+    }, [setRequestedPage]);
     
 
 

@@ -1,4 +1,4 @@
-
+// messageDefs.ts
 
 // Error messages
 const USER_SIGNUP_ERROR = "There was an error signing up. Please try again.";

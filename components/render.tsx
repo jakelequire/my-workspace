@@ -8,6 +8,7 @@
 import TopNavbar from "./navbar/topNavbar";
 import LeftNavbar from "./navbar/leftNavbar";
 import PrimaryElement from "./primaryElement";
+import Status from "./errors/status";
 import { PageStateProvider } from "./PageStateContext";
 import { SessionProvider } from "next-auth/react";
 import { CSSProperties } from "react";
