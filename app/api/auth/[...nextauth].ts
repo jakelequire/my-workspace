@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
+import { NextAuthOptions } from "next-auth";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -10,14 +11,14 @@ export const authOptions = {
   //   }),
   // ],
   callbacks: {
-    async jwt(token, user) {
+    async jwt(token: any, user: any) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
 
-    async session(session, token) {
+    async session(session: any, token: any) {
       session.userId = token.id;
       return session;
     },
@@ -28,5 +29,5 @@ export const authOptions = {
   database: process.env.NEXT_PRIVATE_DATABASE_URL,
 };
 
-
-export default NextAuth(authOptions)
+// @ts-ignore
+export default NextAuth(authOptions) as NextAuthOptions
