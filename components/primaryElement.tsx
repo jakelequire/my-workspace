@@ -15,7 +15,8 @@ export default function PrimaryElement() {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [requestedPage, setRequestedPage] = useState<string>('home');
-	const {setPage} = usePageStateContext();
+	const {page, setPage} = usePageStateContext();
+	const {data: session, status} = useSession();
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -27,16 +28,19 @@ export default function PrimaryElement() {
 
 	useEffect(() => {
     if (!user) {
-      // @ts-ignore
-			setPage('loggedout');
+			setRequestedPage('loggedout');
 		} else {
-      // @ts-ignore
-			setPage('home');
+			setRequestedPage('home');
 		}
-	}, [user, setPage]);
+	}, [user, setRequestedPage]);
 
-	const {data: session, status} = useSession();
-	const {page} = usePageStateContext();
+    useEffect(() => {
+        if (session) {
+            setPage(requestedPage);
+        }
+    }, [session, setPage, requestedPage]);
+    
+
 
 	console.log('<Render> Session-Data:', session);
 	console.log('<Render> Session-Status:', status);

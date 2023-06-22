@@ -3,6 +3,7 @@
 import {useState, useEffect} from 'react';
 import Image from 'next/image';
 import {usePageStateContext} from '../PageStateContext';
+import usePageState from '../usePageState';
 import useSessionState from '../useSessionState';
 // Styles
 import style from './styles/leftnavbar.module.css';
@@ -19,9 +20,14 @@ export default function LeftNavbar(): JSX.Element {
 
 	const handleClick = (page: string) => {
     // @ts-ignore
-		setPage(page);
 		setRequestedPage(page);
 	};
+
+  useEffect(() => {
+    if (user) {
+      setPage(requestedPage);
+    }
+  }, [user, setPage, requestedPage]);
 
 	return (
 		<nav className={style.leftNavbar}>

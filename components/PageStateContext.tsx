@@ -9,7 +9,8 @@ export function PageStateProvider({ children }: any) {
   const pageState = usePageState();
 
   return (
-    <PageStateContext.Provider value={pageState.page as unknown as null}>
+    // @ts-ignore
+    <PageStateContext.Provider value={pageState.page}>
       {children}
     </PageStateContext.Provider>
   );
