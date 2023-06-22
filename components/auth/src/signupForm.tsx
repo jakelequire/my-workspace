@@ -27,7 +27,9 @@ export default function SignupForm(): JSX.Element {
       const user = userCredential.user;
       console.log(user);
     } catch (error) {
+      // @ts-ignore
       const errorCode = error.code;
+      // @ts-ignore
       const errorMessage = error.message;
       console.error(`Error: ${errorCode} - ${errorMessage}`);
     }

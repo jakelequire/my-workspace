@@ -24,7 +24,9 @@ export default function LoginForm(): JSX.Element {
 
       console.log("<LoginForm> User Logged in: ", user)
     } catch (error) {
+      //@ts-ignore
       const errorCode = error.code;
+      //@ts-ignore
       const errorMessage = error.message;
       console.error(`Error: ${errorCode} - ${errorMessage}`);
     }
