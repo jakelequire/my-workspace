@@ -21,6 +21,13 @@ export default function PrimaryElement() {
     const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setPage("loggedout");
+    }
+  }, [user, setPage]);
+  
   
   const { data: session, status } = useSession();
   const { page } = usePageStateContext();
@@ -48,8 +55,7 @@ export default function PrimaryElement() {
   }
 
   if (!user) {
-    // @ts-ignore
-    setPage("loggedout")
+    // @ts-ignore 
     return <SignedoutInterface />;
   } else {
     return (
