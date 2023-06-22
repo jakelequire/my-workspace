@@ -5,11 +5,11 @@ import usePageState from './usePageState';
 
 const PageStateContext = createContext(null);
 
-export function PageStateProvider({ children }) {
+export function PageStateProvider({ children }: any) {
   const pageState = usePageState();
 
   return (
-    <PageStateContext.Provider value={pageState}>
+    <PageStateContext.Provider value={pageState.page as unknown as null}>
       {children}
     </PageStateContext.Provider>
   );

@@ -26,9 +26,11 @@ export default function PrimaryElement() {
 	}, []);
 
 	useEffect(() => {
-		if (!user) {
+    if (!user) {
+      // @ts-ignore
 			setPage('loggedout');
 		} else {
+      // @ts-ignore
 			setPage('home');
 		}
 	}, [user, setPage]);
