@@ -1,16 +1,17 @@
 "use client";
 import useAuthState from "../useAuthState";
+import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import style from "../styles/form.module.css";
 
 export default function LoginForm(): JSX.Element {
   const { loginData, setLoginData } = useAuthState();
-
+  const [data, setData] = useState({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
-
+  // TODO: Change the handle submit to a useEffect hook
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
