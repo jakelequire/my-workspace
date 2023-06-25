@@ -20,7 +20,12 @@
     background-color: #000;
     color: #fff;
     border-bottom: 1px dashed #fff;
+    transition: all 0.125s ease-in-out;
 }
+
+.list_item:hover {
+    background-color: #0b0b0b;
+  }
 
 .list_item_title {
     flex: 2;
@@ -70,11 +75,12 @@
 }
 
 .checkbox {
+    cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
     height: 30px;
     width: 30px;
-    border: 3px solid #afafaf;
+    border: 3px solid #9f9f9f;
     background-color: #000;
     position: relative;
     transition: all 0.2s ease-in-out;
@@ -97,6 +103,7 @@
 }
 
 .checkbox:hover {
-    background-color: #afafaf2a;
-    box-shadow: 0 0 10px #fff;
+    background-color: #000000;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 5px #fff;
 }
