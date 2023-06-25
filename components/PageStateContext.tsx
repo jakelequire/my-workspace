@@ -14,7 +14,6 @@ export function PageStateProvider({ children }: any) {
   const pageState = usePageState();
 
   return (
-    // @ts-ignore
     <PageStateContext.Provider value={pageState}>
       {children}
     </PageStateContext.Provider>

@@ -11,7 +11,10 @@ import style from "./styles/leftnavbar.module.css";
 import _HOME from "@/public/assets/home.svg";
 import _BANKING from "@/public/assets/banking.svg";
 import _TODO from "@/public/assets/todo.svg";
+import _STUDY from "@/public/assets/study.svg";
 import _ANALYTICS from "@/public/assets/analytics.svg";
+import _RESOURCES from "@/public/assets/education.svg";
+import _CALENDAR from "@/public/assets/calendar.svg";
 
 export default function LeftNavbar(): JSX.Element {
   const [requestedPage, setRequestedPage] = useState<string>("home");
@@ -32,6 +35,8 @@ export default function LeftNavbar(): JSX.Element {
     <nav className={style.leftNavbar}>
       <div className={style.dashboard_container}>
         <ol className={style.dashboard_items} id="items">
+          {/* < ================> */}
+          {/* <Home> */}
           <a
             className={style.listItem}
             data-active={requestedPage === "home" ? "true" : "false"}
@@ -44,6 +49,7 @@ export default function LeftNavbar(): JSX.Element {
               Home
             </h1>
           </a>
+          {/* <Banking> */}
           <a
             className={style.listItem}
             data-active={requestedPage === "banking" ? "true" : "false"}
@@ -56,6 +62,20 @@ export default function LeftNavbar(): JSX.Element {
               Banking
             </h1>
           </a>
+          {/* <Calendar> */}
+          <a
+            className={style.listItem}
+            data-active={requestedPage === "calendar" ? "true" : "false"}
+            onClick={() => {
+              handleClick("calendar");
+            }}
+          >
+            <Image src={_CALENDAR} height={25} width={25} alt="calendar" />
+            <h1 className={style.header} id="calendar" datatype="false">
+              Calendar
+            </h1>
+          </a>
+          {/* <To-Do> */}
           <a
             className={style.listItem}
             data-active={requestedPage === "todo" ? "true" : "false"}
@@ -68,6 +88,33 @@ export default function LeftNavbar(): JSX.Element {
               To-Do
             </h1>
           </a>
+          {/* <Study> */}
+          <a
+            className={style.listItem}
+            data-active={requestedPage === "study" ? "true" : "false"}
+            onClick={() => {
+              handleClick("study");
+            }}
+          >
+            <Image src={_STUDY} height={25} width={25} alt="study" />
+            <h1 className={style.header} id="study" datatype="false">
+              Study
+            </h1>
+          </a>
+          {/* <Resources> */}
+          <a
+            className={style.listItem}
+            data-active={requestedPage === "resources" ? "true" : "false"}
+            onClick={() => {
+              handleClick("resources");
+            }}
+          >
+            <Image src={_RESOURCES} height={25} width={25} alt="resources" />
+            <h1 className={style.header} id="resources" datatype="false">
+              Resources
+            </h1>
+          </a>
+          {/* <Analytics> */}
           <a
             className={style.listItem}
             data-active={requestedPage === "analytics" ? "true" : "false"}
@@ -80,6 +127,7 @@ export default function LeftNavbar(): JSX.Element {
               Analytics
             </h1>
           </a>
+          {/* < ================> */}
         </ol>
         <div className={style.auth_container}>
           <button className={style.auth_button} onClick={() => handleSignout()}>
