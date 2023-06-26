@@ -1,3 +1,6 @@
+"use client"
+
+import Image from 'next/image'
 
 import style from '../styles/newListItem.module.css'
 
@@ -23,15 +26,14 @@ export default function newListItem(): JSX.Element {
 
                     </div>
                 </div>
-                <div className={style.priority}>
-                    <div className={style.priority_container}>
-                        <input type="number" className={style.priority_input} />
-                    </div>
-                </div>
             </div>
 
             <div className={style.options_container}>
-
+                <div className={style.priority_container}>
+                    <a className={style.priority_button}>Low</a>
+                    <a className={style.priority_button}>Medium</a>
+                    <a className={style.priority_button}>High</a>
+                </div>
             </div>
         
         </div>
