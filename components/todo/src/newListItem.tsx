@@ -29,6 +29,9 @@ export default function NewListItem(): JSX.Element {
         
 				<div className={style.input_container}>
 					<input type='text' className={style.title_input} placeholder='Title' />
+					<div className={style.image_container}>
+							<a className={style.image_button} data-type="submit"></a>
+					</div>
 				</div>
 
 				<div className={style.bottom_container}>
@@ -37,6 +40,7 @@ export default function NewListItem(): JSX.Element {
 						<div className={style.description}>
 							<textarea className={style.description_input} placeholder='Description'></textarea>
 						</div>
+
 					</div>
 
 					<div className={style.options_container}>
