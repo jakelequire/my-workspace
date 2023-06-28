@@ -3,7 +3,7 @@
 /*            [  /index  ]             */
 /*  Primary & Highest order component  */
 /*             render.tsx              */
-/* Primary content: <PrimaryElement /> */
+/*   Main content: <PrimaryElement />  */
 /* ----------------------------------- */
 import TopNavbar from "./navbar/topNavbar";
 import LeftNavbar from "./navbar/leftNavbar";

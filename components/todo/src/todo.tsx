@@ -1,4 +1,4 @@
-
+import NewListItem from './newListItem';
 import ToDoList from './todo_list';
 import style from '../styles/index.module.css'
 
@@ -24,7 +24,7 @@ export default function ToDo(): JSX.Element {
 
 			<div className={style.todo_wrapper}>
 				<div className={style.top_container}>
-
+                    <NewListItem />
                 </div>
 
 				<div className={style.form_container}>
