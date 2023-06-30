@@ -6,6 +6,7 @@
 /*   Main content: <PrimaryElement />  */
 /* ----------------------------------- */
 import TopNavbar from "./navbar/topNavbar";
+import BottomNavbar from "./navbar/bottomNavbar";
 import LeftNavbar from "./navbar/leftNavbar";
 import PrimaryElement from "./primaryElement";
 import { PageStateProvider } from "./PageStateContext";
@@ -17,8 +18,9 @@ export default function Render() {
     <PageStateProvider>
       <main style={_main}>
         <TopNavbar />
+        <BottomNavbar />
         <div style={_container}>
-          <LeftNavbar />
+          {/* <LeftNavbar /> */}
           <SessionProvider>
             <PrimaryElement />
           </SessionProvider>

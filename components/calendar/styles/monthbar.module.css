@@ -25,4 +25,5 @@
     transform: rotate(270deg);
     white-space: nowrap;
     font-size: 0.8rem;
+    font-family: var(--font-raleway);
 }

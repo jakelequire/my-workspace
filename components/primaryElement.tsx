@@ -87,7 +87,6 @@ const styles = {
   display: "flex",
   height: "100%",
   width: "100%",
-  border: "1.5px solid #fff",
 };
 
 function SignedoutInterface(): JSX.Element {
