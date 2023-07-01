@@ -45,7 +45,7 @@ export default function TopNavbar(): JSX.Element {
                 <div className={style.systemMessages}>
                     <div className={style.currentDir}>    
                         <p className={style.systemMessagesText}>
-                            /{currentPage}/
+                           <span className={style.sysText}>CWD=</span>[/{currentPage}/]
                         </p>
                     </div>
                     <div className={style.sysMessages}>

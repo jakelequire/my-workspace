@@ -4,8 +4,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
-    height: 2.5rem;
-    background-color: #2f2f2f;
+    height: 3.25rem;
+    background-color: #000009;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -16,6 +16,8 @@
 .nav_left {
     display: flex;
     align-items: center;
+    height: 100%;
+    width: 20%;
     gap: 1rem;
 }
 /* //////////////////////////// */
@@ -26,6 +28,7 @@
     flex: 1 1;
     justify-content: center;
     height: 100%;
+    width: 100%;
 }
 
 .center_items {
@@ -33,11 +36,48 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 1rem;
-    width: 60%;
+    width: 100%;
     height: 100%;
+    cursor: pointer;
+}
 
-    padding: 0 1rem;
+.item_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0.15rem 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+
+}
+
+.list_items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    align-content: center;
+    flex-direction: row;
+}
+
+.list_items[data-active='true'] {
+    border-bottom: 2px solid #00ffe7;
+}
+
+.list_items[data-active='false'] {
+    .item_wrapper {
+        opacity: 0.6;
+    }
+}
+
+.list_items:hover {
+    .item_wrapper {
+    background-color: #71717147;
+    }
 }
 
 .center_link {
@@ -45,28 +85,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
     text-align: center;
     font-family: var(--font-raleway);
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-decoration: none;
     transition: all 0.2s ease-in-out;
-    width: 100%;
-    height: 100%;
-    padding: 0.5rem 1.5rem;
-    border-right: 1px solid #a3a3a3;
-    border-left: 1px solid #a3a3a3;
-}
-
-.center_link:hover {
-    background-color: #000;
-    color: #fff;
+    padding: 0.35rem 0.75rem;
 }
 
 /* //////////////////////////// */
 .nav_right {
     display: flex;
     align-items: center;
+    height: 100%;
+    width: 20%;
     gap: 1rem;
 }
