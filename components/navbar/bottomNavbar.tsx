@@ -11,7 +11,7 @@ import _BANKING from '@/public/assets/banking.svg';
 import _TODO from '@/public/assets/todo.svg';
 import _STUDY from '@/public/assets/study.svg';
 import _ANALYTICS from '@/public/assets/analytics.svg';
-import _RESOURCES from '@/public/assets/education.svg';
+import _RESOURCES from '@/public/assets/resources.svg';
 import _CALENDAR from '@/public/assets/calendar.svg';
 
 export default function BottomNavbar(): JSX.Element {

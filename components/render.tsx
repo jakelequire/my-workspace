@@ -47,6 +47,5 @@ const _container: CSSProperties = {
   height: "100%",
   width: "100%",
   overflow: "hidden",
-  borderBottom: "3px solid #fff",
 }
 // ----------------------------------- //
