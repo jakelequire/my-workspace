@@ -13,6 +13,27 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { User } from "firebase/auth";
 
+
+
+const pages: { [key: string]: JSX.Element } = {
+  home: <HomepageInterface />,
+  banking: <BankingInterface />,
+  calendar: <CalendarInterface />,
+  todo: <ToDoInterface />,
+  study: <StudyInterface />,
+  resources: <></>,
+  analytics: <></>,
+  loggedout: <SignedoutInterface />,
+ };
+
+ function CurrentPage(page: string): JSX.Element {
+  const [currentPage, setCurrentPage] = useState<JSX.Element>(pages[page]);
+  useEffect(() => {
+    setCurrentPage(pages[page]);
+  }, [page]);
+  return currentPage;
+ }
+
 export default function PrimaryElement() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
