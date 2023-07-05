@@ -33,7 +33,7 @@ export default function List(): JSX.Element {
 
 // TODO:
 // Need to make a generator for the list items. So far, this is the template:
-
+// Review and finish styling
 const foo = (
   // ...
   <li className={style.list_item}>
