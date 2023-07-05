@@ -7,7 +7,6 @@
 /* ----------------------------------- */
 import TopNavbar from "./navbar/topNavbar";
 import BottomNavbar from "./navbar/bottomNavbar";
-import LeftNavbar from "./navbar/leftNavbar";
 import PrimaryElement from "./primaryElement";
 import { PageStateProvider } from "./PageStateContext";
 import { SessionProvider } from "next-auth/react";
