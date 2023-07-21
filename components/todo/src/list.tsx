@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import NewListTab from "./newListTab";
 
@@ -8,19 +8,33 @@ import style from "../styles/list.module.css";
 import _EDIT from "@/public/assets/edit.svg";
 import _CLOSE from "@/public/assets/close-w.svg";
 
-
-const handleNewList = () => {
-
-
-  
-}
-
-
 export default function List(): JSX.Element {
+  const [dropdownActive, setDropdownActive] = useState<boolean>(false);
+  const [newList, setNewList] = useState<JSX.Element>();
+
+  const handleClick = () => {
+    setDropdownActive(!dropdownActive);
+  };
+  
+  useEffect(() => {
+    if (dropdownActive) {
+      setNewList(<NewListTab />);
+    } else {
+      setNewList(<></>);
+    }
+  }, [dropdownActive, setNewList]);
+
   return (
     <div className={style.list_container}>
-      <a className={style.new_list_button}>New List +</a>
-
+      <a
+        className={style.new_list_button}
+        onClick={() => {
+          handleClick();
+        }}
+      >
+        New List +
+      </a>
+      {newList}
       <ol className={style.list}>
         <li className={style.list_item}>
           <div className={style.list_title}>
