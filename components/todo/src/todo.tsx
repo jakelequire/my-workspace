@@ -1,7 +1,7 @@
-import NewListItem from './newListItem';
-import ToDoList from './todo_list';
+import NewTaskItem from './tasks/newTaskItem';
+import TaskList from './tasks/taskList';
 import style from '../styles/index.module.css'
-import List from './list';
+import List from './list/list';
 
 export default function ToDo(): JSX.Element {
 
@@ -13,11 +13,11 @@ export default function ToDo(): JSX.Element {
 
 			<div className={style.todo_wrapper}>
 				<div className={style.top_container}>
-                    <NewListItem />
+                    <NewTaskItem />
                 </div>
 
 				<div className={style.form_container}>
-                    <ToDoList />
+                    <TaskList />
                 </div>
 			</div>
 		</div>

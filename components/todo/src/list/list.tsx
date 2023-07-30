@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import NewListTab from "./newListTab";
+import NewListItem from "./newListItem";
 
 import Image from "next/image";
-import style from "../styles/list.module.css";
+import style from "../../styles/list/list.module.css";
 
 import _EDIT from "@/public/assets/edit.svg";
 import _CLOSE from "@/public/assets/close-w.svg";
@@ -18,9 +18,9 @@ export default function List(): JSX.Element {
   
   useEffect(() => {
     if (dropdownActive) {
-      setNewList(<NewListTab />);
+      setNewList(<NewListItem />);
     } else {
-      setNewList(<></>);
+      setNewList(undefined);
     }
   }, [dropdownActive, setNewList]);
 

@@ -1,6 +1,6 @@
-import style from "../styles/todolist.module.css";
+import style from "../../styles/tasks/taskList.module.css";
 
-export default function ToDoList(): JSX.Element {
+export default function TaskList(): JSX.Element {
   return (
     <div className={style.todo_container}>
         {exampleListData.map((item, index) => (

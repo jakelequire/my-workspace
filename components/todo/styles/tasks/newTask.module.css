@@ -60,11 +60,11 @@
 }
 
 .image_button[data-type="submit"] {
-    background: url("../../../public/assets/right-arrow.svg") no-repeat center center;
+    background: url("../../../../public/assets/right-arrow.svg") no-repeat center center;
     background-size: 1.8rem;
 }
 .image_button[data-type="submit"]:hover {
-    background: url("../../../public/assets/right-arrow-color.svg") no-repeat center center;
+    background: url("../../../../public/assets/right-arrow-color.svg") no-repeat center center;
     background-size: 1.8rem;
 }
 
@@ -186,29 +186,29 @@
 }
 
 .priority_button[data-type="low"] {
-    background: url("../../../public/assets/exclamation-mark1x.svg") no-repeat center center;
+    background: url("../../../../public/assets/exclamation-mark1x.svg") no-repeat center center;
     background-size: 1.5rem;
 }
 .priority_button[data-type="low"]:hover {
-    background: url("../../../public/assets/exclamation-mark1x-color.svg") no-repeat center center;
+    background: url("../../../../public/assets/exclamation-mark1x-color.svg") no-repeat center center;
     background-size: 1.5rem;
 }
 
 .priority_button[data-type="medium"] {
-    background: url("../../../public/assets/exclamation-mark2x.svg") no-repeat center center;
+    background: url("../../../../public/assets/exclamation-mark2x.svg") no-repeat center center;
     background-size: 1.5rem;
 }
 .priority_button[data-type="medium"]:hover {
-    background: url("../../../public/assets/exclamation-mark2x-color.svg") no-repeat center center;
+    background: url("../../../../public/assets/exclamation-mark2x-color.svg") no-repeat center center;
     background-size: 1.5rem;
 }
 
 .priority_button[data-type="high"] {
-    background: url("../../../public/assets/exclamation-mark3x.svg") no-repeat center center;
+    background: url("../../../../public/assets/exclamation-mark3x.svg") no-repeat center center;
     background-size: 1.5rem;
 }
 .priority_button[data-type="high"]:hover {
-    background: url("../../../public/assets/exclamation-mark3x-color.svg") no-repeat center center;
+    background: url("../../../../public/assets/exclamation-mark3x-color.svg") no-repeat center center;
     background-size: 1.5rem;
 }
 

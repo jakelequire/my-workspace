@@ -45,7 +45,7 @@
     padding: 0.5rem;
     margin-bottom: 1rem;
     cursor: pointer;
-    background: url("../../../public/assets/checkmark-w.svg") no-repeat center center;
+    background: url("../../../../public/assets/checkmark-w.svg") no-repeat center center;
     background-size: 1.5rem;
     opacity: 0.8;
 }

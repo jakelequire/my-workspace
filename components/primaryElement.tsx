@@ -14,7 +14,6 @@ import { auth } from "@/lib/firebase";
 import { User } from "firebase/auth";
 
 
-
 const pages: { [key: string]: JSX.Element } = {
   home: <HomepageInterface />,
   banking: <BankingInterface />,

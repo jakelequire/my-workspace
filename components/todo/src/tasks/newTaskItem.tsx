@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import style from "../styles/newListItem.module.css";
+import style from "../../styles/tasks/newTask.module.css";
 
 interface ListItemProps {
   title: string;
@@ -11,7 +11,7 @@ interface ListItemProps {
   completed: boolean;
 }
 
-export default function NewListItem(): JSX.Element {
+export default function NewTaskItem(): JSX.Element {
   const [listItem, setListItem] = useState<ListItemProps>({
     title: "",
     description: "",
