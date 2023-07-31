@@ -1,42 +1,68 @@
-"use client"
-import { useState, useEffect } from 'react';
+'use client';
+import {useState, useEffect} from 'react';
 import ToDoState from '../todoState';
-import IDGenerator from '../../utils/IDGenerator';
+import Image from 'next/image';
+// Utils
+import IDGen from '@/utils/idGen';
 // Styles
 import style from '../../styles/list/newList.module.css';
-
-
+// SVG
+import _EDIT from "@/public/assets/edit.svg";
+import _CLOSE from "@/public/assets/close-w.svg";
 
 export default function NewListItem(): JSX.Element {
+	const {todoLists, setTodoLists, setDropdownActive} = ToDoState();
+	const [newListName, setNewListName] = useState<string>('');
 
-    const { todoList, setTodoList } = ToDoState();
+	useEffect(() => {
+		setNewListName('');
+	}, [todoLists]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log("Submitted");
+	function handleNewListNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+		setNewListName(event.target.value);
+	}
 
-        const newTask = {
-            id: IDGenerator(),
-            name: "",
-            description: "",
-            dueDate: "",
-            complete: false,
-            priority: 0,
-        }
+	function handleNewListSubmit(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (newListName.length > 0) {
+			setTodoLists([...todoLists, {id: IDGen(), name: newListName}]);
+            setDropdownActive(false);
+		}
+	}
 
-        setTodoList({
-            ...todoList,
-            tasks: [...todoList.tasks, newTask]
-        })
-    }
+	return (
+		<div className={style.new_list_tab}>
+			<form
+				className={style.new_list_form}
+				onSubmit={(event) => {
+					handleNewListSubmit(event);
+				}}>
+				<input className={style.new_list_input} type='text' placeholder='Task Name' />
 
+				<button className={style.new_list_button} type='submit'>+</button>
+			</form>
+		</div>
+	);
+}
+
+interface elProps {
+    name: string
+}
+function el({name}: elProps) {
     return (
-        <div className={style.new_list_tab}>
-            <form className={style.new_list_form} onSubmit={handleSubmit(e)}>
-                <input className={style.new_list_input} type="text" placeholder="Task Name" />
-
-                <button className={style.new_list_button} type="submit"></button>
-            </form>
+        <li className={style.list_item}>
+        <div className={style.list_title}>
+          <a className={style.list_item_edit}>
+            <Image width={20} height={20} src={_EDIT} alt="edit" />
+          </a>
+          <a className={style.list_item_link}> {name} </a>
         </div>
+        <a className={style.list_item_delete}>
+          <Image width={20} height={20} src={_CLOSE} alt="delete" />
+        </a>
+      </li>
     )
 }
+
+
+

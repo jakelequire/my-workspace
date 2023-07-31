@@ -13,6 +13,7 @@ import _STUDY from '@/public/assets/study.svg';
 import _ANALYTICS from '@/public/assets/analytics.svg';
 import _RESOURCES from '@/public/assets/resources.svg';
 import _CALENDAR from '@/public/assets/calendar.svg';
+import _SETTINGS from '@/public/assets/settings-w.svg';
 
 export default function BottomNavbar(): JSX.Element {
 	const [requestedPage, setRequestedPage] = useState<string>('home');
@@ -138,6 +139,22 @@ export default function BottomNavbar(): JSX.Element {
 									handleClick('analytics');
 								}}>
 								Analytics
+							</a>
+						</div>
+					</li>
+					{/* <== Settings ==> */}
+					<li
+						className={styles.list_items}
+						data-active={requestedPage === 'settings' ? 'true' : 'false'}>
+						<div className={styles.item_wrapper}>
+							<Image src={_SETTINGS} height={22} width={22} alt='Settings' />
+							<a
+								className={styles.center_link}
+								data-type='settings'
+								onClick={() => {
+									handleClick('settings');
+								}}>
+								Settings
 							</a>
 						</div>
 					</li>

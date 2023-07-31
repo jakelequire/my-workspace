@@ -6,6 +6,7 @@
     width: 100%;
     height: 100%;
     border-right: 1.5px dashed #fff;
+    user-select: none;
 }
 
 .new_list_button {
@@ -17,6 +18,7 @@
     height: 5%;
     margin-bottom: 1rem;
     transition: all 0.2s ease-in;
+    user-select: none;
 }
 
 .new_list_button:hover {

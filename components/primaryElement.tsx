@@ -4,6 +4,7 @@ import BankingInterface from "./banking/bankingInterface";
 import CalendarInterface from "./calendar/calendarInterface";
 import ToDoInterface from "./todo/todoInterface";
 import StudyInterface from "./study/studyInterface";
+import SettingsInterface from "./settings/settingsInterface";
 import SignupInterface from "./auth/signupInterface";
 import LoginInterface from "./auth/loginInterface";
 import { useState, useEffect } from "react";
@@ -94,6 +95,9 @@ export default function PrimaryElement() {
         break;
       case "analytics":
         currentPage = <></>;
+        break;
+      case "settings":
+        currentPage = <SettingsInterface />;
         break;
       case "loggedout":
         currentPage = <SignedoutInterface />;
