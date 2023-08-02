@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
+import { getUserData } from "../api/apiService";
+
 export default function ToDoState() {
   const [dropdownActive, setDropdownActive] = useState<boolean>(false);
   const [sessionLists, setSessionLists] = useState<Array<JSX.Element>>([]);
@@ -25,21 +26,24 @@ export default function ToDoState() {
     },
   ]);
 
+  // Debugging
+  // Not able to get the user data from the database
   useEffect(() => {
-    const db = getFirestore();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const userRef = doc(collection(db, "users"), user.uid);
-        getDoc(userRef).then((doc) => {
-          if (doc.exists()) {
-            const data = doc.data();
-            if (data) {
-              setTodoLists(data.todoLists);
-              setTasks(data.tasks);
-            }
-          }
-        });
-      }
+    if(!user) {
+      console.log("toDoState: no user")
+      setTodoLists([]);
+      setTasks([]);
+    }
+    if(user) {
+      console.log("toDoState: user")
+      getUserData(user.uid).then((userData) => {
+        console.log("toDoState: userData", userData)
+        setTodoLists(userData.todoLists);
+        setTasks(userData.tasks);
+      }).catch((error: null) => {
+        console.log("todoState: !useEffect THROWN ERROR", error);
+    })}
     });
     return () => unsubscribe();
   }, []);

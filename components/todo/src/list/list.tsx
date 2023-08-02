@@ -41,7 +41,7 @@ export default function List(): JSX.Element {
 			</a>
 			{newList}
 			<ol className={style.list}>
-        {...sessionLists}
+        		{...sessionLists}
 			</ol>
 		</div>
 	);
