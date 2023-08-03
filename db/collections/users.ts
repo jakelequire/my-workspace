@@ -1,14 +1,10 @@
-import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, DocumentData } from "firebase/firestore";
 
-
-export async function getUserData(userId: string) {
+export async function getUserData(userId: string): Promise<DocumentData | null> {
     const db = getFirestore();
     const userRef = doc(collection(db, "users"), userId);
-    console.log("getUserData | <useRef>", userRef)
     const docData = await getDoc(userRef);
-    console.log("getUserData | <docData>", docData)
     if (docData.exists()) {
-        console.log("getUserData | <docData.exists()>", docData.data(), typeof docData.data())
         const data = docData.data();
         return data ? data : null;
     }

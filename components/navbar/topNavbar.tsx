@@ -5,6 +5,7 @@ import style from './styles/topnavbar.module.css'
 import { usePageStateContext } from "../PageStateContext"
 import useSessionState from '../useSessionState'
 import Status from '../errors/status'
+import LogoutButton from './src/logoutButton'
 // SVG
 import _DOCUMENTS from '@/public/assets/documents.svg'
 
@@ -41,6 +42,7 @@ export default function TopNavbar(): JSX.Element {
                         <Image src={_DOCUMENTS} height={25} width={25} alt="docs" />
                         <p className={style.title}>Documents</p>
                     </a>
+                    <LogoutButton />                        
                 </ol>
                 <div className={style.systemMessages}>
                     <div className={style.currentDir}>    

@@ -1,3 +1,4 @@
+import { UserData } from '@/db/types/userData';
 import style from '../../styles/tasks/taskList.module.css';
 
 export default function TaskList(): JSX.Element {
@@ -6,9 +7,10 @@ export default function TaskList(): JSX.Element {
 			{exampleListData.map((item, index) => (
 				<ListItem
 					key={index}
+					id={item.id}
 					title={item.title}
 					description={item.description}
-					createdDate={item.createdDate}
+					creationDate={item.createdDate}
 					dueDate={item.dueDate}
 					priority={item.priority}
 					completed={item.completed}
@@ -18,29 +20,20 @@ export default function TaskList(): JSX.Element {
 	);
 }
 
-interface ListItemProps {
-	title: string;
-	description: string;
-	createdDate: string;
-	dueDate: string;
-	priority: number;
-	completed: boolean;
-}
-
 function ListItem({
 	title,
 	description,
-	createdDate,
+	creationDate,
 	dueDate,
 	priority,
 	completed,
-}: ListItemProps): JSX.Element {
+}: UserData.Item): JSX.Element {
 	return (
 		<div className={style.list_item}>
 			<div className={style.list_item_title}>
 				<h3 className={style.title}>{title}</h3>
 				<p className={style.description}>{description}</p>
-				<p className={style.createDate}>{createdDate}</p>
+				<p className={style.createDate}>{creationDate}</p>
 			</div>
 			<div className={style.list_item_sidebar}>
 				<p className={style.priority}>{priority}</p>
@@ -62,6 +55,7 @@ function ListItem({
 
 const exampleListData = [
 	{
+		id: '0',
 		title: 'Example Title',
 		description: 'Example Description',
 		createdDate: '2021-10-10',
@@ -70,6 +64,7 @@ const exampleListData = [
 		completed: false,
 	},
 	{
+		id: '1',
 		title: 'Example Title',
 		description: 'Example Description',
 		createdDate: '2021-10-10',
@@ -78,6 +73,7 @@ const exampleListData = [
 		completed: false,
 	},
 	{
+		id: '2',
 		title: 'Example Title',
 		description: 'Example Description',
 		createdDate: '2021-10-10',

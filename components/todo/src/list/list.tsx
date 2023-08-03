@@ -9,7 +9,7 @@ import _EDIT from '@/public/assets/edit.svg';
 import _CLOSE from '@/public/assets/close-w.svg';
 
 export default function List(): JSX.Element {
-  const {sessionLists, sessionTasks, dropdownActive, setDropdownActive} = ToDoState();
+  const {sessionLists, dropdownActive, setDropdownActive} = ToDoState();
 	const [newList, setNewList] = useState<JSX.Element>();
 
 	const handleClick = () => {
@@ -41,7 +41,6 @@ export default function List(): JSX.Element {
 			</a>
 			{newList}
 			<ol className={style.list}>
-        		{...sessionLists}
 			</ol>
 		</div>
 	);
