@@ -8,7 +8,7 @@ import newList from '../api/newList';
 const NewList = newList;
 
 export default function ToDoState() {
-	const {uid} = useSessionState();
+  const {uid} = useSessionState();
 	const [dropdownActive, setDropdownActive] = useState<boolean>(false);
 
 	const [sessionLists, setSessionLists] = useState<UserData.List>();

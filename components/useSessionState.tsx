@@ -24,7 +24,6 @@ export default function useSessionState() {
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
-                const uid = user.uid;
                 console.log('<useSessionState> User logged in: ', user);
                 setLoggedIn(true);
                 setUser(user);
