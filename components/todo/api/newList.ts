@@ -3,7 +3,8 @@ import { UserData } from "@/db/types/userData";
 
 export default async function newList(uid: string, list: UserData.NewList) {
     const db = getFirestore();
-    const userRef = doc(collection(db, `userData/${uid}/list`), uid);
+    /**/ console.log("$Firebase Request$ <newList> UID:", uid)
+    const userRef = doc(collection(db, `userData/${uid}`), uid);
     const docData = await getDoc(userRef);
     if (docData.exists()) {
         const data = docData.data();

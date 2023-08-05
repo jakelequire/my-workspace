@@ -40,7 +40,7 @@ export default function useSessionState() {
             return () => unsubscribe();
         }
         );
-    }, [setLoggedIn, setUser, setUid])
+    }, [])
 
 	const handleLogin = () => {
 		// ...
