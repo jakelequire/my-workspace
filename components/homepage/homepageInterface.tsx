@@ -6,7 +6,7 @@ export default function HomepageInterface(): JSX.Element {
 
     return (
         <main className={style.homepage}>
-            <Landing />
+            {/* <Landing /> */}
         </main>
     )
 }

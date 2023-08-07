@@ -1,109 +1,59 @@
 // /db/collections/userData.ts
-import { getFirestore, collection, doc, getDoc, DocumentData } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc, DocumentData, DocumentReference } from "firebase/firestore";
 import { UserData as D } from "../types/userData";
 
+
 export default class UserData {
-    private db: any;
-    private userRef: any;
-    private docData: any;
-    private data: any;
+    public readonly uid: string;
+    public readonly userRef: DocumentReference<DocumentData>;
+    private readonly db: any;
+    public docData: DocumentData;
 
-    constructor(userId: string) {
+    constructor(uid: string) {
         this.db = getFirestore();
-        this.userRef = doc(collection(this.db, "users"), userId);
+        this.uid = uid;
+        this.userRef = doc(this.db, "userData", this.uid); 
+        this.docData = {};
     }
 
-    /**
-    * @returns {Promise<DocumentData | null>} Returns the user data or null if no data exists
-    */
-    async getUserData(): Promise<DocumentData | null> {
-        this.docData = await getDoc(this.userRef);
-        if (this.docData.exists()) {
-            this.data = this.docData.data();
-            return this.data ? this.data : null;
+    async init() {
+        if(!this.uid) {
+            return this;
+        } else if(!this.db) {
+            throw new Error("No db");
+        } else if(!this.userRef) {
+            throw new Error("No userRef");
+        } else {
+            console.log("all good");
         }
-        if (!this.docData.exists()) {
-            console.log("getUserData | <!doc.data.exists()>", "no data")
+        const docSnap = await getDoc(this.userRef);
+        if (docSnap.exists()) {
+            this.docData = docSnap.data();
         }
-        return null;
-    }
-
-    /**
-     * @returns {Promise<User | null>} Returns the user id or null if no user is logged in
-    */
-    async userAuth() {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user) {
-            const uid = user.uid;
-            return uid;
-        }
-        return null;
-    }
-
-    /**
-     * @param {string} listTitle The title of the list to be returned
-     * @returns {Promise<D.List | null>} Returns the list or null if no list exists
-     * @example
-     * 
-     * const list = await getUserList("My List");
-     * console.log(list);
-     */
-    async updateUserData(data: any) {
-        await this.getUserData();
-        if (this.data) {
-            await this.userRef.update(data);
-            return;
-        }
-        if (!this.data) {
-            await this.userRef.set(data);
-            return;
+        if(!this.docData.uid) {
+            await this.newCollection();
         }
     }
 
-    /**
-     * @param {D.List} listTitle The title of the list to be returned
-     * @returns {Promise<D.List | null>} Returns the list or null if no list exists
-     * @example
-     * 
-     * const list = await getUserList("My List");
-     * console.log(list);
-    */
-    async updateList(list: D.List) {
-        await this.getUserData();
-        if (this.data) {
-            await this.userRef.update({
-                [`list.${list.id}`]: list
-            });
-            return;
-        }
-        if (!this.data) {
-            await this.userRef.set({
-                [`list.${list.id}`]: list
-            });
-            return;
-        }
+    async newCollection() {
+        const docRef = doc(collection(this.db, "userData", this.uid));
+        await setDoc(docRef, { uid: this.uid });
+        return docRef;
     }
 
-    /**
-     * @param {string} listTitle The title of the list to be returned
-     * @returns {Promise<D.List | null>} Returns the list or null if no list exists
-    */
-    async deleteList(id: string) {
-        await this.getUserData();
-        if (this.data) {
-            await this.userRef.update({
-                [`list.${id}`]: null
-            });
-            return;
-        }
-        if (!this.data) {
-            await this.userRef.set({
-                [`list.${id}`]: null
-            });
-            return;
-        }
+
+    async newList(list: D.NewList) {
+        await this.init();
+        const listsCollection = collection(this.userRef, "lists");
+        const newListRef = await addDoc(listsCollection, list); // If you want to auto-generate the ID
+        return newListRef;
+    }
+
+    async newItem(itemTitle: string, item: DocumentData) {
+        await this.init();
+        const itemsCollection = collection(this.userRef, "items");
+        const newItemRef = await addDoc(itemsCollection, item); // If you want to auto-generate the ID
+        return newItemRef;
     }
 
 }

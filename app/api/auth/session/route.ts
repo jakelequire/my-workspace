@@ -25,11 +25,11 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 		.then((data) => {
 			console.log('GET | <data>', data);
 			res.status(200).json(data);
-			res.json(data);
 		})
 		.catch((error) => {
 			console.log('GET | <error>', error);
 			res.status(500).json({error: error});
-			res.json({error: error});
 		});
+
+	return;
 }

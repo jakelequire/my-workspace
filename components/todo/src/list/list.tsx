@@ -9,8 +9,8 @@ import _EDIT from '@/public/assets/edit.svg';
 import _CLOSE from '@/public/assets/close-w.svg';
 
 export default function List(): JSX.Element {
-  const {sessionLists, dropdownActive, setDropdownActive} = ToDoState();
-	const [newList, setNewList] = useState<JSX.Element>();
+  const {dropdownActive, setDropdownActive} = ToDoState();
+	const [newListItem, setNewListItem] = useState<JSX.Element>(<></>);
 
 	const handleClick = () => {
 		setDropdownActive(!dropdownActive);
@@ -18,15 +18,11 @@ export default function List(): JSX.Element {
 
 	useEffect(() => {
 		if (dropdownActive) {
-			setNewList(<NewListItem />);
+			setNewListItem(<NewListItem />);
 		} else {
-			setNewList(undefined);
+			setNewListItem(<></>);
 		}
-	}, [dropdownActive, setNewList]);
-
-  useEffect(() => {
-    console.log(sessionLists);
-  }, [sessionLists])
+	}, [dropdownActive, setNewListItem]);
 
   const plusOrMinus = dropdownActive ? '-' : '+';
 
@@ -39,7 +35,7 @@ export default function List(): JSX.Element {
 				}}>
 				<span className={style.newListText}>New List {plusOrMinus}</span>
 			</a>
-			{newList}
+			{newListItem}
 			<ol className={style.list}>
 			</ol>
 		</div>

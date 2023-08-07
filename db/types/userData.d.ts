@@ -1,4 +1,4 @@
-
+import { DocumentData } from "firebase/firestore";
 
 export namespace UserData {
 	export type User = string;
@@ -7,12 +7,12 @@ export namespace UserData {
 	export interface List {
 		id: string;
 		title: string;
-		items: Item[];
+		items: Item[{}];
 	}
 
 	export interface NewList {
+		id: string;
 		title: string;
-		items: never[];
 	}
 
 	export interface Item {
@@ -21,7 +21,7 @@ export namespace UserData {
 		completed: boolean;
 		dueDate: string;
 		description: string;
-		priority: number;
+		priority: '' | 'none' | 'low' | 'medium' | 'high';
 		creationDate: string;
 	}
 

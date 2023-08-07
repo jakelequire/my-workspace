@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import ToDoState from '../todoState';
-import useSessionState from '@/components/useSessionState';
 import Image from 'next/image';
 // Utils
 import IDGen from '@/utils/idGen';
@@ -12,8 +11,7 @@ import _EDIT from '@/public/assets/edit.svg';
 import _CLOSE from '@/public/assets/close-w.svg';
 
 export default function NewListItem(): JSX.Element {
-	const {setNewList, dropdownActive, setDropdownActive} = ToDoState();
-	const {uid} = useSessionState();
+	const {setNewList, setDropdownActive} = ToDoState();
 	const [newListName, setNewListName] = useState<string>('');
 
 
@@ -24,14 +22,9 @@ export default function NewListItem(): JSX.Element {
 			const newList = {
 				id: IDGen(),
 				title: newListName,
-				items: [],
 			};
-
 			setNewList(newList);
-
 			setDropdownActive(false);
-
-			// Add the list to Firestore
 		}
 	}
 
