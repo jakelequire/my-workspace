@@ -1,61 +1,134 @@
 // /db/collections/userData.ts
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc, DocumentData, DocumentReference } from "firebase/firestore";
-import { UserData as D } from "../types/userData";
+import {
+	getFirestore,
+	collection,
+	doc,
+	getDoc,
+	setDoc,
+	addDoc,
+	DocumentData,
+	DocumentReference,
+	DocumentSnapshot,
+} from 'firebase/firestore';
+import { UserDataCollection } from "../types/userData";
 
 
 export default class UserData {
-    public readonly uid: string;
-    public readonly userRef: DocumentReference<DocumentData>;
-    private readonly db: any;
-    public docData: DocumentData;
+	private readonly db: any;
+	readonly uid: string;
+	readonly userRef: DocumentReference<DocumentData>;
+	docData: DocumentData;
 
-    constructor(uid: string) {
-        this.db = getFirestore();
-        this.uid = uid;
-        this.userRef = doc(this.db, "userData", this.uid); 
-        this.docData = {};
-    }
+	constructor(uid: string) {
+		this.db = getFirestore();
+		this.uid = uid;
+		this.userRef = doc(this.db, 'userData', this.uid);
+		this.docData = {};
+	}
 
-    async init() {
-        if(!this.uid) {
-            return this;
-        } else if(!this.db) {
-            throw new Error("No db");
-        } else if(!this.userRef) {
-            throw new Error("No userRef");
-        } else {
-            console.log("all good");
-        }
-        const docSnap = await getDoc(this.userRef);
-        if (docSnap.exists()) {
-            this.docData = docSnap.data();
-        }
-        if(!this.docData.uid) {
-            await this.newCollection();
-        }
-    }
+    /**
+     * @returns this
+     * 
+     * @description Initializes the class and sets the document data
+     * if the document exists, otherwise creates a new document at /userData/{uid}
+     * and sets the document data to the new document.
+     * 
+     * @throws Error if db or userRef is not initialized
+     * @throws Error if the document does not exist and cannot be created
+     * @throws Error if the document exists but cannot be read
+    */ 
+	public async init(): Promise<this> {
+		// Validate
+		if (!this.uid) {
+			return this;
+		} else if (!this.db) {
+			throw new Error('db not initialized');
+		} else if (!this.userRef) {
+			throw new Error('userRef not initialized');
+		}
+		// Get the document
+		const docSnap = await getDoc(this.userRef);
+		if (docSnap.exists()) {
+			this.docData = docSnap.data();
+		}
+		// If the document doesn't exist, create it
+		if (!this.docData.uid) {
+			await this.newCollection();
+		}
+		return this;
+	}
 
-    async newCollection() {
-        const docRef = doc(collection(this.db, "userData", this.uid));
-        await setDoc(docRef, { uid: this.uid });
-        return docRef;
-    }
+    /**
+     * @returns DocumentSnapshot<DocumentData, DocumentData> | null
+     * 
+     * @description Returns the document snapshot of /userData/{uid}
+    */
+	public async userSnapshot(): Promise<DocumentSnapshot<DocumentData> | null> {
+		await this.init();
+		const docSnap = await getDoc(this.userRef);
+		return docSnap;
+	}
 
+    /**
+     * @returns DocumentReference<DocumentData>
+     * 
+     * @description Creates a new document at /userData/{uid}
+    */
+	public async newCollection(): Promise<DocumentReference<DocumentData>> {
+		const docRef = doc(this.db, 'userData', this.uid);
+		await setDoc(docRef, {uid: this.uid});
+		return docRef;
+	}
 
-    async newList(list: D.NewList) {
-        await this.init();
-        const listsCollection = collection(this.userRef, "lists");
-        const newListRef = await addDoc(listsCollection, list); // If you want to auto-generate the ID
-        return newListRef;
-    }
+    /**
+     * @param list The list to add to the collection
+     * @returns void | Error
+     * 
+     * @description Adds a list to /userData/{uid}/lists
+    */
+	public async newList(list: UserDataCollection.List): Promise<void | Error> {
+		await this.init();
+		const listCollection = collection(this.userRef, 'lists');
+		const newListRef = async () => {
+			try {
+				await addDoc(listCollection, {
+					title: list.title,
+					items: list.items,
+				});
+			} catch (error) {
+				console.log('<userData> Error thrown @newList :', error);
+				throw new Error('Error adding document: ' + error);
+			}
+		};
+		return newListRef();
+	}
 
-    async newItem(itemTitle: string, item: DocumentData) {
-        await this.init();
-        const itemsCollection = collection(this.userRef, "items");
-        const newItemRef = await addDoc(itemsCollection, item); // If you want to auto-generate the ID
-        return newItemRef;
-    }
-
+    /**
+     * @param listId The id of the list to add the task to
+     * @param task The task to add to the list
+     * @returns void | Error
+     * 
+     * @description Adds a task to /userData/{uid}/lists/{listId}/items
+    */
+	public async newTask(listId: string, task: UserDataCollection.Task): Promise<void | Error> {
+		await this.init();
+		const itemCollection = collection(this.userRef, `lists/${listId}/items/`);
+		const newItemRef = async () => {
+			try {
+				await addDoc(itemCollection, {
+					id: task.id,
+					title: task.title,
+					completed: task.completed,
+					dueDate: task.dueDate,
+					description: task.description,
+					priority: task.priority,
+					creationDate: task.creationDate,
+				});
+			} catch (error) {
+				console.log('<userData> Error thrown @newTask :', error);
+				throw new Error('Error adding document: ' + error);
+			}
+		};
+		return newItemRef();
+	}
 }
-
-export * from "./userData";

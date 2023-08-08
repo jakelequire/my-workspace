@@ -1,40 +1,53 @@
-import { DocumentData } from "firebase/firestore";
 
-export namespace UserData {
-	export type User = string;
-	declare function uid(): User;
 
-	export interface List {
-		id: string;
-		title: string;
-		items: Item[{}];
-	}
 
-	export interface NewList {
-		id: string;
-		title: string;
-	}
+export namespace UserDataCollection {
 
-	export interface Item {
-		id: string;
-		title: string;
-		completed: boolean;
-		dueDate: string;
-		description: string;
-		priority: '' | 'none' | 'low' | 'medium' | 'high';
-		creationDate: string;
-	}
+    export interface ToDo {
+        list: {
+            [key: string]: {
+                id: string;
+                title: string;
+                items: {
+                    [key: string]: Task;
+                }
+            }
 
-	export interface ToDo {
-		list: {
-			[key: string]: {
-				title: string;
-				items: {
-					[key: string]: Item;
-				};
-			};
-		};
-	}
+        }
+    }
 
+    export type List = {
+        id: string;
+        title: string;
+        items: Task[];
+    }
+
+    export type Task = {
+        id: string;
+        title: string;
+        completed: boolean;
+        dueDate: string;
+        description: string;
+        priority: '' | 'none' | 'low' | 'medium' | 'high';
+        creationDate: string;
+    }
+
+    export interface NewClientList {
+        id: string;
+        title: string;
+        items: never[];
+    }
+
+    export interface NewClientList extends List {
+
+
+    }
+
+    export interface NewClientTask extends Task {
+
+
+    }
 
 }
+
+export * from './userDataCollection';
