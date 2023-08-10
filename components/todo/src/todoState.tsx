@@ -5,7 +5,7 @@ import {UserDataCollection as UDC} from '@/db/types/userData';
 import useSessionState from '@/components/useSessionState';
 import UserData from '@/db/collections/userData';
 // import newList from '../api/newList';
-
+											
 export default function ToDoState() {
 	const [dropdownActive, setDropdownActive] = useState<boolean>(false);
 	const [sessionLists, setSessionLists] = useState(<></>);
@@ -53,13 +53,13 @@ export default function ToDoState() {
 	// !useEffect to create a new list with an empty item array in Firebase
 	useEffect(() => {
 		if (userDataCollection === undefined) return;
-		userDataCollection.newList(newList);
+		userDataCollection.createList(newList);
 	}, [newList, userDataCollection]);
 
 	// !useEffect to create a new item in Firebase
 	useEffect(() => {
 		if (userDataCollection === undefined) return;
-		userDataCollection.newTask(newClientTask.title, newClientTask);
+		userDataCollection.createTask(newClientTask.title, newClientTask);
 	}, [newClientTask, userDataCollection]);
 
 	// !Debugging
