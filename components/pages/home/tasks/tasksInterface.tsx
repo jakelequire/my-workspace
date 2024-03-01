@@ -10,6 +10,9 @@ export default function TasksInterface(): JSX.Element {
         <section className={styles.tasks_container}>
             <div className={styles.tasks_wrapper}>
                 <TaskInput />
+                <div className={styles.tasks_header}>
+                    <h2 className={styles.tasks_title}>Tasks</h2>
+                </div>
                 <DataTable />
             </div>
         </section>
