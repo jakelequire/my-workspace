@@ -15,7 +15,7 @@ import {
 
 
 export default function Category() {
-    const [priority, setPriority] = React.useState('Low');
+    const [category, setCategory] = React.useState('Personal');
 
     return (
         <div className={styles.menu_container}>
@@ -24,16 +24,17 @@ export default function Category() {
         </div>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className={`${styles.menu} w-32`} variant='outline'>{priority}</Button>
+                <Button className={`${styles.menu} w-32`} variant='outline'>{category}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className='w-56'>
                 <DropdownMenuLabel>Set Category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={priority} onValueChange={setPriority}>
-                    <DropdownMenuRadioItem value='Low'>Low</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='Medium'>Medium</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='High'>High</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='Urgent'>Urgent</DropdownMenuRadioItem>
+                <DropdownMenuRadioGroup value={category} onValueChange={setCategory}>
+                    <DropdownMenuRadioItem value='Personal'>Personal</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='Appointment'>Appointment</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='Project'>Project</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='Work'>Work</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='Other'>Other</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>

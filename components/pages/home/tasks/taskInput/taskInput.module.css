@@ -119,3 +119,7 @@
     height: 100%;
     gap: 0.5rem;
 }
+
+.taskinput_button {
+    margin-top: 1rem;
+}
