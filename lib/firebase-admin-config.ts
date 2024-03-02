@@ -6,7 +6,7 @@ const firebaseAdminConfig = {
     credential: admin.credential.cert(serviceAccount)
 }
 
-export function customInitApp() {
+export function InitApp() {
     if (getApps().length <= 0) {
         initializeApp(firebaseAdminConfig);
     }

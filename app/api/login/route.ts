@@ -1,10 +1,12 @@
 // app/api/login/route.ts
 import * as admin from 'firebase-admin';
+import { auth } from '@/lib/firebase-config';
 import { cookies, headers } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
-import { customInitApp } from '@/lib/firebase-admin-config';
+import { InitApp } from '@/lib/firebase-admin-config';
+console.log("POST /api/login !!! ")
 
-customInitApp();
+InitApp();
 
 export async function POST(request: Request, response: NextResponse) {
     console.log("POST /api/login")
