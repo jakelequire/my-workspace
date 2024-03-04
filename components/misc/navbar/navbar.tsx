@@ -8,8 +8,10 @@ import {
     NavigationMenuTrigger,
     NavigationMenuLink,
 } from '../../ui/navigation-menu';
+import { Button } from '@/components/ui/button';
 import * as React from 'react';
 import Link from 'next/link';
+import { useAuthContext } from '@/app/AuthContext';
 import { cn } from '@/lib/utils';
 
 const components: { title: string; href: string; description: string }[] = [
@@ -50,9 +52,30 @@ const finances: { title: string; href: string; description: string }[] = [
 ]
 
 export default function Navbar(): JSX.Element {
+    const { isLoggedIn, logout } = useAuthContext();
+
+    const isUserLoggedIn: string = isLoggedIn ? 'Logged In' : 'Logged Out';
+
     return (
         <NavigationMenu>
             <NavigationMenuList>
+
+                <NavigationMenuItem>
+                    {isUserLoggedIn}
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                    <Button onClick={logout}>Logout</Button>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                    <Link href='/login' passHref>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            Login
+                        </NavigationMenuLink>
+                    </Link>
+                </NavigationMenuItem>
+                    
 
 				<NavigationMenuItem>
                     <Link href='/' legacyBehavior passHref>

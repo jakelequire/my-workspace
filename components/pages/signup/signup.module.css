@@ -1,9 +1,7 @@
 
-
-
-.login_container {
+.signup_container {
     display: flex;
-    justify-content: row;
+    justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
