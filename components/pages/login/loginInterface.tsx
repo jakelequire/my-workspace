@@ -3,11 +3,13 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 import { auth, firebase_app } from '@/lib/firebase-config';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/app/AuthContext';
 import styles from './login.module.css';
 
 export default function LoginInterface(): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setIsLoggedIn } = useAuthContext();
     const router = useRouter();
 
     const signIn = async (email: string, password: string) => {
@@ -26,17 +28,15 @@ export default function LoginInterface(): JSX.Element {
                 },
                 body: JSON.stringify({ token: idToken }), // Send token in the body
                 credentials: 'include', // For cookies
+            }).then((res) => {
+                if(res.status === 200) {
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            }).catch((er) => {
+                console.log('\n<!>Error in fetch /api/auth<!>\n', er);
             });
-
-            console.log('\n<!>res<!>\n', res.status);
-
-            if (res.ok) {
-                // Handle successful authentication, e.g., store auth state or redirect
-                router.push('/');
-            } else {
-                // Handle errors, e.g., invalid token or server error
-                error = new Error('Authentication failed');
-            }
         } catch (e) {
             error = e;
             console.log('\n Error in signInWithEmailAndPassword: \n', e);

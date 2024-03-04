@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-
     if (request.nextUrl.pathname.startsWith("/_next")) {
         return NextResponse.next();
     }
@@ -10,14 +9,24 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const token = request.cookies.get('authToken');
+    const tokenValidation = () => {
+        const token = request.cookies.get('authToken');
+        if (!token) {
+            return NextResponse.redirect(new URL('/login', request.url));
+        } else {
+            return NextResponse.next();
+        }
+    }
 
-    if (!token && !request.nextUrl.pathname.startsWith("/login")) {
+
+    if (!tokenValidation() && !request.nextUrl.pathname.startsWith("/login")) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    if(token && request.nextUrl.pathname.startsWith("/login")) {
-        console.log('\n<!>middleware<!>\n', token);
+
+
+    if(tokenValidation() && request.nextUrl.pathname.startsWith("/login")) {
+        console.log('\n<!>middleware<!>\n', tokenValidation());
         return NextResponse.redirect(new URL('/', request.url))
     } else {
         console.log("No token found in cookies")
@@ -25,3 +34,5 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.next();
 }
+
+

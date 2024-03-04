@@ -13,6 +13,9 @@ import * as React from 'react';
 import Link from 'next/link';
 import { useAuthContext } from '@/app/AuthContext';
 import { cn } from '@/lib/utils';
+import { getAuth, signOut } from 'firebase/auth';
+import { firebase_app } from '@/lib/firebase-config';
+const auth = getAuth(firebase_app);
 
 const components: { title: string; href: string; description: string }[] = [
     {
@@ -52,9 +55,26 @@ const finances: { title: string; href: string; description: string }[] = [
 ]
 
 export default function Navbar(): JSX.Element {
-    const { isLoggedIn, logout } = useAuthContext();
+    const { isLoggedIn, setIsLoggedIn, logout } = useAuthContext();
 
     const isUserLoggedIn: string = isLoggedIn ? 'Logged In' : 'Logged Out';
+
+    const handleSignOut = async () => {
+        await signOut(auth);
+        return fetch('/api/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include', // For cookies
+        }).then((res) => {
+            if (res.status === 200) {
+                setIsLoggedIn(false);
+            } else {
+                setIsLoggedIn(true);
+            }
+        })
+    }
 
     return (
         <NavigationMenu>
@@ -65,7 +85,9 @@ export default function Navbar(): JSX.Element {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <Button onClick={logout}>Logout</Button>
+                    <button onClick={handleSignOut}>
+                        Logout
+                    </button>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>

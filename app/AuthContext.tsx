@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, { useState, useEffect, useContext } from 'react';
 import { onAuthStateChanged, getAuth, signOut } from 'firebase/auth';
 import { cookies } from 'next/headers';
@@ -7,13 +7,13 @@ import Router from 'next/router';
 
 const auth = getAuth(firebase_app);
 
-export const AuthContext = React.createContext({ 
-    user: null, 
+export const AuthContext = React.createContext({
+    user: null,
     loading: true,
     isLoggedIn: false,
-    logout: async () => {}
+    setIsLoggedIn: (value: boolean) => {},
+    logout: async () => {},
 });
-
 
 export const useAuthContext = () => useContext(AuthContext);
 
@@ -27,45 +27,40 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             if (user) {
                 setUser(user);
                 setIsLoggedIn(true);
-                Router.push('/home'); // Redirect to the home page if the user is logged in
             } else {
                 setUser(null);
                 setIsLoggedIn(false);
                 singoutUser();
-                Router.push('/login'); // Redirect to the login page if the user is not logged in
             }
             setLoading(false);
         });
 
         return () => unsubscribe();
-    }, []);
-
+    }, [setIsLoggedIn]);
 
     const logout = async () => {
-        await signOut(auth).then(() => {
-            // Successfully signed out
-            setUser(null); // Update the user state to null
-        }).catch((error) => {
-            // An error happened.
-            console.error("Logout Error:", error);
-        });
+        console.log('!!!Logging out!!!');
+        await signOut(auth);
+        console.log('!!!User signed out!!!');
+        setUser(null);
+        setIsLoggedIn(false);
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, isLoggedIn, logout }}>
+        <AuthContext.Provider value={{ user, loading, isLoggedIn, logout, setIsLoggedIn }}>
             {loading ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     );
 };
 
-function singoutUser() {
+async function singoutUser() {
     // makes request to /api/logout
-    return fetch('/api/logout', {
+    return await fetch('/api/logout', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include', // For cookies
+        credentials: 'include',
     }).then((res) => {
         if (res.ok) {
             console.log('User signed out');

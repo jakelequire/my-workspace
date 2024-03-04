@@ -55,11 +55,11 @@ export async function POST(request: Request) {
         // Verify token with Firebase Admin SDK
         const decodedToken = await verifyTokenWithFirebase(token);
         // Verify auth with Firebase Auth SDK
-        if(await validateWithFirebase()) {
-            console.log('\n[/api/auth = POST] <!>validateWithFirebase<!>\n Successful!');
-        } else {
-            console.log('\n[/api/auth = POST] <!>validateWithFirebase<!>\n Failed!');
-        }
+        // if(await validateWithFirebase()) {
+        //     console.log('\n[/api/auth = POST] <!>validateWithFirebase<!>\n Successful!');
+        // } else {
+        //     console.log('\n[/api/auth = POST] <!>validateWithFirebase<!>\n Failed!');
+        // }
 
         if(decodedToken) {
             console.log('\n[/api/auth = POST] <!>decodedToken<!>\n Successful!', decodedToken);
@@ -74,6 +74,8 @@ export async function POST(request: Request) {
             path: '/',
             maxAge: 60 * 60 * 24 * 7, // 1 week
         });
+
+        cookies().set('testing', 'This is a test!')
 
         // SetHeader - 'set-cookie' - serialized
         cookies().set('authToken', token, {
@@ -92,6 +94,7 @@ export async function POST(request: Request) {
 async function verifyTokenWithFirebase(idToken: any) {
     try {
         const decodedToken = await admin.auth().verifyIdToken(idToken);
+        console.log('\n[/api/auth = POST] Token Successfully Received\n')
         return decodedToken;
     } catch (error) {
         console.error('Error verifying ID token:', error);
@@ -100,15 +103,19 @@ async function verifyTokenWithFirebase(idToken: any) {
 }
 
 
-export async function streamToJson(stream: ReadableStream<Uint8Array>): Promise<unknown> {
+async function streamToJson(stream: ReadableStream<Uint8Array>): Promise<unknown> {
     return await new Response(stream).json();
 }
 
 async function validateWithFirebase() {
+    console.log('\n[/api/auth = POST] <!>validateWithFirebase<!>\n');
     const auth = getAuth();
+    console.log('\n[/api/auth = POST] <!>auth<!>\n')
     const user = auth.currentUser;
     if (!user) {
+        console.log('\n[/api/auth = POST] <!>No user found<!>\n')
         return false;
     }
+    console.log('\n[/api/auth = POST] <!>User found<!>\n')
     return true;
 }
