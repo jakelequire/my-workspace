@@ -3,6 +3,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 import { auth, firebase_app } from '@/lib/firebase-config';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation'
 import { useAuthContext } from '@/app/AuthContext';
 import styles from './login.module.css';
 
@@ -12,6 +13,10 @@ export default function LoginInterface(): JSX.Element {
     const { setIsLoggedIn } = useAuthContext();
     const router = useRouter();
 
+    function refreshPage() {
+        window.location.reload();
+    }
+
     const signIn = async (email: string, password: string) => {
         let result: any = null,
             error = null;
@@ -20,19 +25,48 @@ export default function LoginInterface(): JSX.Element {
             console.log('\n<!>signInWithEmailAndPassword result<!>\n', result);
             const idToken = await result.user.getIdToken(); // Directly obtain the ID token
 
+            // !If no token is found, send a POST request to /api/login
+            // !with the error message
+            if(!idToken) {
+                return await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ error: 'No token found'}),
+                    credentials: 'include',
+                }).then((res) => {
+                    if(res.status === 200) {
+                        /*DEBUG*/console.log('[LoginInterface] Redirecting to { / } ');
+                        setIsLoggedIn(true);
+                        refreshPage();
+                    } else {
+                        /*DEBUG*/console.log('[LoginInterface] Error in fetch { /api/login }');
+                        setIsLoggedIn(false);
+                        refreshPage();
+                    }
+                }).catch((er) => {
+                    console.log('\n<!>Error in fetch /api/auth<!>\n', er);
+                });
+            }
+
             // Send POST request to /api/auth with the ID token in the Authorization header
-            const res = await fetch('/api/auth', {
+            // If the status is 200, set isLoggedIn to true
+            return await fetch('/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`, // Send token in the header
                 },
                 body: JSON.stringify({ token: idToken }), // Send token in the body
                 credentials: 'include', // For cookies
             }).then((res) => {
                 if(res.status === 200) {
                     setIsLoggedIn(true);
+                    refreshPage();
                 } else {
                     setIsLoggedIn(false);
+                    refreshPage();
                 }
             }).catch((er) => {
                 console.log('\n<!>Error in fetch /api/auth<!>\n', er);
@@ -41,22 +75,14 @@ export default function LoginInterface(): JSX.Element {
             error = e;
             console.log('\n Error in signInWithEmailAndPassword: \n', e);
         }
-
-        return { result, error };
     };
 
     const handleForm = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const { result, error } = await signIn(email, password);
-
-        if (error) {
-            return console.log('\n Error in Login: \n', error);
-        }
-
-        // else successful
-        console.log('<LoginInterface> Result: ', result);
-        return router.push('/');
+        const foo = await signIn(email, password);
+        
+        return foo;
     };
 
     return (

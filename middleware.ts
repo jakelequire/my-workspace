@@ -1,38 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'; 
+import { cookies } from 'next/headers';
+
+export const config = {
+    // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+    matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+};
 
 export async function middleware(request: NextRequest) {
-    if (request.nextUrl.pathname.startsWith("/_next")) {
-        return NextResponse.next();
+    const { nextUrl } = request;
+
+    // Check if the user is signed in
+    const validate = await validateSessionCookie();
+    console.log("\n[middleware.ts] validate: ", validate);
+    if(!validate && nextUrl.pathname !== '/login') {
+        return NextResponse.redirect(new URL('/login', request.nextUrl).href);
     }
 
-    if (request.nextUrl.pathname.startsWith("/api/auth")) {
-        return NextResponse.next();
+    if(validate && nextUrl.pathname === '/login') {
+        return NextResponse.redirect(new URL('/', request.nextUrl).href);
     }
-
-    const tokenValidation = () => {
-        const token = request.cookies.get('authToken');
-        if (!token) {
-            return NextResponse.redirect(new URL('/login', request.url));
-        } else {
-            return NextResponse.next();
-        }
-    }
-
-
-    if (!tokenValidation() && !request.nextUrl.pathname.startsWith("/login")) {
-        return NextResponse.redirect(new URL('/login', request.url));
-    }
-
-
-
-    if(tokenValidation() && request.nextUrl.pathname.startsWith("/login")) {
-        console.log('\n<!>middleware<!>\n', tokenValidation());
-        return NextResponse.redirect(new URL('/', request.url))
-    } else {
-        console.log("No token found in cookies")
-    }
-
-    return NextResponse.next();
 }
 
-
+async function validateSessionCookie(): Promise<boolean> {
+    const sessionCookie = cookies().get('session') || '';
+    if(sessionCookie) {
+        return true;
+    } else {
+        return false;
+    }
+}

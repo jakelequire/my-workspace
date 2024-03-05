@@ -38,6 +38,10 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
         return () => unsubscribe();
     }, [setIsLoggedIn]);
 
+    useEffect(() => {
+        
+    }, [isLoggedIn])
+
     const logout = async () => {
         console.log('!!!Logging out!!!');
         await signOut(auth);

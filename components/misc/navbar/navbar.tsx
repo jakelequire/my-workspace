@@ -15,6 +15,10 @@ import { useAuthContext } from '@/app/AuthContext';
 import { cn } from '@/lib/utils';
 import { getAuth, signOut } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
+import Router from 'next/router';
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation'
+
 const auth = getAuth(firebase_app);
 
 const components: { title: string; href: string; description: string }[] = [
@@ -59,6 +63,10 @@ export default function Navbar(): JSX.Element {
 
     const isUserLoggedIn: string = isLoggedIn ? 'Logged In' : 'Logged Out';
 
+    function refreshPage() {
+        window.location.reload();
+    }
+
     const handleSignOut = async () => {
         await signOut(auth);
         return fetch('/api/logout', {
@@ -69,11 +77,17 @@ export default function Navbar(): JSX.Element {
             credentials: 'include', // For cookies
         }).then((res) => {
             if (res.status === 200) {
+                /*DEBUG*/ console.log('[Navbar] Redirecting to { /login } ');
                 setIsLoggedIn(false);
+                refreshPage();
             } else {
+                /*DEBUG*/ console.log('[Navbar] Error in fetch { /api/logout }');
                 setIsLoggedIn(true);
+                refreshPage();
             }
-        })
+        }).catch((er) => {
+            console.log('\n<!>Error in fetch /api/logout<!>\n', er);
+        });
     }
 
     return (
