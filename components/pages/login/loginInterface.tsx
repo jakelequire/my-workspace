@@ -1,21 +1,17 @@
 'use client';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, firebase_app } from '@/lib/firebase-config';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { redirect } from 'next/navigation'
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase-config';
+import { useState } from 'react';
 import { useAuthContext } from '@/app/AuthContext';
+import { useRouter } from 'next/navigation';
 import styles from './login.module.css';
 
 export default function LoginInterface(): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { setIsLoggedIn } = useAuthContext();
-    const router = useRouter();
 
-    function refreshPage() {
-        window.location.reload();
-    }
+    const router = useRouter();
 
     const signIn = async (email: string, password: string) => {
         let result: any = null,
@@ -37,13 +33,11 @@ export default function LoginInterface(): JSX.Element {
                     credentials: 'include',
                 }).then((res) => {
                     if(res.status === 200) {
-                        /*DEBUG*/console.log('[LoginInterface] Redirecting to { / } ');
                         setIsLoggedIn(true);
-                        refreshPage();
+                        router.push('/');
                     } else {
-                        /*DEBUG*/console.log('[LoginInterface] Error in fetch { /api/login }');
                         setIsLoggedIn(false);
-                        refreshPage();
+                        router.push('/login');
                     }
                 }).catch((er) => {
                     console.log('\n<!>Error in fetch /api/auth<!>\n', er);
@@ -63,10 +57,10 @@ export default function LoginInterface(): JSX.Element {
             }).then((res) => {
                 if(res.status === 200) {
                     setIsLoggedIn(true);
-                    refreshPage();
+                    router.push('/');
                 } else {
                     setIsLoggedIn(false);
-                    refreshPage();
+                    router.push('/login');
                 }
             }).catch((er) => {
                 console.log('\n<!>Error in fetch /api/auth<!>\n', er);

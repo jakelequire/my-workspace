@@ -18,7 +18,6 @@ const firebaseConfig = {
 };
 
 Object.entries(firebaseConfig).forEach(([key, value]) => {
-    console.log(`\n[firebase-config.ts]\nkey: ${key},\nvalue: ${value}`)
     if (!value) {
         throw new Error(`Firebase configuration error: ${key} is not set.`);
     }

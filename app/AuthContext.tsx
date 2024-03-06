@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect, useContext } from 'react';
 import { onAuthStateChanged, getAuth, signOut } from 'firebase/auth';
-import { cookies } from 'next/headers';
 import { firebase_app } from '@/lib/firebase-config';
 import Router from 'next/router';
 
@@ -25,8 +24,8 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setUser(user);
                 setIsLoggedIn(true);
+                setUser(user);
             } else {
                 setUser(null);
                 setIsLoggedIn(false);
@@ -38,17 +37,13 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
         return () => unsubscribe();
     }, [setIsLoggedIn]);
 
-    useEffect(() => {
-        
-    }, [isLoggedIn])
-
     const logout = async () => {
-        console.log('!!!Logging out!!!');
-        await signOut(auth);
-        console.log('!!!User signed out!!!');
         setUser(null);
         setIsLoggedIn(false);
+        await signOut(auth);
+        console.log('!!!User signed out!!!');
     };
+
 
     return (
         <AuthContext.Provider value={{ user, loading, isLoggedIn, logout, setIsLoggedIn }}>

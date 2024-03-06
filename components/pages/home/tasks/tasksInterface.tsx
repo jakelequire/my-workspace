@@ -1,3 +1,4 @@
+"use client"
 import { DataTable } from './datatable/datatable'
 import TaskInput from './taskInput/taskInput'
 import styles from './tasks.module.css'

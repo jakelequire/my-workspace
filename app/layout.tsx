@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import AuthWrapper from './wrapper';
+import { AuthContextProvider } from '@/app/AuthContext';
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-            {children}
+        <AuthContextProvider>
+          {children}
+        </AuthContextProvider>
       </body>
     </html>
   );
