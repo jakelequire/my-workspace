@@ -1,6 +1,6 @@
 // /api/login/route.ts
 import * as admin from 'firebase-admin';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { InitApp } from '@/lib/firebase-admin-config';
 //Initialize Firebase Admin
