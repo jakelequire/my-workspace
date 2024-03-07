@@ -92,9 +92,7 @@ export default function Navbar(): JSX.Element {
             return (
                 // position link all the way to the right
                 <Link href='/login' legacyBehavior passHref>
-                    <Button
-                        className={navigationMenuTriggerStyle()}
-                        onClick={handleSignOut}>
+                    <Button className={navigationMenuTriggerStyle()} onClick={handleSignOut}>
                         Logout
                     </Button>
                 </Link>
@@ -102,9 +100,7 @@ export default function Navbar(): JSX.Element {
         } else {
             return (
                 <Link href='/login' legacyBehavior passHref>
-                    <Button className={navigationMenuTriggerStyle()}>
-                        Login
-                    </Button>
+                    <Button className={navigationMenuTriggerStyle()}>Login</Button>
                 </Link>
             );
         }
@@ -113,52 +109,54 @@ export default function Navbar(): JSX.Element {
     return (
         <div className='flex flex-row items-center justify-between w-full'>
             <div className='flex justify-center flex-grow'>
-            <NavigationMenu className='justify-center'>
-                <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <Link href='/' legacyBehavior passHref>
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                                Dashboard
-                            </NavigationMenuLink>
-                        </Link>
-                    </NavigationMenuItem>
+                {isLoggedIn ? (
+                    <NavigationMenu className='justify-center'>
+                        <NavigationMenuList>
+                            <NavigationMenuItem>
+                                <Link href='/' legacyBehavior passHref>
+                                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                        Dashboard
+                                    </NavigationMenuLink>
+                                </Link>
+                            </NavigationMenuItem>
 
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>Home Life</NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
-                                {components.map((component) => (
-                                    <ListItem
-                                        key={component.title}
-                                        title={component.title}
-                                        href={component.href}>
-                                        {component.description}
-                                    </ListItem>
-                                ))}
-                            </ul>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger>Home Life</NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                                        {components.map((component) => (
+                                            <ListItem
+                                                key={component.title}
+                                                title={component.title}
+                                                href={component.href}>
+                                                {component.description}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
 
-                    <NavigationMenuItem>
-                        <NavigationMenuTrigger>Finances</NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
-                                {finances.map((component) => (
-                                    <ListItem
-                                        key={component.title}
-                                        title={component.title}
-                                        href={component.href}>
-                                        {component.description}
-                                    </ListItem>
-                                ))}
-                            </ul>
-                        </NavigationMenuContent>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
-            </NavigationMenu>
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger>Finances</NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                                        {finances.map((component) => (
+                                            <ListItem
+                                                key={component.title}
+                                                title={component.title}
+                                                href={component.href}>
+                                                {component.description}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                ) : null}
             </div>
             <div className='flex justify-end flex-initial '>
-                <LoginButton />
+                {(isLoggedIn ? <LoginButton /> : null)}
             </div>
         </div>
     );

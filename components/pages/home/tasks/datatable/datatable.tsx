@@ -38,6 +38,7 @@ import {
 export type TodoItem = {
     id: string;
     title: string;
+    priority: 'low' | 'medium' | 'high';
     description: string;
     completed: boolean;
     status: 'not started' | 'in-progress' | 'completed';
@@ -49,6 +50,7 @@ const exampleData: TodoItem[] = [
     {
         id: '1',
         title: 'Create a new website',
+        priority: 'high',
         description: 'Create a new website for the company.',
         completed: false,
         status: 'not started',
@@ -58,6 +60,7 @@ const exampleData: TodoItem[] = [
     {
         id: '2',
         title: 'Update the blog',
+        priority: 'medium',
         description: 'Update the blog with new content.',
         completed: false,
         status: 'not started',
@@ -67,6 +70,7 @@ const exampleData: TodoItem[] = [
     {
         id: '3',
         title: 'Create a new website',
+        priority: 'low',
         description: 'Create a new website for the company.',
         completed: false,
         status: 'not started',
@@ -76,6 +80,7 @@ const exampleData: TodoItem[] = [
     {
         id: '4',
         title: 'Create a new website',
+        priority: 'high',
         description: 'Create a new website for the company.',
         completed: false,
         status: 'not started',
@@ -85,6 +90,7 @@ const exampleData: TodoItem[] = [
     {
         id: '5',
         title: 'Create a new website',
+        priority: 'high',
         description: 'Create a new website for the company.',
         completed: false,
         status: 'not started',
@@ -119,44 +125,39 @@ export const columns: ColumnDef<TodoItem>[] = [
     {
         accessorKey: 'title',
         header: 'Title',
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("title")}</div>
-        )
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('title')}</div>,
+    },
+    {
+        accessorKey: 'priority',
+        header: 'Priority',
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('priority')}</div>,
     },
     {
         accessorKey: 'description',
         header: 'Description',
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("description")}</div>
-        )
+        cell: ({ row }) => <div className='capitalize w-96'>{row.getValue('description')}</div>,
     },
     {
         accessorKey: 'status',
         header: 'Status',
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("status")}</div>
-        )
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('status')}</div>,
     },
     {
         accessorKey: 'started',
         header: 'Started',
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("started")}</div>
-        )
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('started')}</div>,
     },
     {
         accessorKey: 'due',
         header: 'Due',
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("due")}</div>
-        )
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('due')}</div>,
     },
     {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
             const todo = row.original;
-
+            // DropdownMenu for each of the rows
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -252,9 +253,9 @@ export function DataTable() {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext()
-                                                  )}
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                            )}
                                         </TableHead>
                                     );
                                 })}
