@@ -12,10 +12,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTaskContext } from '../TaskContext';
 
+type Category = 'personal' | 'appointment' | 'project' | 'work' | 'other';
 
 export default function Category() {
-    const [category, setCategory] = React.useState('Personal');
+    const { category, setCategory } = useTaskContext();
 
     return (
         <div className={styles.menu_container}>
@@ -29,7 +31,7 @@ export default function Category() {
             <DropdownMenuContent className='w-56'>
                 <DropdownMenuLabel>Set Category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={category} onValueChange={setCategory}>
+                <DropdownMenuRadioGroup value={category as Category} onValueChange={setCategory as () => Category}>
                     <DropdownMenuRadioItem value='Personal'>Personal</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value='Appointment'>Appointment</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value='Project'>Project</DropdownMenuRadioItem>

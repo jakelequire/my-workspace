@@ -18,8 +18,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
-import { toast } from '@/components/ui/use-toast';
-import styles from './calendar.module.css';
+import { useTaskContext } from '../TaskContext';
 
 const FormSchema = z.object({
     dob: z.date({
@@ -28,6 +27,8 @@ const FormSchema = z.object({
 });
 
 export default function CalendarInput(): JSX.Element {
+    const { due, setDue } = useTaskContext();
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
@@ -63,7 +64,11 @@ export default function CalendarInput(): JSX.Element {
                                 <Calendar
                                     mode='single'
                                     selected={field.value}
-                                    onSelect={field.onChange}
+                                    onSelect={(date) => {
+                                        field.onChange(date);
+                                        if(!date) return;
+                                        setDue(format(date, 'PP'));
+                                    }}
                                     initialFocus
                                 />
                             </PopoverContent>

@@ -12,10 +12,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTaskContext } from '../TaskContext';
 
+type Priority = 'low' | 'medium' | 'high';
 
 export default function Priority() {
-    const [priority, setPriority] = React.useState('Low');
+    const { priority, setPriority } = useTaskContext();
 
     return (
         <div className={styles.menu_container}>
@@ -29,7 +31,7 @@ export default function Priority() {
             <DropdownMenuContent className='w-56'>
                 <DropdownMenuLabel>Set Priority</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={priority} onValueChange={setPriority}>
+                <DropdownMenuRadioGroup value={priority as Priority} onValueChange={setPriority as () => Priority}>
                     <DropdownMenuRadioItem value='Low'>Low</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value='Medium'>Medium</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value='High'>High</DropdownMenuRadioItem>

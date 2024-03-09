@@ -13,9 +13,14 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -25,81 +30,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { useTaskContext } from '../TaskContext';
+import { Todo } from '@/types/types';
 
-export type TodoItem = {
-    id: string;
-    title: string;
-    priority: 'low' | 'medium' | 'high';
-    description: string;
-    completed: boolean;
-    status: 'not started' | 'in-progress' | 'completed';
-    started: string;
-    due: string;
-};
 
-const exampleData: TodoItem[] = [
-    {
-        id: '1',
-        title: 'Create a new website',
-        priority: 'high',
-        description: 'Create a new website for the company.',
-        completed: false,
-        status: 'not started',
-        started: '2022-01-01',
-        due: '2022-01-31',
-    },
-    {
-        id: '2',
-        title: 'Update the blog',
-        priority: 'medium',
-        description: 'Update the blog with new content.',
-        completed: false,
-        status: 'not started',
-        started: '2022-01-01',
-        due: '2022-01-31',
-    },
-    {
-        id: '3',
-        title: 'Create a new website',
-        priority: 'low',
-        description: 'Create a new website for the company.',
-        completed: false,
-        status: 'not started',
-        started: '2022-01-01',
-        due: '2022-01-31',
-    },
-    {
-        id: '4',
-        title: 'Create a new website',
-        priority: 'high',
-        description: 'Create a new website for the company.',
-        completed: false,
-        status: 'not started',
-        started: '2022-01-01',
-        due: '2022-01-31',
-    },
-    {
-        id: '5',
-        title: 'Create a new website',
-        priority: 'high',
-        description: 'Create a new website for the company.',
-        completed: false,
-        status: 'not started',
-        started: '2022-01-01',
-        due: '2022-01-31',
-    },
-];
-
-export const columns: ColumnDef<TodoItem>[] = [
+export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -131,6 +69,11 @@ export const columns: ColumnDef<TodoItem>[] = [
         accessorKey: 'priority',
         header: 'Priority',
         cell: ({ row }) => <div className='capitalize'>{row.getValue('priority')}</div>,
+    },
+    {
+        accessorKey: 'category',
+        header: 'Category',
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('category')}</div>,
     },
     {
         accessorKey: 'description',
@@ -186,8 +129,10 @@ export function DataTable() {
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
+    const { todoItems } = useTaskContext();
+
     const table = useReactTable({
-        data: exampleData,
+        data: todoItems,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -210,9 +155,9 @@ export function DataTable() {
             <div className='flex items-center py-4'>
                 <Input
                     placeholder='Filter Tasks...'
-                    value={(table.getColumn('task')?.getFilterValue() as string) ?? ''}
+                    value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('task')?.setFilterValue(event.target.value)
+                        table.getColumn('title')?.setFilterValue(event.target.value)
                     }
                     className='max-w-sm'
                 />
@@ -230,7 +175,7 @@ export function DataTable() {
                                 return (
                                     <DropdownMenuCheckboxItem
                                         key={column.id}
-                                        className='capitalize'
+                                        className="capitalize"
                                         checked={column.getIsVisible()}
                                         onCheckedChange={(value: any) =>
                                             column.toggleVisibility(!!value)
@@ -264,9 +209,10 @@ export function DataTable() {
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row, index) => (
                                 <TableRow
                                     key={row.id}
+                                    id={todoItems[index].id}
                                     data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

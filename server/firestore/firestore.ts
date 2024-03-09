@@ -12,16 +12,7 @@
 
 import { firestore } from 'firebase-admin';
 import { InitApp } from '@/lib/firebase-admin-config';
-
-type TodoItem = {
-    id: string;
-    title: string;
-    description: string;
-    completed: boolean;
-    status: 'not started' | 'in-progress' | 'completed';
-    started: string;
-    due: string;
-};
+import { Todo } from '@/types/types';
 
 InitApp();
 
@@ -33,17 +24,20 @@ export class Firestore {
     }
 
     // Add a new todo item
-    async addTodoItem(todoItem: Omit<TodoItem, 'id'>): Promise<firestore.DocumentReference> {
+    async addTodoItem(todoItem: Todo.DbTodoItem): Promise<Todo.AddTodoServerResponse> {
         const docRef = await this.db
             .collection('todo')
             .doc('todoitem')
             .collection('items')
             .add(todoItem);
-        return docRef;
+        /*DEBUG*/ // console.log("Document Reference: \n", docRef)
+        /*DEBUG*/ // console.log("Document ID: \n", docRef.id)
+        // export type AddTodoServerResponse = Promise<TodoItem>
+        return { id: docRef.id, ...todoItem } as Todo.TodoItem;
     }
 
     // Update an existing todo item
-    async updateTodoItem(id: string, todoItem: Partial<TodoItem>): Promise<void> {
+    async updateTodoItem(id: string, todoItem: Partial<Todo.TodoItem>): Promise<void> {
         await this.db
             .collection('todo')
             .doc('todoitem')
@@ -53,7 +47,7 @@ export class Firestore {
     }
 
     // Fetch a single todo item by id
-    async getTodoItem(id: string): Promise<TodoItem | undefined> {
+    async getTodoItem(id: string): Promise<Todo.TodoItem | undefined> {
         const doc = await this.db
             .collection('todo')
             .doc('todoitem')
@@ -61,16 +55,18 @@ export class Firestore {
             .doc(id)
             .get();
         if (doc.exists) {
-            return { id: doc.id, ...doc.data() } as TodoItem;
+            return { id: doc.id, ...doc.data() } as Todo.TodoItem;
         } else {
             return undefined;
         }
     }
 
     // Fetch all todo items
-    async getAllTodoItems(): Promise<TodoItem[]> {
+    async getAllTodoItems(): Promise<Todo.TodoItem[]> {
         const snapshot = await this.db.collection('todo').doc('todoitem').collection('items').get();
-        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as TodoItem));
+        const returnedSnapshop = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Todo.TodoItem));
+        /*DEBUG*/ console.log("[firestore] Returned Snapshot: \n", returnedSnapshop)
+        return returnedSnapshop;
     }
 
     // Delete a todo item
