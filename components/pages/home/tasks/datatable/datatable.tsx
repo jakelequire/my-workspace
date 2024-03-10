@@ -151,6 +151,7 @@ export function DataTable() {
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [categoryFilter, setCategoryFilter] = React.useState('Category');
+    const [priorityFilter, setPriorityFilter] = React.useState('Priority');
 
     const { todoItems } = useTaskContext();
 
@@ -185,9 +186,9 @@ export function DataTable() {
                     className='max-w-sm'
                 />
 
-                {/* ------------------------------------ */}
-                {/* Filter Button (filtering by category)*/}
-                {/* ------------------------------------ */}
+                {/* ------------------------------------- */}
+                {/* Filter Button (filtering by category) */}
+                {/* ------------------------------------- */}
                 <div className='pl-6 flex flex-col'>
                     <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Category</p>
                     <DropdownMenu>
@@ -252,6 +253,71 @@ export function DataTable() {
                                         setCategoryFilter('Other');
                                     }}>
                                     Other
+                                </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
+                {/* ------------------------------------- */}
+                {/* Filter Button (filtering by priority) */}
+                {/* ------------------------------------- */}
+                <div className='pl-6 flex flex-col'>
+                    <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Priority</p>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant='outline' className='w-fit'>
+                                {priorityFilter}
+                                {/* TODO: Need to figure out how to implement animation */}
+                                <ChevronDownIcon
+                                    className='relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180'
+                                    aria-hidden='true'
+                                />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='w-56'>
+                            <DropdownMenuLabel>Filter by Priority</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuRadioGroup value={``}>
+                                <DropdownMenuRadioItem
+                                    value='Reset'
+                                    onClick={() => {
+                                        table.getColumn('priority')?.setFilterValue('');
+                                        setPriorityFilter('Priority');
+                                    }}>
+                                <b><i>Reset Filter</i></b>
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Personal' 
+                                    onClick={() => {
+                                        table.getColumn('priority')?.setFilterValue('Low');
+                                        setPriorityFilter('Low');
+                                    }}>
+                                    Low
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Appointment' 
+                                    onClick={() => {
+                                        table.getColumn('priority')?.setFilterValue('Medium');
+                                        setPriorityFilter('Medium');
+                                    }}>
+                                    Medium
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Appointment' 
+                                    onClick={() => {
+                                        table.getColumn('priority')?.setFilterValue('High');
+                                        setPriorityFilter('High');
+                                    }}>
+                                    High
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Appointment' 
+                                    onClick={() => {
+                                        table.getColumn('priority')?.setFilterValue('Urgent');
+                                        setPriorityFilter('Urgent');
+                                    }}>
+                                    Urgent
                                 </DropdownMenuRadioItem>
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
