@@ -152,6 +152,7 @@ export function DataTable() {
     const [rowSelection, setRowSelection] = React.useState({});
     const [categoryFilter, setCategoryFilter] = React.useState('Category');
     const [priorityFilter, setPriorityFilter] = React.useState('Priority');
+    const [statusFilter, setStatusFilter] = React.useState('Status');
 
     const { todoItems } = useTaskContext();
 
@@ -318,6 +319,63 @@ export function DataTable() {
                                         setPriorityFilter('Urgent');
                                     }}>
                                     Urgent
+                                </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
+                {/* ------------------------------------- */}
+                {/*  Filter Button (filtering by status)  */}
+                {/* ------------------------------------- */}
+                <div className='pl-6 flex flex-col'>
+                    <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Status</p>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant='outline' className='w-fit'>
+                                {statusFilter}
+                                {/* TODO: Need to figure out how to implement animation */}
+                                <ChevronDownIcon
+                                    className='relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180'
+                                    aria-hidden='true'
+                                />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='w-56'>
+                            <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuRadioGroup value={``}>
+                                <DropdownMenuRadioItem
+                                    value='Reset'
+                                    onClick={() => {
+                                        table.getColumn('status')?.setFilterValue('');
+                                        setStatusFilter('Status');
+                                    }}>
+                                <b><i>Reset Filter</i></b>
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Personal' 
+                                    onClick={() => {
+                                        table.getColumn('status')?.setFilterValue('not started');
+                                        setStatusFilter('not started');
+                                    }}>
+                                    not started
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Appointment' 
+                                    onClick={() => {
+                                        table.getColumn('status')?.setFilterValue('in-progress');
+                                        setStatusFilter('in-progress');
+                                    }}>
+                                    in-progress
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Appointment' 
+                                    onClick={() => {
+                                        table.getColumn('status')?.setFilterValue('completed');
+                                        setStatusFilter('completed');
+                                    }}>
+                                    completed
                                 </DropdownMenuRadioItem>
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
