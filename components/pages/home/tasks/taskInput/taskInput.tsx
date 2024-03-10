@@ -12,20 +12,10 @@ import styles from './taskInput.module.css';
 
 export default function TaskInput(): JSX.Element {
     const {
-        setId,
-        setTitle,
-        setDescription,
-        setStarted,
+        todoItem,
         clearFields,
         addTodoItem,
-        title,
-        priority,
-        category,
-        description,
-        completed,
-        status,
-        started,
-        due,
+        setTodoItem,
     } = useTaskContext();
 
     const handleAddTask = async () => {
@@ -33,24 +23,23 @@ export default function TaskInput(): JSX.Element {
         // Date format: Mar 1, 2022
         const date = new Date();
         const formattedDate = format(date, 'PP');
-        /*DEBUG*/ console.log("Formatted Date: ", formattedDate);
-        setStarted(formattedDate);
-        
+
         const newTask: Todo.DbTodoItem = {
-            title,
-            priority,
-            category,
-            description,
-            completed,
-            status,
+            title: todoItem.title,
+            priority: todoItem.priority,
+            category: todoItem.category,
+            description: todoItem.description,
+            completed: todoItem.completed,
+            status: todoItem.status,
             started: formattedDate,
-            due,
+            due: todoItem.due,
         };
 
         const response = await sendTask(newTask);
-        if (response && response.id) { // Verify response structure matches expected TodoItem
-            addTodoItem(response);
+        if (response) { // Verify response structure matches expected TodoItem
+            console.log("Adding todo item:", response);
             clearFields();
+            addTodoItem(response);
         } else {
             console.error("Failed to add new task, response:", response);
         }
@@ -80,15 +69,15 @@ export default function TaskInput(): JSX.Element {
                     <Input
                         type='text'
                         placeholder='Enter a title for the task'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        value={todoItem.title}
+                        onChange={(e) => (setTodoItem({ ...todoItem, title: e.target.value }))}
                         className={`${styles.taskinput_input} ${styles.textarea_title}`}
                     />
                     <Input
                         type='textarea'
                         placeholder='Enter a description for the task'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        value={todoItem.description}
+                        onChange={(e) => (setTodoItem({ ...todoItem, description: e.target.value }))}
                         className={`${styles.taskinput_input} ${styles.textarea_description}`}
                     />
                 </div>

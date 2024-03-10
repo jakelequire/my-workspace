@@ -27,7 +27,7 @@ const FormSchema = z.object({
 });
 
 export default function CalendarInput(): JSX.Element {
-    const { due, setDue } = useTaskContext();
+    const { todoItem, setTodoItem } = useTaskContext();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -67,7 +67,7 @@ export default function CalendarInput(): JSX.Element {
                                     onSelect={(date) => {
                                         field.onChange(date);
                                         if(!date) return;
-                                        setDue(format(date, 'PP'));
+                                        setTodoItem({ ...todoItem, due: format(date, 'PP') });
                                     }}
                                     initialFocus
                                 />

@@ -13,33 +13,72 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTaskContext } from '../TaskContext';
-
-type Category = 'personal' | 'appointment' | 'project' | 'work' | 'other';
+import { Todo } from '@/types/types';
 
 export default function Category() {
-    const { category, setCategory } = useTaskContext();
+    const { todoItem, setTodoItem } = useTaskContext();
+
+    const setCategory = (value: any) => {
+        console.log('Hello from setCategory');
+        setTodoItem({
+            ...todoItem,
+            category: value as Todo.Category,
+        });
+    };
 
     return (
         <div className={styles.menu_container}>
-        <div className={styles.menu_title}>
-            <label className={`${styles.priority_title}`}>Category</label>
-        </div>
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button className={`${styles.menu} w-32`} variant='outline'>{category}</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className='w-56'>
-                <DropdownMenuLabel>Set Category</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={category as Category} onValueChange={setCategory as () => Category}>
-                    <DropdownMenuRadioItem value='Personal'>Personal</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='Appointment'>Appointment</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='Project'>Project</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='Work'>Work</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='Other'>Other</DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
+            <div className={styles.menu_title}>
+                <label className={`${styles.priority_title}`}>Category</label>
+            </div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button className={`${styles.menu} w-32`} variant='outline'>
+                        {todoItem.category}
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='w-56'>
+                    <DropdownMenuLabel>Set Category</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup value={todoItem.category} onChange={setCategory}>
+                        <DropdownMenuRadioItem
+                            onSelect={(e) => {
+                                setCategory('Personal');
+                            }}
+                            value='Personal'>
+                            Personal
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Appointment'
+                            onSelect={(_) => {
+                                setCategory('Appointment');
+                            }}>
+                            Appointment
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Project'
+                            onSelect={(_) => {
+                                setCategory('Project');
+                            }}>
+                            Project
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Work'
+                            onSelect={(_) => {
+                                setCategory('Work');
+                            }}>
+                            Work
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Other'
+                            onSelect={(_) => {
+                                setCategory('Other');
+                            }}>
+                            Other
+                        </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     );
 }

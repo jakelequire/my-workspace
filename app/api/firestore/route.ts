@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         const requestBody = await request.json();
         const addTodoItem = await firestoreService.addTodoItem(requestBody as Todo.TodoItem);
 
-        return new Response(JSON.stringify({addTodoItem}), {
+        return new Response(JSON.stringify({...addTodoItem}), {
             status: 200,
         });
     } catch (error) {

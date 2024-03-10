@@ -14,7 +14,7 @@ export default function TasksInterface(): JSX.Element {
                     <div className={styles.tasks_header}>
                         <h2 className={styles.tasks_title}>Tasks</h2>
                     </div>
-                    <DataTable/>
+                    <DataTable />
                 </div>
             </section>
         </TaskProvider>

@@ -1,66 +1,31 @@
-// TaskContext.tsx
-"use client";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Todo } from '@/types/types';
 
-import { createContext, useContext, useState, useEffect } from "react";
-import { Todo } from "@/types/types";
+// Only expose methods and state that are necessary
+interface TaskContextType {
+    todoItem: Todo.TodoItem;
+    setTodoItem: (todoItem: Todo.TodoItem) => void;
+    todoItems: Todo.TodoItem[];
+    addTodoItem: (newItem: Todo.TodoItem) => void;
+    clearFields: () => void;
+}
 
-export const TaskContext = createContext<Todo.TodoContext>({
-    id: "",
-    title: "",
-    priority: 'Low',
-    category: 'Personal',
-    description: "",
-    completed: false,
-    status: 'not started',
-    started: "",
-    due: "",
-    todoItems: [] as Todo.TodoItem[],
-    setId: (id) => {},
-    setTitle: (title) => {},
-    setPriority: (priority) => {},
-    setCategory: (category) => {},
-    setDescription: (description) => {},
-    setCompleted: (completed) => {},
-    setStatus: (status) => {},
-    setStarted: (started) => {},
-    setDue: (due) => {},
-    setTodoItems: (todoItems: Todo.TodoItem[]) => {},
-    clearFields: () => {},
-    addTodoItem: (newItem: Todo.TodoItem) => {},
-});
+const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
-export const useTaskContext = () => {
-    return useContext(TaskContext);
-};
-
-export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
-    const [id, setId] = useState<string>("");
-    const [title, setTitle] = useState<string>("");
-    const [priority, setPriority] = useState<Todo.Priority>('Low');
-    const [category, setCategory] = useState<Todo.Category>('Personal');
-    const [description, setDescription] = useState<string>("");
-    const [completed, setCompleted] = useState<boolean>(false);
-    const [status, setStatus] = useState<Todo.Status>('not started');
-    const [started, setStarted] = useState<string>("");
-    const [due, setDue] = useState<string>("");
+// Custom hook to manage and encapsulate the state logic
+function useTaskProvider() {
+    const [todoItem, setTodoItem] = useState<Todo.TodoItem>({
+        id: '',
+        title: '',
+        priority: 'Low',
+        category: 'Personal',
+        description: '',
+        completed: false,
+        status: 'not started',
+        started: '',
+        due: '',
+    });
     const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
-
-    const clearFields = () => {
-        setId("");
-        setTitle("");
-        setPriority('Low');
-        setCategory('Personal');
-        setDescription("");
-        setCompleted(false);
-        setStatus('not started');
-        setStarted("");
-        setDue("");
-    }
-
-    const addTodoItem = async(newItem: Todo.TodoItem) => {
-        // Add the new item to the front end list of todo items
-        setTodoItems((prevItems) => [...prevItems, newItem]);
-    }
 
     useEffect(() => {
         const fetchTodoItems = async () => {
@@ -70,39 +35,42 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
                 const data = await response.json();
                 setTodoItems(data);
             } catch (error) {
-                console.error("Error fetching todo items:", error);
+                console.error('Error fetching todo items:', error);
             }
         };
         fetchTodoItems();
     }, []);
 
+    const addTodoItem = (newItem: Todo.TodoItem) => {
+        setTodoItems((prevItems) => [...prevItems, newItem]);
+    };
 
-    return (
-        <TaskContext.Provider value={{
-            id,
-            title,
-            priority,
-            category,
-            description,
-            completed,
-            status,
-            started,
-            due,
-            todoItems,
-            setId,
-            setTitle,
-            setPriority,
-            setCategory,
-            setDescription,
-            setCompleted,
-            setStatus,
-            setStarted,
-            setDue,
-            setTodoItems,
-            clearFields,
-            addTodoItem,
-        }}>
-            {children}
-        </TaskContext.Provider>
-    );
+    const clearFields = () => {
+        setTodoItem({
+            id: '',
+            title: '',
+            priority: 'Low',
+            category: 'Personal',
+            description: '',
+            completed: false,
+            status: 'not started',
+            started: '',
+            due: '',
+        });
+    };
+
+    return { todoItem, todoItems, addTodoItem, setTodoItem, clearFields };
+}
+
+export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
+    const value = useTaskProvider();
+    return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
+};
+
+export const useTaskContext = () => {
+    const context = useContext(TaskContext);
+    if (context === undefined) {
+        throw new Error('useTaskContext must be used within a TaskProvider');
+    }
+    return context;
 };
