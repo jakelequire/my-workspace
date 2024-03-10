@@ -1,19 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Todo } from '@/types/types';
 
-// Only expose methods and state that are necessary
-interface TaskContextType {
-    todoItem: Todo.TodoItem;
-    setTodoItem: (todoItem: Todo.TodoItem) => void;
-    todoItems: Todo.TodoItem[];
-    addTodoItem: (newItem: Todo.TodoItem) => void;
-    clearFields: () => void;
-}
-
-const TaskContext = createContext<TaskContextType | undefined>(undefined);
+const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
 // Custom hook to manage and encapsulate the state logic
 function useTaskProvider() {
+    const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
     const [todoItem, setTodoItem] = useState<Todo.TodoItem>({
         id: '',
         title: '',
@@ -25,7 +17,6 @@ function useTaskProvider() {
         started: '',
         due: '',
     });
-    const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
 
     useEffect(() => {
         const fetchTodoItems = async () => {
@@ -45,6 +36,20 @@ function useTaskProvider() {
         setTodoItems((prevItems) => [...prevItems, newItem]);
     };
 
+    const editTodoItem = (
+        id: string,
+        updatedItem: Todo.TodoItem
+    ): Omit<Todo.TodoItem, 'id'> | undefined => {
+        setTodoItems((prevItems) => prevItems.map((item) => (item.id === id ? updatedItem : item)));
+        const { id: _, ...todoItem } = updatedItem;
+        if (!todoItem) return;
+        return todoItem;
+    };
+
+    const deleteTodoItem = (id: string) => {
+        setTodoItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    };
+
     const clearFields = () => {
         setTodoItem({
             id: '',
@@ -59,7 +64,15 @@ function useTaskProvider() {
         });
     };
 
-    return { todoItem, todoItems, addTodoItem, setTodoItem, clearFields };
+    return {
+        todoItem,
+        todoItems,
+        addTodoItem,
+        setTodoItem,
+        clearFields,
+        deleteTodoItem,
+        editTodoItem,
+    };
 }
 
 export const TaskProvider = ({ children }: { children: React.ReactNode }) => {

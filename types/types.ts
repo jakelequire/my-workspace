@@ -18,29 +18,14 @@ export namespace Todo {
         due: string;
     };
 
-    export interface TodoContext {
-        id: string;
-        title: string;
-        priority: Priority;
-        category: Category;
-        description: string;
-        completed: boolean;
-        status: Status;
-        started: string;
-        due: string;
+    export interface TaskContextType {
+        todoItem: TodoItem;
+        setTodoItem: (todoItem: TodoItem) => void;
         todoItems: TodoItem[];
-        setId: (id: string) => void;
-        setTitle: (title: string) => void;
-        setPriority: (priority: Priority) => void;
-        setCategory: (category: Category) => void;
-        setDescription: (description: string) => void;
-        setCompleted: (completed: boolean) => void;
-        setStatus: (status: Status) => void;
-        setStarted: (started: string) => void;
-        setDue: (due: string) => void;
-        setTodoItems: (todoItems: TodoItem[]) => void;
-        clearFields: () => void;
         addTodoItem: (newItem: TodoItem) => void;
+        clearFields: () => void;
+        deleteTodoItem: (id: string) => void;
+        editTodoItem: (id: string, updatedItem: TodoItem) => Omit<TodoItem, 'id'> | undefined;
     }
 
     export type DbTodoItem = Omit<TodoItem, 'id'>;

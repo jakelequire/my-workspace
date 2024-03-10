@@ -1,6 +1,5 @@
 'use client';
 import * as React from 'react';
-import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -13,6 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
+
 import {
     Table,
     TableBody,
@@ -21,6 +21,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -30,9 +31,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+
+import CompletedBtn from './completedBtn';
+import EditStatusBtn from './statusBtn';
+
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
 
@@ -61,6 +69,14 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
         enableHiding: false,
     },
     {
+        accessorKey: 'complete',
+        header: '',
+        cell: ({ row }) => {
+            const id = row.original.id;
+            return <CompletedBtn id={id} />;
+        },
+    },
+    {
         accessorKey: 'title',
         header: 'Title',
         cell: ({ row }) => <div className='capitalize'>{row.getValue('title')}</div>,
@@ -83,7 +99,11 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         accessorKey: 'status',
         header: 'Status',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('status')}</div>,
+        cell: ({ row }) => {
+            const id = row.original.id;
+            const status = row.getValue('status');
+            return <EditStatusBtn id={id} currentStatus={status as Todo.Status} />;
+        },
     },
     {
         accessorKey: 'started',
@@ -100,7 +120,7 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const todo = row.original;
-            // DropdownMenu for each of the rows
+            // DropdownMenu for each of the rowsCfc2xDLYaUWaY14nFra8
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -111,11 +131,16 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => {}}>
+                            Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {}}>
+                            Delete
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(todo.id)}>
                             Copy todo ID
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
@@ -150,7 +175,6 @@ export function DataTable() {
         },
     });
 
-
     return (
         <div className='w-full'>
             <div className='flex items-center py-4'>
@@ -162,6 +186,7 @@ export function DataTable() {
                     }
                     className='max-w-sm'
                 />
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant='outline' className='ml-auto'>
