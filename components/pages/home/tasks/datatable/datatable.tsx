@@ -30,6 +30,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
 } from '@/components/ui/dropdown-menu';
 
 import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
@@ -39,11 +41,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 
 import CompletedBtn from './completedBtn';
-import EditStatusBtn from './statusBtn';
+import EditStatusBtn from './editing/statusBtn';
 
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
-
 
 export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
@@ -132,12 +133,8 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                     <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => {}}>
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => {}}>
-                            Delete
-                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(todo.id)}>
                             Copy todo ID
                         </DropdownMenuItem>
@@ -153,6 +150,7 @@ export function DataTable() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const [categoryFilter, setCategoryFilter] = React.useState('Category');
 
     const { todoItems } = useTaskContext();
 
@@ -187,6 +185,79 @@ export function DataTable() {
                     className='max-w-sm'
                 />
 
+                {/* ------------------------------------ */}
+                {/* Filter Button (filtering by category)*/}
+                {/* ------------------------------------ */}
+                <div className='pl-6 flex flex-col'>
+                    <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Category</p>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant='outline' className='w-fit'>
+                                {categoryFilter}
+                                {/* TODO: Need to figure out how to implement animation */}
+                                <ChevronDownIcon
+                                    className='relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180'
+                                    aria-hidden='true'
+                                />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='w-56'>
+                            <DropdownMenuLabel>Filter by Category</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuRadioGroup value={``}>
+                                <DropdownMenuRadioItem
+                                    value='Reset'
+                                    onClick={() => {
+                                        table.getColumn('category')?.setFilterValue('');
+                                        setCategoryFilter('Category');
+                                    }}>
+                                <b><i>Reset Filter</i></b>
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Personal' 
+                                    onClick={() => {
+                                        table.getColumn('category')?.setFilterValue('Personal');
+                                        setCategoryFilter('Personal');
+                                    }}>
+                                    Personal
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Appointment' 
+                                    onClick={() => {
+                                        table.getColumn('category')?.setFilterValue('Appointment');
+                                        setCategoryFilter('Appointment');
+                                    }}>
+                                    Appointment
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Project' 
+                                    onClick={() => {
+                                        table.getColumn('category')?.setFilterValue('Project');
+                                        setCategoryFilter('Project');
+                                    }}>
+                                    Project
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Work' 
+                                    onClick={() => {
+                                        table.getColumn('category')?.setFilterValue('Work');
+                                        setCategoryFilter('Work');
+                                    }}>
+                                    Work
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem 
+                                    value='Other' 
+                                    onClick={() => {
+                                        table.getColumn('category')?.setFilterValue('Other');
+                                        setCategoryFilter('Other');
+                                    }}>
+                                    Other
+                                </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant='outline' className='ml-auto'>
@@ -201,7 +272,7 @@ export function DataTable() {
                                 return (
                                     <DropdownMenuCheckboxItem
                                         key={column.id}
-                                        className="capitalize"
+                                        className='capitalize'
                                         checked={column.getIsVisible()}
                                         onCheckedChange={(value: any) =>
                                             column.toggleVisibility(!!value)
@@ -226,7 +297,7 @@ export function DataTable() {
                                                 : flexRender(
                                                     header.column.columnDef.header,
                                                     header.getContext()
-                                            )}
+                                                )}
                                         </TableHead>
                                     );
                                 })}

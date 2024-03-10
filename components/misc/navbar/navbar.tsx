@@ -17,6 +17,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { useRouter } from 'next/navigation';
 
+
 const auth = getAuth(firebase_app);
 
 const components: { title: string; href: string; description: string }[] = [
