@@ -51,11 +51,6 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
         cell: ({ row }) => <div className='capitalize'>{row.getValue('status')}</div>,
     },
     {
-        accessorKey: 'started',
-        header: 'Started',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('started')}</div>,
-    },
-    {
         accessorKey: 'due',
         header: 'Due',
         cell: ({ row }) => <div className='capitalize'>{row.getValue('due')}</div>,

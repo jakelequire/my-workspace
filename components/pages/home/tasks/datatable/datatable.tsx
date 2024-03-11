@@ -179,16 +179,15 @@ export function DataTable() {
 
     return (
         <div className='w-full'>
-            <div className='flex items-center py-4'>
+            <div className='flex items-end py-4'>
                 <Input
-                    placeholder='Filter Tasks...'
+                    placeholder='Filter By Title...'
                     value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
                         table.getColumn('title')?.setFilterValue(event.target.value)
                     }
                     className='max-w-sm'
                 />
-
                 {/* ------------------------------------- */}
                 {/* Filter Button (filtering by category) */}
                 {/* ------------------------------------- */}
