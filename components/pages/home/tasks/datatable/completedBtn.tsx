@@ -32,7 +32,7 @@ export default function CompletedBtn({ id }: any): JSX.Element {
     }
 
     return (
-        <Button className="h-6 w-6" variant='outline' size='icon' onClick={onSubmit}>
+        <Button className="h-6 w-6 bg-none!important" variant='outline' size='icon' onClick={onSubmit}>
             <CheckIcon className='h-3 w-3' />
         </Button>
     );

@@ -86,7 +86,10 @@ export function TodoWidget() {
 
     return (
         <div className='w-full'>
-            <div className='rounded-md border'>
+            <div className="pl-6 pt-6">
+                <a href='/home/tasks' className='text-xl font-bold'>Todo List</a>
+            </div>
+            <div className='rounded-md p-6'>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
