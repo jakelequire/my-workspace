@@ -46,6 +46,8 @@ import EditStatusBtn from './editing/statusBtn';
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
 
+const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider' 
+
 export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         id: 'select',
@@ -213,7 +215,7 @@ export function DataTable() {
                                         table.getColumn('category')?.setFilterValue('');
                                         setCategoryFilter('Category');
                                     }}>
-                                <b><i>Reset Filter</i></b>
+                                <span className={menuHeaderStyle}>Reset Filter</span>
                                 </DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem 
                                     value='Personal' 
@@ -286,7 +288,7 @@ export function DataTable() {
                                         table.getColumn('priority')?.setFilterValue('');
                                         setPriorityFilter('Priority');
                                     }}>
-                                <b><i>Reset Filter</i></b>
+                                <span className={menuHeaderStyle}>Reset Filter</span>
                                 </DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem 
                                     value='Personal' 
@@ -351,7 +353,7 @@ export function DataTable() {
                                         table.getColumn('status')?.setFilterValue('');
                                         setStatusFilter('Status');
                                     }}>
-                                <b><i>Reset Filter</i></b>
+                                <span className={menuHeaderStyle}>Reset Filter</span>
                                 </DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem 
                                     value='Personal' 

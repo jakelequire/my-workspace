@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useGlobalContext } from '@/components/GlobalContext';
 import { Todo } from '@/types/types';
 
 const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
-// Custom hook to manage and encapsulate the state logic
 function useTaskProvider() {
     const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
-    const [todoItem, setTodoItem] = useState<Todo.TodoItem>({
+    const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
         id: '',
         title: '',
         priority: 'Low',
@@ -18,19 +18,11 @@ function useTaskProvider() {
         due: '',
     });
 
+    const { todoList } = useGlobalContext();
+
     useEffect(() => {
-        const fetchTodoItems = async () => {
-            try {
-                const response = await fetch('/api/firestore');
-                if (!response.ok) throw new Error('Failed to fetch todo items');
-                const data = await response.json();
-                setTodoItems(data);
-            } catch (error) {
-                console.error('Error fetching todo items:', error);
-            }
-        };
-        fetchTodoItems();
-    }, []);
+        setTodoItems(todoList);
+    }, [todoList]);
 
     const addTodoItem = (newItem: Todo.TodoItem) => {
         setTodoItems((prevItems) => [...prevItems, newItem]);
@@ -51,7 +43,7 @@ function useTaskProvider() {
     };
 
     const clearFields = () => {
-        setTodoItem({
+        setNewTodoItem({
             id: '',
             title: '',
             priority: 'Low',
@@ -65,10 +57,10 @@ function useTaskProvider() {
     };
 
     return {
-        todoItem,
+        todoItem: newTodoItem,
         todoItems,
         addTodoItem,
-        setTodoItem,
+        setTodoItem: setNewTodoItem,
         clearFields,
         deleteTodoItem,
         editTodoItem,

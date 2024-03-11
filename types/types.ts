@@ -1,4 +1,15 @@
+import type { User } from "firebase/auth";
 
+export namespace GlobalState {
+
+    export interface GlobalContextType {
+        user: User | null;
+        setUser: (user: User) => void;
+        todoList: Todo.TodoItem[];
+        setTodoList: (todoList: Todo.TodoItem[]) => void;
+    }
+
+}
 
 
 export namespace Todo {
@@ -31,5 +42,4 @@ export namespace Todo {
     export type DbTodoItem = Omit<TodoItem, 'id'>;
     
     export type AddTodoServerResponse = Promise<TodoItem>
-
 }
