@@ -108,7 +108,7 @@ export default function Navbar(): JSX.Element {
     };
 
     return (
-        <div className='flex flex-row items-center justify-between w-full'>
+        <div className='flex flex-row items-center justify-between w-full h-12 border-b border-b-zinc-600'>
             <div className='flex justify-center flex-grow'>
                 {isLoggedIn ? (
                     <NavigationMenu className='justify-center'>

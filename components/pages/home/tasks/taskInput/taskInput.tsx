@@ -71,7 +71,7 @@ export default function TaskInput(): JSX.Element {
                         placeholder='Enter a title for the task'
                         value={todoItem.title}
                         onChange={(e) => (setTodoItem({ ...todoItem, title: e.target.value }))}
-                        className={`${styles.taskinput_input} ${styles.textarea_title}`}
+                        className={`${styles.taskinput_input} ${styles.textarea_title} `}
                     />
                     <Input
                         type='textarea'
@@ -93,7 +93,7 @@ export default function TaskInput(): JSX.Element {
                     </div>
                 </div>
                 <div className={styles.button_container}>
-                    <Button type='submit' className={styles.taskinput_button} onClick={handleAddTask}>
+                    <Button type='submit' className={`${styles.taskinput_button}`} onClick={handleAddTask}>
                         Add Task
                     </Button>
                 </div>
