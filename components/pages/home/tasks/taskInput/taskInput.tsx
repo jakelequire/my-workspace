@@ -7,18 +7,13 @@ import Category from './category';
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 import styles from './taskInput.module.css';
 
 export default function TaskInput(): JSX.Element {
-    const {
-        todoItem,
-        submissionCount,
-        clearFields,
-        addTodoItem,
-        setTodoItem,
-        setSubmissionCount,
-    } = useTaskContext();
+    const { todoItem, submissionCount, clearFields, addTodoItem, setTodoItem, setSubmissionCount } =
+        useTaskContext();
 
     const handleAddTask = async () => {
         // format(date, 'PP')
@@ -38,13 +33,14 @@ export default function TaskInput(): JSX.Element {
         };
 
         const response = await sendTask(newTask);
-        if (response) { // Verify response structure matches expected TodoItem
-            console.log("Adding todo item:", response);
+        if (response) {
+            // Verify response structure matches expected TodoItem
+            console.log('Adding todo item:', response);
             clearFields();
             addTodoItem(response);
             setSubmissionCount(submissionCount + 1);
         } else {
-            console.error("Failed to add new task, response:", response);
+            console.error('Failed to add new task, response:', response);
         }
     };
 
@@ -58,9 +54,9 @@ export default function TaskInput(): JSX.Element {
             body: JSON.stringify(task),
         });
 
-        const response: Todo.AddTodoServerResponse = await sendRequest.json()
+        const response: Todo.AddTodoServerResponse = await sendRequest.json();
         return response;
-    }
+    };
 
     return (
         <div className={styles.taskinput_container}>
@@ -73,14 +69,14 @@ export default function TaskInput(): JSX.Element {
                         type='text'
                         placeholder='Enter a title for the task'
                         value={todoItem.title}
-                        onChange={(e) => (setTodoItem({ ...todoItem, title: e.target.value }))}
+                        onChange={(e) => setTodoItem({ ...todoItem, title: e.target.value })}
                         className={`${styles.taskinput_input} ${styles.textarea_title} `}
                     />
                     <Input
                         type='textarea'
                         placeholder='Enter a description for the task'
                         value={todoItem.description}
-                        onChange={(e) => (setTodoItem({ ...todoItem, description: e.target.value }))}
+                        onChange={(e) => setTodoItem({ ...todoItem, description: e.target.value })}
                         className={`${styles.taskinput_input} ${styles.textarea_description}`}
                     />
                 </div>
@@ -96,7 +92,15 @@ export default function TaskInput(): JSX.Element {
                     </div>
                 </div>
                 <div className={styles.button_container}>
-                    <Button type='submit' className={`${styles.taskinput_button}`} onClick={handleAddTask}>
+                    <Button
+                        type='submit'
+                        className={`${styles.taskinput_button}`}
+                        onClick={() => {
+                            handleAddTask();
+                            toast.success('A new task has been created.', {
+                                description: `Task: ${todoItem.title} has been added to the list.`,
+                            });
+                        }}>
                         Add Task
                     </Button>
                 </div>
