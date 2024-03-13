@@ -37,7 +37,7 @@ export default function MiniTodo(): JSX.Element {
 
     const todoStats = [
         {
-            title: 'Total Todos',
+            title: 'Total Tasks',
             value: totalTodos,
         },
         {
@@ -89,7 +89,7 @@ export default function MiniTodo(): JSX.Element {
     return (
         <Carousel className='flex align-middle w-full h-full flex-col' setApi={setCarouselApi} >
             <div className='flex items-center justify-start w-full h-10 pl-8 pt-5'>
-                <h1 className='text-base font-bold'>Todo Stats</h1>
+                <h1 className='text-base font-bold'>Todo</h1>
                 <ReaderIcon className='w-6 h-6 ml-4' />
             </div>
 
