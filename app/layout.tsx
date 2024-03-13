@@ -5,7 +5,9 @@ import { AuthContextProvider } from '@/app/AuthContext';
 import { GlobalProvider } from '@/components/GlobalContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'sonner';
+
 import './globals.css';
+import '@/styles/embla.css';
 
 const inter = Inter({ subsets: ['latin'] });
 

@@ -13,7 +13,7 @@ export namespace GlobalState {
 
 
 export namespace Todo {
-    export type Priority = 'Low' | 'Medium' | 'High';
+    export type Priority = 'Low' | 'Medium' | 'High' | 'Urgent';
     export type Category = 'Personal' | 'Appointment' | 'Project' | 'Work' | 'Other';
     export type Status = 'not started' | 'in-progress' | 'completed';
 

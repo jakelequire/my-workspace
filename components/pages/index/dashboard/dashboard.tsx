@@ -1,6 +1,7 @@
 'use client';
 import { TodoWidget } from './widget/todoWidget';
 import { DashNav } from './navigation/dashNav';
+import MiniTodo from './widget/miniTodo';
 import styles from './dashboard.module.css';
 
 export default function Dashboard(): JSX.Element {
@@ -34,6 +35,7 @@ export default function Dashboard(): JSX.Element {
 
                 </div>
                 <div className={styles.mini_widget_four}>
+                    <MiniTodo />
 
                 </div>
             </div>
