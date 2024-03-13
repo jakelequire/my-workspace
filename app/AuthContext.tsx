@@ -29,7 +29,6 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             } else {
                 setUser(null);
                 setIsLoggedIn(false);
-                singoutUser();
             }
             setLoading(false);
         });

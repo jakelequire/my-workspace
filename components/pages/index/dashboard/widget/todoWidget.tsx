@@ -82,7 +82,7 @@ export function TodoWidget() {
             columnVisibility,
             rowSelection,
             pagination: {
-                ...tablePagination
+                ...tablePagination,
             },
         },
         manualPagination: false, // Set to false if your data is client-side
@@ -91,8 +91,10 @@ export function TodoWidget() {
 
     return (
         <div className='w-full'>
-            <div className="pl-6 pt-6">
-                <a href='/home/tasks' className='text-xl font-bold'>Todo List</a>
+            <div className='pl-6 pt-6'>
+                <a href='/home/tasks' className='text-xl font-bold'>
+                    Todo List
+                </a>
             </div>
             <div className='rounded-md p-6'>
                 <Table>
@@ -105,9 +107,9 @@ export function TodoWidget() {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                      header.column.columnDef.header,
+                                                      header.getContext()
+                                                  )}
                                         </TableHead>
                                     );
                                 })}

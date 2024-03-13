@@ -101,7 +101,7 @@ export default function LoginInterface(): JSX.Element {
                     <input
                         type='password'
                         id='password'
-                        name='password'
+                        name='current-password'
                         className={styles.input}
                         required
                         onChange={(e) => setPassword(e.target.value)}
