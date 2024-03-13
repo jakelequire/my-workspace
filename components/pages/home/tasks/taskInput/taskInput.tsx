@@ -13,9 +13,11 @@ import styles from './taskInput.module.css';
 export default function TaskInput(): JSX.Element {
     const {
         todoItem,
+        submissionCount,
         clearFields,
         addTodoItem,
         setTodoItem,
+        setSubmissionCount,
     } = useTaskContext();
 
     const handleAddTask = async () => {
@@ -40,6 +42,7 @@ export default function TaskInput(): JSX.Element {
             console.log("Adding todo item:", response);
             clearFields();
             addTodoItem(response);
+            setSubmissionCount(submissionCount + 1);
         } else {
             console.error("Failed to add new task, response:", response);
         }
@@ -83,7 +86,7 @@ export default function TaskInput(): JSX.Element {
                 </div>
                 <div className={styles.datainfo}>
                     <div className={styles.taskinput_duedate}>
-                        <CalendarInput />
+                        <CalendarInput key={submissionCount} />
                     </div>
                     <div className={styles.taskinput_priority}>
                         <Priority />

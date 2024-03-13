@@ -22,7 +22,7 @@ import { useTaskContext } from '../TaskContext';
 
 const FormSchema = z.object({
     dob: z.date({
-        required_error: 'A date of birth is required.',
+        required_error: 'An error occurred. Please try again.',
     }),
 });
 
@@ -32,6 +32,7 @@ export default function CalendarInput(): JSX.Element {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
+    const { reset } = form;
 
     return (
     <Form {...form}>

@@ -56,6 +56,24 @@ const finances: { title: string; href: string; description: string }[] = [
     },
 ];
 
+const tools: { title: string; href: string; description: string }[] = [
+    {
+        title: 'GPT',
+        href: '/tools/gpt',
+        description: 'Generate text using OpenAI GPT.',
+    },
+    {
+        title: 'Text Editor',
+        href: '/tools/text-editor',
+        description: 'Edit and save text documents.',
+    },
+    {
+        title: 'Notes',
+        href: '/tools/notes',
+        description: 'Create and manage my personal notes.',
+    }
+]
+
 export default function Navbar(): JSX.Element {
     const { isLoggedIn, setIsLoggedIn } = useAuthContext();
     const router = useRouter();
@@ -109,6 +127,9 @@ export default function Navbar(): JSX.Element {
 
     return (
         <div className='flex flex-row items-center justify-between w-full h-12 border-b border-b-zinc-600'>
+            <div className='flex justify-end flex-initial w-24 '>
+                {/* */}
+            </div>
             <div className='flex justify-center flex-grow'>
                 {isLoggedIn ? (
                     <NavigationMenu className='justify-center'>
@@ -152,11 +173,28 @@ export default function Navbar(): JSX.Element {
                                     </ul>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
+
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                                        {tools.map((component) => (
+                                            <ListItem
+                                                key={component.title}
+                                                title={component.title}
+                                                href={component.href}>
+                                                {component.description}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
                         </NavigationMenuList>
                     </NavigationMenu>
                 ) : null}
             </div>
-            <div className='flex justify-end flex-initial '>
+            <div className='flex justify-end flex-initial w-24 '>
                 {(isLoggedIn ? <LoginButton /> : null)}
             </div>
         </div>

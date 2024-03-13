@@ -17,6 +17,8 @@ function useTaskProvider() {
         started: '',
         due: '',
     });
+    const [submissionCount, setSubmissionCount] = useState(0);
+
 
     const { todoList } = useGlobalContext();
 
@@ -59,11 +61,13 @@ function useTaskProvider() {
     return {
         todoItem: newTodoItem,
         todoItems,
+        submissionCount,
         addTodoItem,
         setTodoItem: setNewTodoItem,
         clearFields,
         deleteTodoItem,
         editTodoItem,
+        setSubmissionCount,
     };
 }
 

@@ -28,32 +28,27 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         accessorKey: 'title',
         header: 'Title',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('title')}</div>,
+        cell: ({ row }) => <div className='capitalize text-sm'>{row.getValue('title')}</div>,
     },
     {
         accessorKey: 'priority',
         header: 'Priority',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('priority')}</div>,
+        cell: ({ row }) => <div className='capitalize text-sm'>{row.getValue('priority')}</div>,
     },
     {
         accessorKey: 'category',
         header: 'Category',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('category')}</div>,
-    },
-    {
-        accessorKey: 'description',
-        header: 'Description',
-        cell: ({ row }) => <div className='capitalize w-36'>{row.getValue('description')}</div>,
+        cell: ({ row }) => <div className='capitalize text-sm'>{row.getValue('category')}</div>,
     },
     {
         accessorKey: 'status',
         header: 'Status',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('status')}</div>,
+        cell: ({ row }) => <div className='capitalize text-sm'>{row.getValue('status')}</div>,
     },
     {
         accessorKey: 'due',
         header: 'Due',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('due')}</div>,
+        cell: ({ row }) => <div className='capitalize text-sm'>{row.getValue('due')}</div>,
     },
 ];
 
@@ -62,6 +57,10 @@ export function TodoWidget() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const [tablePagination, setTablePagination] = React.useState({
+        pageIndex: 0, //initial page index
+        pageSize: 9, //default page size
+    });
 
     const { todoList } = useGlobalContext();
 
@@ -76,12 +75,18 @@ export function TodoWidget() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
+        onPaginationChange: setTablePagination,
         state: {
             sorting,
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination: {
+                ...tablePagination
+            },
         },
+        manualPagination: false, // Set to false if your data is client-side
+        pageCount: 1,
     });
 
     return (
@@ -109,7 +114,7 @@ export function TodoWidget() {
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className=''>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow

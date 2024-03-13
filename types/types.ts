@@ -31,12 +31,14 @@ export namespace Todo {
 
     export interface TaskContextType {
         todoItem: TodoItem;
-        setTodoItem: (todoItem: TodoItem) => void;
         todoItems: TodoItem[];
+        submissionCount: number;
+        setTodoItem: (todoItem: TodoItem) => void;
         addTodoItem: (newItem: TodoItem) => void;
         clearFields: () => void;
         deleteTodoItem: (id: string) => void;
         editTodoItem: (id: string, updatedItem: TodoItem) => Omit<TodoItem, 'id'> | undefined;
+        setSubmissionCount: (count: number) => void;
     }
 
     export type DbTodoItem = Omit<TodoItem, 'id'>;

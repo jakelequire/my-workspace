@@ -46,7 +46,9 @@ import EditStatusBtn from './editing/statusBtn';
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
 
-const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider' 
+const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider';
+
+
 
 export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
@@ -59,7 +61,7 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                 }
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                 aria-label='Select all'
-                className="border-input"
+                className='border-input'
             />
         ),
         cell: ({ row }) => (
@@ -67,7 +69,7 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
                 aria-label='Select row'
-                className="border-input"
+                className='border-input'
             />
         ),
         enableSorting: false,
@@ -99,7 +101,11 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         accessorKey: 'description',
         header: 'Description',
-        cell: ({ row }) => <div className='capitalize w-96'>{row.getValue('description')}</div>,
+        cell: ({ row }) => (
+            <div className='capitalize line-clamp-2 max-w-80 overflow-ellipsis'>
+                {row.getValue('description')}
+            </div>
+        ),
     },
     {
         accessorKey: 'status',
@@ -157,6 +163,10 @@ export function DataTable() {
     const [categoryFilter, setCategoryFilter] = React.useState('Category');
     const [priorityFilter, setPriorityFilter] = React.useState('Priority');
     const [statusFilter, setStatusFilter] = React.useState('Status');
+    const [tablePagination, setTablePagination] = React.useState({
+        pageIndex: 0, //initial page index
+        pageSize: 7, //default page size
+    });
 
     const { todoItems } = useTaskContext();
 
@@ -171,13 +181,21 @@ export function DataTable() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
+        onPaginationChange: setTablePagination,
         state: {
             sorting,
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination: {
+                ...tablePagination
+            },
         },
+        manualPagination: false, // Set to false if your data is client-side
+        pageCount: -1,
     });
+
+    const isLastPage = table.getState().pagination.pageIndex >= Math.ceil(todoItems.length / table.getState().pagination.pageSize) - 1;
 
     return (
         <div className='w-full'>
@@ -194,7 +212,9 @@ export function DataTable() {
                 {/* Filter Button (filtering by category) */}
                 {/* ------------------------------------- */}
                 <div className='pl-6 flex flex-col'>
-                    <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Category</p>
+                    <p className='text-muted-foreground pb-2 text-xs text-center'>
+                        Filter by Category
+                    </p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant='outline' className='w-fit'>
@@ -216,42 +236,42 @@ export function DataTable() {
                                         table.getColumn('category')?.setFilterValue('');
                                         setCategoryFilter('Category');
                                     }}>
-                                <span className={menuHeaderStyle}>Reset Filter</span>
+                                    <span className={menuHeaderStyle}>Reset Filter</span>
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Personal' 
+                                <DropdownMenuRadioItem
+                                    value='Personal'
                                     onClick={() => {
                                         table.getColumn('category')?.setFilterValue('Personal');
                                         setCategoryFilter('Personal');
                                     }}>
                                     Personal
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Appointment' 
+                                <DropdownMenuRadioItem
+                                    value='Appointment'
                                     onClick={() => {
                                         table.getColumn('category')?.setFilterValue('Appointment');
                                         setCategoryFilter('Appointment');
                                     }}>
                                     Appointment
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Project' 
+                                <DropdownMenuRadioItem
+                                    value='Project'
                                     onClick={() => {
                                         table.getColumn('category')?.setFilterValue('Project');
                                         setCategoryFilter('Project');
                                     }}>
                                     Project
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Work' 
+                                <DropdownMenuRadioItem
+                                    value='Work'
                                     onClick={() => {
                                         table.getColumn('category')?.setFilterValue('Work');
                                         setCategoryFilter('Work');
                                     }}>
                                     Work
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Other' 
+                                <DropdownMenuRadioItem
+                                    value='Other'
                                     onClick={() => {
                                         table.getColumn('category')?.setFilterValue('Other');
                                         setCategoryFilter('Other');
@@ -262,12 +282,15 @@ export function DataTable() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+                {/* ------------------------------------- */}
 
                 {/* ------------------------------------- */}
                 {/* Filter Button (filtering by priority) */}
                 {/* ------------------------------------- */}
                 <div className='pl-6 flex flex-col'>
-                    <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Priority</p>
+                    <p className='text-muted-foreground pb-2 text-xs text-center'>
+                        Filter by Priority
+                    </p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant='outline' className='w-fit'>
@@ -289,34 +312,34 @@ export function DataTable() {
                                         table.getColumn('priority')?.setFilterValue('');
                                         setPriorityFilter('Priority');
                                     }}>
-                                <span className={menuHeaderStyle}>Reset Filter</span>
+                                    <span className={menuHeaderStyle}>Reset Filter</span>
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Personal' 
+                                <DropdownMenuRadioItem
+                                    value='Personal'
                                     onClick={() => {
                                         table.getColumn('priority')?.setFilterValue('Low');
                                         setPriorityFilter('Low');
                                     }}>
                                     Low
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Appointment' 
+                                <DropdownMenuRadioItem
+                                    value='Appointment'
                                     onClick={() => {
                                         table.getColumn('priority')?.setFilterValue('Medium');
                                         setPriorityFilter('Medium');
                                     }}>
                                     Medium
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Appointment' 
+                                <DropdownMenuRadioItem
+                                    value='Appointment'
                                     onClick={() => {
                                         table.getColumn('priority')?.setFilterValue('High');
                                         setPriorityFilter('High');
                                     }}>
                                     High
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Appointment' 
+                                <DropdownMenuRadioItem
+                                    value='Appointment'
                                     onClick={() => {
                                         table.getColumn('priority')?.setFilterValue('Urgent');
                                         setPriorityFilter('Urgent');
@@ -327,12 +350,15 @@ export function DataTable() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+                {/* ------------------------------------- */}
 
                 {/* ------------------------------------- */}
                 {/*  Filter Button (filtering by status)  */}
                 {/* ------------------------------------- */}
                 <div className='pl-6 flex flex-col'>
-                    <p className='text-muted-foreground pb-2 text-xs text-center'>Filter by Status</p>
+                    <p className='text-muted-foreground pb-2 text-xs text-center'>
+                        Filter by Status
+                    </p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant='outline' className='w-fit'>
@@ -354,26 +380,26 @@ export function DataTable() {
                                         table.getColumn('status')?.setFilterValue('');
                                         setStatusFilter('Status');
                                     }}>
-                                <span className={menuHeaderStyle}>Reset Filter</span>
+                                    <span className={menuHeaderStyle}>Reset Filter</span>
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Personal' 
+                                <DropdownMenuRadioItem
+                                    value='Personal'
                                     onClick={() => {
                                         table.getColumn('status')?.setFilterValue('not started');
                                         setStatusFilter('not started');
                                     }}>
                                     not started
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Appointment' 
+                                <DropdownMenuRadioItem
+                                    value='Appointment'
                                     onClick={() => {
                                         table.getColumn('status')?.setFilterValue('in-progress');
                                         setStatusFilter('in-progress');
                                     }}>
                                     in-progress
                                 </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem 
-                                    value='Appointment' 
+                                <DropdownMenuRadioItem
+                                    value='Appointment'
                                     onClick={() => {
                                         table.getColumn('status')?.setFilterValue('completed');
                                         setStatusFilter('completed');
@@ -384,6 +410,7 @@ export function DataTable() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+                {/* ------------------------------------- */}
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -422,9 +449,9 @@ export function DataTable() {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                      header.column.columnDef.header,
+                                                      header.getContext()
+                                                  )}
                                         </TableHead>
                                     );
                                 })}
@@ -474,8 +501,10 @@ export function DataTable() {
                     <Button
                         variant='outline'
                         size='sm'
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}>
+                        onClick={() => {
+                            table.nextPage();
+                        }}
+                        disabled={isLastPage || !table.getCanNextPage()}>
                         Next
                     </Button>
                 </div>
