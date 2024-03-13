@@ -1,6 +1,7 @@
 'use client';
 import { TodoWidget } from './widget/todoWidget';
 import { DashboardNavigationMenu } from './widget/navigationMenu';
+import { DashNav } from './navigation/dashNav';
 import styles from './dashboard.module.css';
 
 export default function Dashboard(): JSX.Element {
@@ -15,7 +16,7 @@ export default function Dashboard(): JSX.Element {
                 </div>
                 <div className={styles.navigator_container}>
                     <div className={styles.navbar_wrapper}>
-                        <DashboardNavigationMenu />
+                        <DashNav />
                     </div>
                     <div className={styles.profile_wrapper}>
 

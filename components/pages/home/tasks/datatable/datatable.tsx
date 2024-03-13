@@ -42,6 +42,7 @@ import { Input } from '@/components/ui/input';
 
 import CompletedBtn from './completedBtn';
 import EditStatusBtn from './editing/statusBtn';
+import { DialogDemo } from '../events/dialog';
 
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
@@ -86,7 +87,7 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         accessorKey: 'title',
         header: 'Title',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('title')}</div>,
+        cell: ({ row }) => <a className='capitalize'>{row.getValue('title')}</a>,
     },
     {
         accessorKey: 'priority',
