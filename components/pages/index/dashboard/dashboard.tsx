@@ -1,6 +1,5 @@
 'use client';
 import { TodoWidget } from './widget/todoWidget';
-import { DashboardNavigationMenu } from './widget/navigationMenu';
 import { DashNav } from './navigation/dashNav';
 import styles from './dashboard.module.css';
 
