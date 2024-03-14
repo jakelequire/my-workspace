@@ -2,11 +2,11 @@
 import GPTSettings from './settings/gptSettings'
 import GPTTextArea from './textarea/gptTextArea';
 import styles from './gpt.module.css'
-import { GptProvider } from './GptContext';
+import { GPTProvider } from './GptContext';
 
 export default function GPTInterface(): JSX.Element {
     return (
-        <GptProvider>
+        <GPTProvider>
             <section className={styles.gpt_container}>
                 <div className={styles.gpt_settings}>
                     <GPTSettings />
@@ -15,6 +15,6 @@ export default function GPTInterface(): JSX.Element {
                     <GPTTextArea />
                 </div>
             </section>
-        </GptProvider>
+        </GPTProvider>
     )
 }
