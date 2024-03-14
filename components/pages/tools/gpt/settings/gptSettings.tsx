@@ -9,12 +9,26 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Slider } from '@/components/ui/slider';
 import { useGptContext, GPTModel } from '../GptContext';
 
 import styles from './gptSettings.module.css';
+
+const metaDescription = {
+    temperature: `What sampling temperature to use, between 0 and 2. 
+    Higher values like 0.8 will make the output more random, 
+    while lower values like 0.2 will make it more focused and deterministic.`,
+    maxTokens: `The maximum number of tokens to generate. This can vary from model to model.`,
+    topP: `An alternative to sampling with temperature, it sets the threshold for the cumulative probability of the generated tokens.
+    Lower values of top_p (e.g. 0.75) will result in a more focused response, while higher values (e.g. 1.0) will make the model more random.`,
+    frequencyPenalty: `The higher the penalty, the more likely the model will avoid repeating the same response.
+    This value can be between 0 and 2.`,
+    presencePenalty: `The higher the penalty, the more likely the model will avoid generating previously seen content.
+    This value can be between 0 and 2.`,
+};
 
 const modelTokenMapping = {
     'gpt-3.5-turbo': 16385,
@@ -91,7 +105,18 @@ export default function GPTSettings(): JSX.Element {
 
                 <div className={styles.slider_settings}>
                     <div className='flex flex-row align-center align-end w-full gap-4 pb-2'>
-                        <h2 className='text-md font-semibold'>Temperature</h2>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <h2 className='text-md font-semibold cursor-default'>
+                                        Temperature
+                                    </h2>
+                                </TooltipTrigger>
+                                <TooltipContent className='max-w-60 text-wrap'>
+                                    <p>{metaDescription.temperature}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                         <p className='text-xs text-gray-400 pt-1'>0 - 100</p>
                     </div>
                     <Slider
@@ -113,7 +138,17 @@ export default function GPTSettings(): JSX.Element {
 
                 <div className={styles.slider_settings}>
                     <div className='flex flex-row align-center align-end w-full gap-4 pb-2'>
-                        <h2 className='text-md font-semibold'>Max Tokens</h2>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <h2 className='text-md font-semibold'>Max Tokens</h2>
+                                </TooltipTrigger>
+                                <TooltipContent className='max-w-60 text-wrap'>
+                                    <p>{metaDescription.temperature}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+
                         <p className='text-xs text-gray-400 pt-1'>0 - {maxTokens}</p>
                     </div>
                     <Slider
@@ -134,7 +169,16 @@ export default function GPTSettings(): JSX.Element {
 
                 <div className={styles.slider_settings}>
                     <div className='flex flex-row align-center align-end w-full gap-4 pb-2'>
-                        <h2 className='text-md font-semibold'>Top P</h2>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <h2 className='text-md font-semibold'>Top P</h2>
+                                </TooltipTrigger>
+                                <TooltipContent className='max-w-60 text-wrap'>
+                                    <p>{metaDescription.topP}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                         <p className='text-xs text-gray-400 pt-1'>0 - 100</p>
                     </div>
                     <Slider
@@ -154,8 +198,17 @@ export default function GPTSettings(): JSX.Element {
 
                 <div className={styles.slider_settings}>
                     <div className='flex flex-row align-center align-end w-full gap-4 pb-2'>
-                        <h2 className='text-md font-semibold'>Frequency Penalty</h2>
-                        <p className='text-xs text-gray-400 pt-1'>0 - 100</p>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <h2 className='text-md font-semibold'>Frequency Penalty</h2>
+                                </TooltipTrigger>
+                                <TooltipContent className='max-w-60 text-wrap'>
+                                    <p>{metaDescription.frequencyPenalty}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <p className='text-xs text-gray-400 pt-1'>-2 - 2</p>
                     </div>
                     <Slider
                         defaultValue={[50]}
@@ -176,8 +229,18 @@ export default function GPTSettings(): JSX.Element {
 
                 <div className={styles.slider_settings}>
                     <div className='flex flex-row align-center align-end w-full gap-4 pb-2'>
-                        <h2 className='text-md font-semibold'>Presence Penalty</h2>
-                        <p className='text-xs text-gray-400 pt-1'>0 - 100</p>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <h2 className='text-md font-semibold'>Presence Penalty</h2>
+                                </TooltipTrigger>
+                                <TooltipContent className='max-w-60 text-wrap'>
+                                    <p>{metaDescription.presencePenalty}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        
+                        <p className='text-xs text-gray-400 pt-1'>-2 - 2</p>
                     </div>
                     <Slider
                         defaultValue={[50]}
@@ -204,7 +267,6 @@ export default function GPTSettings(): JSX.Element {
                         Clear Conversation
                     </Button>
                 </div>
-
             </div>
         </div>
     );
