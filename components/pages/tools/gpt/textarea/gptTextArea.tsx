@@ -11,7 +11,7 @@ export default function GPTTextArea(): JSX.Element {
 
     return (
         <div className={styles.gpt_textarea}>
-            <ScrollArea className="rounded-md border">
+            <ScrollArea className="h-[80%] w-[100%] rounded-md border">
             <div className={styles.response_container}>
                 {conversations.map((conv, index) => (
                     <React.Fragment key={conv.id}>
