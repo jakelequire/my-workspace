@@ -20,13 +20,13 @@ export default function InputContainer(): JSX.Element {
         <div className='flex flex-row h-full w-[100%] gap-2'>
             <Textarea
                 placeholder='Message ChatGPT...'
-                className='h-full w-[95%] border-none p-3 resize-none overflow-auto whitespace-pre-wrap break-words align-top'
+                className='h-full w-[96%] border-none p-3 resize-none overflow-auto whitespace-pre-wrap break-words align-top'
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)} // Update local state on change
             />
 
-            <Button variant='outline' size='icon' className='h-full w-[5%]' onClick={handleSubmit}>
-                <ChevronRightIcon className='h-6 w-6' />
+            <Button variant='ghost' size='icon' className='h-[27%] w-[4%]' onClick={handleSubmit}>
+                <ChevronRightIcon className='h-5 w-5' />
             </Button>
         </div>
     );

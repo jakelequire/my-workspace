@@ -3,6 +3,7 @@ import * as React from 'react';
 import InputContainer from './input';
 import styles from './gptTextArea.module.css';
 import { useGptContext } from '../GptContext';
+import { ScrollArea } from "@/components/ui/scroll-area"
 import ChatBubble from './chatBubble';
 
 export default function GPTTextArea(): JSX.Element {
@@ -10,6 +11,7 @@ export default function GPTTextArea(): JSX.Element {
 
     return (
         <div className={styles.gpt_textarea}>
+            <ScrollArea className="rounded-md border">
             <div className={styles.response_container}>
                 {conversations.map((conv, index) => (
                     <React.Fragment key={conv.id}>
@@ -24,6 +26,7 @@ export default function GPTTextArea(): JSX.Element {
                     </React.Fragment>
                 ))}
             </div>
+            </ScrollArea>
             <div className={styles.input_container}>
                 <InputContainer />
             </div>
