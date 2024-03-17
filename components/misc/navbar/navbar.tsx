@@ -36,6 +36,11 @@ const components: { title: string; href: string; description: string }[] = [
         href: '/home/tasks',
         description: 'My personal tasks / to-do list. Manage my tasks and deadlines.',
     },
+    {
+        title: 'Job Tracker',
+        href: '/home/jobs',
+        description: 'My personal job tracker. Manage my job applications and interviews.',
+    }
 ];
 
 const finances: { title: string; href: string; description: string }[] = [
@@ -71,6 +76,11 @@ const tools: { title: string; href: string; description: string }[] = [
         title: 'Notes',
         href: '/tools/notes',
         description: 'Create and manage my personal notes.',
+    },
+    {
+        title: 'Cloud Storage',
+        href: '/tools/storage',
+        description: 'Manage my personal cloud storage. Hosted by Firebase.',
     }
 ]
 

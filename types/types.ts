@@ -45,3 +45,36 @@ export namespace Todo {
     
     export type AddTodoServerResponse = Promise<TodoItem>
 }
+
+
+
+export namespace JT {
+
+    export type JobItem = {
+        id: string,
+        companyName: string,
+        position: string,
+        payRange: string,
+        location: string,
+        dateApplied: string,
+        source: string,
+        status: string,
+        applicationType: string,
+    }
+    
+    export interface JobTrackerContext {
+        submissionCount: number;
+        setSubmissionCount: (count: number) => void;
+        jobItem: JobItem[];
+        setJobItem: (jobItem: JobItem) => void;
+        newJobItem: JobItem;
+        setNewJobItem: (jobItem: JobItem) => void;
+        addJobItem: (newJobItem: JobItem) => void;
+        clearFields: () => void;
+        deleteJobItem: (id: string) => void;
+        editJobItem: (id: string, updatedItem: JobItem) => Omit<JobItem, 'id'> | undefined;
+    }
+
+    export type DbJobItem = Omit<JobItem, 'id'>;
+    export type AddJobServerResponse = Promise<JobItem>
+}

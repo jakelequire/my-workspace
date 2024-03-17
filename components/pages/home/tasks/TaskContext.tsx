@@ -5,6 +5,7 @@ import { Todo } from '@/types/types';
 const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
 function useTaskProvider() {
+    const [submissionCount, setSubmissionCount] = useState(0);
     const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
     const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
         id: '',
@@ -17,7 +18,6 @@ function useTaskProvider() {
         started: '',
         due: '',
     });
-    const [submissionCount, setSubmissionCount] = useState(0);
 
 
     const { todoList } = useGlobalContext();

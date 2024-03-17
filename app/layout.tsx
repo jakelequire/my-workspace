@@ -8,6 +8,7 @@ import { Toaster } from 'sonner';
 
 import './globals.css';
 import '@/styles/embla.css';
+import './sample.css'
 
 const inter = Inter({ subsets: ['latin'] });
 
