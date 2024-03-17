@@ -1,5 +1,6 @@
 'use client';
 import { JobTrackerProvider } from './jobTrackerContext';
+import JobsDisplay from './jobsDisplay/jobsDisplay';
 import JobInput from './jobInput/jobInput';
 import styles from './jobTracker.module.css';
 
@@ -12,7 +13,9 @@ export default function JobTrackerInterface(): JSX.Element {
                     <div className={styles.jobtracker_header}>
                         <h2 className={styles.jobtracker_title}>Current Applications</h2>
                     </div>
-                    {/* <DataTable /> */}
+                    <div className={styles.jobtracker_tabs}>
+                        <JobsDisplay />
+                    </div>
                 </div>
             </section>
         </JobTrackerProvider>

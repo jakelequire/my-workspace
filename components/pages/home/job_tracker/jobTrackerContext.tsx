@@ -2,22 +2,23 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useGlobalContext } from '@/components/GlobalContext';
 import { JT } from '@/types/types';
 
-
 const JobTrackerContext = createContext<JT.JobTrackerContext | undefined>(undefined);
 
 function useJobTrackerProvider() {
     const [submissionCount, setSubmissionCount] = useState(0);
+    const [currentTab, setCurrentTab] = useState<string>("currentapps");
     const [jobItem, setJobItem] = useState<JT.JobItem[]>([])
     const [newJobItem, setNewJobItem] = useState<JT.JobItem>({
         id: "",
         companyName: "",
         position: "",
-        payRange: "",
-        location: "",
+        payRange: "0-20k",
+        location: "Tacoma, WA",
         dateApplied: "",
-        source: "",
-        status: "",
-        applicationType: "",
+        source: "Indeed",
+        status: "Applied",
+        applicationType: "Job",
+        jobLink: "",
     })
 
     // const { todoList } = useGlobalContext();
@@ -44,17 +45,19 @@ function useJobTrackerProvider() {
         setJobItem((prevItems) => prevItems.filter((item) => item.id !== id));
     };
 
+
     const clearFields = () => {
         setNewJobItem({
             id: "",
             companyName: "",
             position: "",
             payRange: "",
-            location: "",
+            location: "Tacoma, WA",
             dateApplied: "",
-            source: "",
-            status: "",
-            applicationType: "",
+            source: "Indeed",
+            status: "Applied",
+            applicationType: "Job",
+            jobLink: "",
         });
     };
 
@@ -63,8 +66,11 @@ function useJobTrackerProvider() {
         setSubmissionCount,
         jobItem,
         newJobItem,
-        setJobItem,
         setNewJobItem,
+        setJobItem,
+        currentTab,
+        setCurrentTab,
+        
         addJobItem,
         clearFields,
         deleteJobItem,
@@ -74,7 +80,6 @@ function useJobTrackerProvider() {
 
 export const JobTrackerProvider = ({ children }: { children: React.ReactNode }) => {
     const value = useJobTrackerProvider();
-    //@ts-ignore
     return <JobTrackerContext.Provider value={value}>{children}</JobTrackerContext.Provider>;
 };
 

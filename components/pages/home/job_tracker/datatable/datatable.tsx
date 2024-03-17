@@ -39,11 +39,7 @@ import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-
-import CompletedBtn from './completedBtn';
-import EditStatusBtn from './editing/statusBtn';
-import { DialogDemo } from '../events/dialog';
-
+import { JT } from '@/types/types';
 import { useJobTrackerContext } from '../jobTrackerContext';
 
 const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider';
@@ -59,7 +55,7 @@ interface JobItem {
     status: string,
 }
 
-export const columns: ColumnDef<JobItem>[] = [
+export const columns: ColumnDef<JT.JobItem>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -158,10 +154,10 @@ export function DataTable() {
         pageSize: 7, //default page size
     });
 
-    const { jobItems } = useJobTrackerContext();
+    const { jobItem } = useJobTrackerContext();
 
     const table = useReactTable({
-        data: jobItems,
+        data: jobItem,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -185,7 +181,7 @@ export function DataTable() {
         pageCount: -1,
     });
 
-    const isLastPage = table.getState().pagination.pageIndex >= Math.ceil(todoItems.length / table.getState().pagination.pageSize) - 1;
+    const isLastPage = table.getState().pagination.pageIndex >= Math.ceil(jobItem.length / table.getState().pagination.pageSize) - 1;
 
     return (
         <div className='w-full'>
@@ -249,7 +245,7 @@ export function DataTable() {
                             table.getRowModel().rows.map((row, index) => (
                                 <TableRow
                                     key={row.id}
-                                    id={todoItems[index].id}
+                                    id={jobItem[index].id}
                                     data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

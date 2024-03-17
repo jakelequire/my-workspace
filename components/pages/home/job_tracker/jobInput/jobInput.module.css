@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 20vh;
+    height: 25vh;
     width: 100%;
     padding: 1rem 0;
     border-bottom: 1px solid hsl(240 3.7% 15.9%);
@@ -17,7 +17,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 5vh;
+    margin-bottom: 1rem;
 }
 .jobinput_title{
     font-size: 1.5rem;
@@ -34,14 +34,12 @@
     height: 100%;
 }
 
-
 .jobinput_fields {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    height: 50%;
-    gap: 1.25rem;
+    height: 100%;
 }
 
 .jobinput_companyinfo {
@@ -50,7 +48,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
-    height: 50%;
+    height: 100%;
     gap: 0.5rem;
 }
 
@@ -60,7 +58,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
-    height: 50%;
+    height: 100%;
     gap: 0.5rem;
 }
 

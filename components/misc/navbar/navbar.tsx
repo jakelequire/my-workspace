@@ -17,70 +17,80 @@ import { getAuth, signOut } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { useRouter } from 'next/navigation';
 
-
 const auth = getAuth(firebase_app);
 
-const components: { title: string; href: string; description: string }[] = [
+const components: { title: string; href: string; description: string, active: boolean }[] = [
     {
         title: 'Calendar',
         href: '/home/calendar',
         description: 'My personal calendar. Shows all my events, appointments, and reminders.',
+        active: false,
     },
     {
         title: 'Email',
         href: '/home/email',
         description: 'Outlook email. Send, receive, and manage my email.',
+        active: false,
     },
     {
         title: 'Tasks',
         href: '/home/tasks',
         description: 'My personal tasks / to-do list. Manage my tasks and deadlines.',
+        active: true,
     },
     {
         title: 'Job Tracker',
         href: '/home/jobs',
         description: 'My personal job tracker. Manage my job applications and interviews.',
+        active: true,
     }
 ];
 
-const finances: { title: string; href: string; description: string }[] = [
+const finances: { title: string; href: string; description: string, active: boolean }[] = [
     {
         title: 'Banking',
         href: '/finances/banking',
         description: 'Manage my bank accounts, transactions, and payments.',
+        active: false,
     },
     {
         title: 'Investments',
         href: '/finances/investments',
         description: 'Manage my investment portfolio and stock market.',
+        active: false,
     },
     {
         title: 'Budgeting',
         href: '/finances/budgeting',
         description: 'Manage my personal budget and expenses.',
+        active: false,
     },
 ];
 
-const tools: { title: string; href: string; description: string }[] = [
+const tools: { title: string; href: string; description: string, active: boolean }[] = [
     {
         title: 'GPT',
         href: '/tools/gpt',
         description: 'Generate text using OpenAI GPT.',
+        active: true,
     },
     {
         title: 'Text Editor',
         href: '/tools/text-editor',
         description: 'Edit and save text documents.',
+        active: false,
     },
     {
         title: 'Notes',
         href: '/tools/notes',
         description: 'Create and manage my personal notes.',
+        active: false,
     },
     {
         title: 'Cloud Storage',
         href: '/tools/storage',
         description: 'Manage my personal cloud storage. Hosted by Firebase.',
+        active: false,
     }
 ]
 
@@ -159,6 +169,7 @@ export default function Navbar(): JSX.Element {
                                         {components.map((component) => (
                                             <ListItem
                                                 key={component.title}
+                                                className={component.active ? '' : 'text-accent'}
                                                 title={component.title}
                                                 href={component.href}>
                                                 {component.description}
@@ -175,6 +186,7 @@ export default function Navbar(): JSX.Element {
                                         {finances.map((component) => (
                                             <ListItem
                                                 key={component.title}
+                                                className={component.active ? '' : 'text-accent'}
                                                 title={component.title}
                                                 href={component.href}>
                                                 {component.description}
@@ -191,6 +203,7 @@ export default function Navbar(): JSX.Element {
                                         {tools.map((component) => (
                                             <ListItem
                                                 key={component.title}
+                                                className={component.active ? '' : 'text-accent'}
                                                 title={component.title}
                                                 href={component.href}>
                                                 {component.description}

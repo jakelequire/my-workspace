@@ -11,26 +11,17 @@ import {
     LocationInput,
     SourceInput,
     StatusInput,
-    ApplicationTypeInput
+    ApplicationTypeInput,
+    JobLinkInput,
 } from './inputFields';
 
 import styles from './jobInput.module.css';
 
 export default function JobInput(): JSX.Element {
-    const {
-        jobItem,
-        newJobItem,
-        setNewJobItem,
-        setJobItem,
-        addJobItem,
-        clearFields,
-        submissionCount,
-        setSubmissionCount,
-    } = useJobTrackerContext();
+    const { newJobItem, addJobItem, clearFields, submissionCount, setSubmissionCount } =
+        useJobTrackerContext();
 
     const handleAddJob = async () => {
-        // format(date, 'PP')
-        // Date format: Mar 1, 2022
         const date = new Date();
         const formattedDate = format(date, 'PP');
 
@@ -43,14 +34,14 @@ export default function JobInput(): JSX.Element {
             source: newJobItem.source,
             status: newJobItem.status,
             applicationType: newJobItem.applicationType,
+            jobLink: newJobItem.jobLink,
         };
-
+        clearFields();
         const response = await sendJob(newJob);
 
         if (response) {
             // Verify response structure matches expected TodoItem
             console.log('Adding todo item:', response);
-            clearFields();
             addJobItem(response);
             setSubmissionCount(submissionCount + 1);
         } else {
@@ -60,7 +51,7 @@ export default function JobInput(): JSX.Element {
 
     const sendJob = async (jobItem: JT.DbJobItem) => {
         // Send the task to the server endpoint /api/firestore
-        const sendRequest = await fetch('/api/firestore', {
+        const sendRequest = await fetch('/api/firestore/jobs', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -89,6 +80,7 @@ export default function JobInput(): JSX.Element {
                         <SourceInput />
                         <StatusInput />
                         <ApplicationTypeInput />
+                        <JobLinkInput />
                     </div>
                 </div>
                 <div className={styles.button_container}>
@@ -98,7 +90,8 @@ export default function JobInput(): JSX.Element {
                         onClick={() => {
                             handleAddJob();
                             toast.success('A new job has been created.', {
-                                description: `Job: ${newJobItem.companyName} has been added to the list.`,
+                                description: `New job application for ${newJobItem.companyName} has been added to the job tracker.`,
+                                duration: 2000,
                             });
                         }}>
                         Add Job

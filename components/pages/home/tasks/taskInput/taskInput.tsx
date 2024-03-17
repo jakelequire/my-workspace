@@ -32,11 +32,12 @@ export default function TaskInput(): JSX.Element {
             due: todoItem.due,
         };
 
+        clearFields();
         const response = await sendTask(newTask);
+
         if (response) {
             // Verify response structure matches expected TodoItem
             console.log('Adding todo item:', response);
-            clearFields();
             addTodoItem(response);
             setSubmissionCount(submissionCount + 1);
         } else {
@@ -99,6 +100,7 @@ export default function TaskInput(): JSX.Element {
                             handleAddTask();
                             toast.success('A new task has been created.', {
                                 description: `Task: ${todoItem.title} has been added to the list.`,
+                                duration: 2000,
                             });
                         }}>
                         Add Task

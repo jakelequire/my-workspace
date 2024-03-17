@@ -49,6 +49,9 @@ export namespace Todo {
 
 
 export namespace JT {
+    export type Status = 'Applied' | 'Saved' | 'Pending Interview' | 'Interviewed' | 'Waiting for Response';
+    export type ApplicationType = 'Job' | 'Internship' | 'Freelance' | 'Contract' | 'Other';
+    export type Source = 'Indeed' | 'LinkedIn' | 'Glassdoor' | 'Monster' | 'Company Website' | 'Other';
 
     export type JobItem = {
         id: string,
@@ -58,17 +61,21 @@ export namespace JT {
         location: string,
         dateApplied: string,
         source: string,
-        status: string,
-        applicationType: string,
+        status: Status,
+        applicationType: ApplicationType,
+        jobLink: string,
     }
     
     export interface JobTrackerContext {
         submissionCount: number;
         setSubmissionCount: (count: number) => void;
         jobItem: JobItem[];
-        setJobItem: (jobItem: JobItem) => void;
+        setJobItem: (jobItems: JobItem[]) => void;
         newJobItem: JobItem;
         setNewJobItem: (jobItem: JobItem) => void;
+        currentTab: string;
+        setCurrentTab: (tab: string) => void;
+        
         addJobItem: (newJobItem: JobItem) => void;
         clearFields: () => void;
         deleteJobItem: (id: string) => void;
