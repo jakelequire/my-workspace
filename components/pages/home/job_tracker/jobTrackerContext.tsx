@@ -74,6 +74,7 @@ function useJobTrackerProvider() {
 
 export const JobTrackerProvider = ({ children }: { children: React.ReactNode }) => {
     const value = useJobTrackerProvider();
+    //@ts-ignore
     return <JobTrackerContext.Provider value={value}>{children}</JobTrackerContext.Provider>;
 };
 
