@@ -41,6 +41,17 @@ function useJobTrackerProvider() {
         return newJobItem;
     };
 
+    const archiveJobItem = (
+        id: string,
+        updatedItem: JT.JobItem
+    ): Omit<JT.JobItem, 'id'> | undefined  => {
+        setJobItem((prevItems) => prevItems.map((item) => (item.id === id ? updatedItem : item)));
+        setSubmissionCount(submissionCount + 1);
+        const { id: _, ...newJobItem } = updatedItem;
+        if (!newJobItem) return;
+        return newJobItem;
+    }
+
     const deleteJobItem = (id: string) => {
         setJobItem((prevItems) => prevItems.filter((item) => item.id !== id));
         setSubmissionCount(submissionCount + 1);
@@ -72,6 +83,7 @@ function useJobTrackerProvider() {
         clearFields,
         deleteJobItem,
         editJobItem,
+        archiveJobItem,
     };
 }
 

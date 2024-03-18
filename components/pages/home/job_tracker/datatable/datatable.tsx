@@ -35,11 +35,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
-
+import ArchiveButton from './archiveButton';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { JT } from '@/types/types';
+import { useGlobalContext } from '@/components/GlobalContext';
 
 
 export const columns: ColumnDef<JT.JobItem>[] = [
@@ -114,11 +115,30 @@ export const columns: ColumnDef<JT.JobItem>[] = [
         ),
     },
     {
+        accessorKey: 'archive',
+        header: '',
+        cell: ({ row }) => (
+            <ArchiveButton id={row.original.id} />
+        ),
+    },
+    {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
             const job = row.original;
-            // DropdownMenu for each of the rowsCfc2xDLYaUWaY14nFra8
+            const deleteItem = async () => {
+                const response = await fetch('/api/firestore/jobs', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: job.id }),
+                });
+                if (!response.ok) {
+                    console.error('Failed to delete job');
+                }
+            }
+
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -131,7 +151,7 @@ export const columns: ColumnDef<JT.JobItem>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
+                        <DropdownMenuItem onClick={deleteItem}>Delete</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(job.id)}>
                             Copy ID
                         </DropdownMenuItem>

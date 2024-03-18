@@ -76,3 +76,46 @@ export async function POST(request: Request) {
         }
     }
 }
+
+
+/* ---------------------------------------- /
+ * ######################################## /
+ *        DELETE /api/firestore/jobs        /
+ * ######################################## /
+ * ---------------------------------------- /
+*/
+export async function DELETE(request: Request) {
+    console.log('[/api/firestore] Hello from DELETE');
+
+    // Check if the request has a body
+    if (!request.body) {
+        return new Response(JSON.stringify({ message: 'No body provided' }), { status: 400 });
+    }
+
+    const getUserId = cookies().get('userId');
+
+    if (!getUserId) {
+        return new Response(JSON.stringify({ message: 'No user ID in cookies.' }), {
+            status: 400,
+        });
+    }
+
+    const jobTracker = new JobTracker();
+
+    try {
+        // Directly await the JSON body parsing
+        const requestBody = await request.json();
+        jobTracker.initUser(getUserId.value);
+        await jobTracker.deleteJobItem(requestBody.id);
+        /*DEBUG*/ console.log("[/api/firestore] Deleted Item ID: ", requestBody.id)
+
+        return new Response(JSON.stringify({ message: 'Item deleted successfully' }), {
+            status: 200,
+        });
+    } catch (error) {
+        console.error('Error parsing JSON body', error);
+        return new Response(JSON.stringify({ message: 'Error parsing JSON body' }), {
+            status: 400,
+        });
+    }
+}

@@ -55,7 +55,7 @@ export namespace Todo {
 
 
 export namespace JT {
-    export type Status = 'Applied' | 'Saved' | 'Pending Interview' | 'Interviewed' | 'Waiting for Response';
+    export type Status = 'Applied' | 'Saved' | 'Pending Interview' | 'Interviewed' | 'Waiting for Response' | 'Archived';
     export type ApplicationType = 'Job' | 'Internship' | 'Freelance' | 'Contract' | 'Other';
     export type Source = 'Indeed' | 'LinkedIn' | 'Glassdoor' | 'Monster' | 'Company Website' | 'Other';
 
@@ -82,6 +82,7 @@ export namespace JT {
         clearFields: () => void;
         deleteJobItem: (id: string) => void;
         editJobItem: (id: string, updatedItem: JobItem) => Omit<JobItem, 'id'> | undefined;
+        archiveJobItem: (id: string, updatedItem: JobItem) => Omit<JobItem, 'id'> | undefined;
     }
 
     export type DbJobItem = Omit<JobItem, 'id'>;

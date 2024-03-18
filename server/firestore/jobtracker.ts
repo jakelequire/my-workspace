@@ -63,5 +63,17 @@ export class JobTracker {
         return items;
     }
     
+    async deleteJobItem(id: string): Promise<void> {
+        console.warn("[JobTracker] {!API ENDPOINT CALLED!} deleteJobItem");
+        console.log("userId: ", this.userId);
+        console.log("id: ", id);
+
+        await this.db
+            .collection('users')
+            .doc(this.userId)
+            .collection('jobs')
+            .doc(id)
+            .delete();
+    }
 
 }
