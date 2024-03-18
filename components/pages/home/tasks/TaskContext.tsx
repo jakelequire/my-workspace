@@ -5,7 +5,6 @@ import { Todo } from '@/types/types';
 const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
 function useTaskProvider() {
-    const [submissionCount, setSubmissionCount] = useState(0);
     const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
     const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
         id: '',
@@ -20,7 +19,7 @@ function useTaskProvider() {
     });
 
 
-    const { todoList } = useGlobalContext();
+    const { todoList, submissionCount, setSubmissionCount } = useGlobalContext();
 
     useEffect(() => {
         setTodoItems(todoList);
@@ -28,6 +27,7 @@ function useTaskProvider() {
 
     const addTodoItem = (newItem: Todo.TodoItem) => {
         setTodoItems((prevItems) => [...prevItems, newItem]);
+        setSubmissionCount(submissionCount + 1);
     };
 
     const editTodoItem = (
@@ -35,6 +35,7 @@ function useTaskProvider() {
         updatedItem: Todo.TodoItem
     ): Omit<Todo.TodoItem, 'id'> | undefined => {
         setTodoItems((prevItems) => prevItems.map((item) => (item.id === id ? updatedItem : item)));
+        setSubmissionCount(submissionCount + 1);
         const { id: _, ...todoItem } = updatedItem;
         if (!todoItem) return;
         return todoItem;
@@ -42,6 +43,7 @@ function useTaskProvider() {
 
     const deleteTodoItem = (id: string) => {
         setTodoItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        setSubmissionCount(submissionCount + 1);
     };
 
     const clearFields = () => {
@@ -61,13 +63,11 @@ function useTaskProvider() {
     return {
         todoItem: newTodoItem,
         todoItems,
-        submissionCount,
         addTodoItem,
         setTodoItem: setNewTodoItem,
         clearFields,
         deleteTodoItem,
         editTodoItem,
-        setSubmissionCount,
     };
 }
 

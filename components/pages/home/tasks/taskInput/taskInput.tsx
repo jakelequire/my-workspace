@@ -5,6 +5,7 @@ import CalendarInput from './calendar';
 import Priority from './priority';
 import Category from './category';
 import { useTaskContext } from '../TaskContext';
+import { useGlobalContext } from '@/components/GlobalContext';
 import { Todo } from '@/types/types';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
@@ -12,8 +13,8 @@ import { toast } from 'sonner';
 import styles from './taskInput.module.css';
 
 export default function TaskInput(): JSX.Element {
-    const { todoItem, submissionCount, clearFields, addTodoItem, setTodoItem, setSubmissionCount } =
-        useTaskContext();
+    const { todoItem, clearFields, addTodoItem, setTodoItem } = useTaskContext();
+    const { submissionCount } = useGlobalContext();
 
     const handleAddTask = async () => {
         // format(date, 'PP')
@@ -39,7 +40,6 @@ export default function TaskInput(): JSX.Element {
             // Verify response structure matches expected TodoItem
             console.log('Adding todo item:', response);
             addTodoItem(response);
-            setSubmissionCount(submissionCount + 1);
         } else {
             console.error('Failed to add new task, response:', response);
         }

@@ -10,9 +10,6 @@ export default function JobTrackerInterface(): JSX.Element {
             <section className={styles.jobtracker_container}>
                 <div className={styles.jobtracker_wrapper}>
                     <JobInput />
-                    <div className={styles.jobtracker_header}>
-                        <h2 className={styles.jobtracker_title}>Current Applications</h2>
-                    </div>
                     <div className={styles.jobtracker_tabs}>
                         <JobsDisplay />
                     </div>

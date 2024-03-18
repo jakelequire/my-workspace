@@ -132,7 +132,7 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const todo = row.original;
-            // DropdownMenu for each of the rowsCfc2xDLYaUWaY14nFra8
+            
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -170,7 +170,7 @@ export function DataTable() {
     });
 
     const { todoItems } = useTaskContext();
-
+    console.log("[DataTable.tsx] todoItems:", todoItems)
     const table = useReactTable({
         data: todoItems,
         columns,

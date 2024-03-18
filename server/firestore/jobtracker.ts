@@ -1,4 +1,3 @@
-import { getAuth } from 'firebase/auth';
 import { firestore } from 'firebase-admin';
 import { InitApp } from '@/lib/firebase-admin-config';
 import { JT } from '@/types/types';
@@ -11,20 +10,58 @@ export class JobTracker {
 
     constructor() {
         this.db = firestore();
-        this.userId = getAuth().currentUser?.uid || '';
+        this.userId = '';
     }
 
+    initUser(userId: string): void {
+        if(!userId) {
+            throw new Error('User not found');
+        }
+
+        this.userId = userId;
+    }
 
     async addJobItem(jobItem: JT.DbJobItem): Promise<JT.AddJobServerResponse> {
+        console.warn("[JobTracker] {!API ENDPOINT CALLED!} addJobItem");
+
         const docRef = await this.db
-            .collection('jobtracker')
+            .collection('users')
             .doc(this.userId)
             .collection('jobs')
             .add(jobItem);
         return { id: docRef.id, ...jobItem } as JT.JobItem;
     }
 
+    async getJobItem(id: string): Promise<JT.JobItem | undefined> {
+        console.warn("[JobTracker] {!API ENDPOINT CALLED!} getJobItem");
 
+        const doc = await this.db
+            .collection('users')
+            .doc(this.userId)
+            .collection('jobs')
+            .doc(id)
+            .get();
+        if (doc.exists) {
+            return { id: doc.id, ...doc.data() } as JT.JobItem;
+        } else {
+            return undefined;
+        }
+    }
+
+    async getAllJobItems(): Promise<JT.JobItem[]> {
+        console.warn("[JobTracker] {!API ENDPOINT CALLED!} getAllJobItems");
+        
+        const snapshot = await this.db
+            .collection('users')
+            .doc(this.userId)
+            .collection('jobs')
+            .get();
+        const items: JT.JobItem[] = [];
+        snapshot.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data().jobItem } as JT.JobItem);
+        });
+        return items;
+    }
     
 
 }

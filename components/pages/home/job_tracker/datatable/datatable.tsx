@@ -40,20 +40,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { JT } from '@/types/types';
-import { useJobTrackerContext } from '../jobTrackerContext';
 
-const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider';
-
-interface JobItem {
-    id: string,
-    companyName: string,
-    position: string,
-    payRange: string,
-    location: string,
-    dateApplied: string,
-    origination: string,
-    status: string,
-}
 
 export const columns: ColumnDef<JT.JobItem>[] = [
     {
@@ -81,9 +68,9 @@ export const columns: ColumnDef<JT.JobItem>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: 'company',
+        accessorKey: 'companyName',
         header: 'Company',
-        cell: ({ row }) => <a className='capitalize'>{row.getValue('company')}</a>,
+        cell: ({ row }) => <a className='capitalize'>{row.getValue('companyName')}</a>,
     },
     {
         accessorKey: 'position',
@@ -91,9 +78,9 @@ export const columns: ColumnDef<JT.JobItem>[] = [
         cell: ({ row }) => <div className='capitalize'>{row.getValue('position')}</div>,
     },
     {
-        accessorKey: 'payrange',
+        accessorKey: 'payRange',
         header: 'Pay Range',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('payrange')}</div>,
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('payRange')}</div>,
     },
     {
         accessorKey: 'location',
@@ -101,14 +88,14 @@ export const columns: ColumnDef<JT.JobItem>[] = [
         cell: ({ row }) => <div className='capitalize'>{row.getValue('location')}</div>,
     },
     {
+        accessorKey: 'applicationType',
+        header: 'Type',
+        cell: ({ row }) => <div className='capitalize'>{row.getValue('applicationType')}</div>,
+    },
+    {
         accessorKey: 'dateapplied',
         header: 'Date Applied',
         cell: ({ row }) => <div className='capitalize'>{row.getValue('dateapplied')}</div>,
-    },
-    {
-        accessorKey: 'origination',
-        header: 'Origination',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('origination')}</div>,
     },
     {
         accessorKey: 'status',
@@ -116,10 +103,21 @@ export const columns: ColumnDef<JT.JobItem>[] = [
         cell: ({ row }) => <div className='capitalize'>{row.getValue('status')}</div>,
     },
     {
+        accessorKey: 'jobLink',
+        header: 'Link',
+        cell: ({ row }) => (
+            <a
+                href={row.getValue('jobLink')}
+                className='capitalize max-w-20 overflow-clip hover:underline '>
+                View Job
+            </a>
+        ),
+    },
+    {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
-            const todo = row.original;
+            const job = row.original;
             // DropdownMenu for each of the rowsCfc2xDLYaUWaY14nFra8
             return (
                 <DropdownMenu>
@@ -134,8 +132,8 @@ export const columns: ColumnDef<JT.JobItem>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(todo.id)}>
-                            Copy todo ID
+                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(job.id)}>
+                            Copy ID
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -144,7 +142,7 @@ export const columns: ColumnDef<JT.JobItem>[] = [
     },
 ];
 
-export function DataTable() {
+export function DataTable({ jobItem }: { jobItem: JT.JobItem[] }): JSX.Element {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -153,8 +151,6 @@ export function DataTable() {
         pageIndex: 0, //initial page index
         pageSize: 7, //default page size
     });
-
-    const { jobItem } = useJobTrackerContext();
 
     const table = useReactTable({
         data: jobItem,
@@ -174,23 +170,33 @@ export function DataTable() {
             columnVisibility,
             rowSelection,
             pagination: {
-                ...tablePagination
+                ...tablePagination,
             },
         },
         manualPagination: false, // Set to false if your data is client-side
         pageCount: -1,
     });
 
-    const isLastPage = table.getState().pagination.pageIndex >= Math.ceil(jobItem.length / table.getState().pagination.pageSize) - 1;
+    const isLastPage =
+        table.getState().pagination.pageIndex >=
+        Math.ceil(jobItem.length / table.getState().pagination.pageSize) - 1;
 
     return (
         <div className='w-full'>
-            <div className='flex items-end py-4'>
+            <div className='flex items-end py-4 gap-2'>
                 <Input
-                    placeholder='Filter By Title...'
-                    value={(table.getColumn('company')?.getFilterValue() as string) ?? ''}
+                    placeholder='Filter By Company...'
+                    value={(table.getColumn('companyName')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('company')?.setFilterValue(event.target.value)
+                        table.getColumn('companyName')?.setFilterValue(event.target.value)
+                    }
+                    className='max-w-sm'
+                />
+                <Input
+                    placeholder='Filter By Position...'
+                    value={(table.getColumn('position')?.getFilterValue() as string) ?? ''}
+                    onChange={(event) =>
+                        table.getColumn('position')?.setFilterValue(event.target.value)
                     }
                     className='max-w-sm'
                 />
@@ -231,9 +237,9 @@ export function DataTable() {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext()
-                                                  )}
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
                                         </TableHead>
                                     );
                                 })}

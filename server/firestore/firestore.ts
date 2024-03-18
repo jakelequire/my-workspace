@@ -25,19 +25,20 @@ export class Firestore {
 
     // Add a new todo item
     async addTodoItem(todoItem: Todo.DbTodoItem): Promise<Todo.AddTodoServerResponse> {
+        console.warn("[firestore] {!API ENDPOINT CALLED!} addTodoItem");
+
         const docRef = await this.db
             .collection('todo')
             .doc('todoitem')
             .collection('items')
             .add(todoItem);
-        /*DEBUG*/ // console.log("Document Reference: \n", docRef)
-        /*DEBUG*/ // console.log("Document ID: \n", docRef.id)
-        // export type AddTodoServerResponse = Promise<TodoItem>
         return { id: docRef.id, ...todoItem } as Todo.TodoItem;
     }
 
     // Update an existing todo item
     async updateTodoItem(id: string, todoItem: Partial<Todo.TodoItem>): Promise<void> {
+        console.warn("[firestore] {!API ENDPOINT CALLED!} updateTodoItem");
+
         await this.db
             .collection('todo')
             .doc('todoitem')
@@ -48,6 +49,8 @@ export class Firestore {
 
     // Fetch a single todo item by id
     async getTodoItem(id: string): Promise<Todo.TodoItem | undefined> {
+        console.warn("[firestore] {!API ENDPOINT CALLED!} getTodoItem");
+
         const doc = await this.db
             .collection('todo')
             .doc('todoitem')
@@ -63,14 +66,18 @@ export class Firestore {
 
     // Fetch all todo items
     async getAllTodoItems(): Promise<Todo.TodoItem[]> {
+        console.warn("[firestore] {!API ENDPOINT CALLED!} getAllTodoItems");
+
         const snapshot = await this.db.collection('todo').doc('todoitem').collection('items').get();
         const returnedSnapshop = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Todo.TodoItem));
-        /*DEBUG*/ console.log("[firestore] Returned Snapshot: \n", returnedSnapshop)
+        // console.log("[firestore] Returned Snapshot: \n", returnedSnapshop)
         return returnedSnapshop;
     }
 
     // Delete a todo item
     async deleteTodoItem(id: string): Promise<void> {
+        console.warn("[firestore] {!API ENDPOINT CALLED!} deleteTodoItem");
+        
         await this.db.collection('todo').doc('todoitem').collection('items').doc(id).delete();
     }
 }

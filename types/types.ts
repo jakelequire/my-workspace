@@ -1,12 +1,19 @@
 import type { User } from "firebase/auth";
 
 export namespace GlobalState {
+    interface LocalUser {
+        id: string;
+    }
 
     export interface GlobalContextType {
-        user: User | null;
-        setUser: (user: User) => void;
+        user: LocalUser;
+        setUser: (user: LocalUser) => void;
         todoList: Todo.TodoItem[];
         setTodoList: (todoList: Todo.TodoItem[]) => void;
+        jobList: JT.JobItem[];
+        setJobList: (jobList: JT.JobItem[]) => void;
+        submissionCount: number;
+        setSubmissionCount: (count: number) => void;
     }
 
 }
@@ -32,13 +39,12 @@ export namespace Todo {
     export interface TaskContextType {
         todoItem: TodoItem;
         todoItems: TodoItem[];
-        submissionCount: number;
         setTodoItem: (todoItem: TodoItem) => void;
         addTodoItem: (newItem: TodoItem) => void;
+
         clearFields: () => void;
         deleteTodoItem: (id: string) => void;
         editTodoItem: (id: string, updatedItem: TodoItem) => Omit<TodoItem, 'id'> | undefined;
-        setSubmissionCount: (count: number) => void;
     }
 
     export type DbTodoItem = Omit<TodoItem, 'id'>;
@@ -67,15 +73,11 @@ export namespace JT {
     }
     
     export interface JobTrackerContext {
-        submissionCount: number;
-        setSubmissionCount: (count: number) => void;
         jobItem: JobItem[];
         setJobItem: (jobItems: JobItem[]) => void;
         newJobItem: JobItem;
         setNewJobItem: (jobItem: JobItem) => void;
-        currentTab: string;
-        setCurrentTab: (tab: string) => void;
-        
+
         addJobItem: (newJobItem: JobItem) => void;
         clearFields: () => void;
         deleteJobItem: (id: string) => void;

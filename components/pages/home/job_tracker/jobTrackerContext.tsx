@@ -5,8 +5,6 @@ import { JT } from '@/types/types';
 const JobTrackerContext = createContext<JT.JobTrackerContext | undefined>(undefined);
 
 function useJobTrackerProvider() {
-    const [submissionCount, setSubmissionCount] = useState(0);
-    const [currentTab, setCurrentTab] = useState<string>("currentapps");
     const [jobItem, setJobItem] = useState<JT.JobItem[]>([])
     const [newJobItem, setNewJobItem] = useState<JT.JobItem>({
         id: "",
@@ -21,14 +19,15 @@ function useJobTrackerProvider() {
         jobLink: "",
     })
 
-    // const { todoList } = useGlobalContext();
+    const { jobList, submissionCount, setSubmissionCount } = useGlobalContext();
     
-    // useEffect(() => {
-    //     setJobItems(example); // Taken from Gobal Context
-    // }, [example]);
+    useEffect(() => {
+        setJobItem(jobList); 
+    }, [jobList]);
 
     const addJobItem = (newItem: JT.JobItem) => {
         setJobItem((prevItems) => [...prevItems, newItem]);
+        setSubmissionCount(submissionCount + 1);
     };
 
     const editJobItem = (
@@ -36,6 +35,7 @@ function useJobTrackerProvider() {
         updatedItem: JT.JobItem
     ): Omit<JT.JobItem, 'id'> | undefined => {
         setJobItem((prevItems) => prevItems.map((item) => (item.id === id ? updatedItem : item)));
+        setSubmissionCount(submissionCount + 1);
         const { id: _, ...newJobItem } = updatedItem;
         if (!newJobItem) return;
         return newJobItem;
@@ -43,6 +43,7 @@ function useJobTrackerProvider() {
 
     const deleteJobItem = (id: string) => {
         setJobItem((prevItems) => prevItems.filter((item) => item.id !== id));
+        setSubmissionCount(submissionCount + 1);
     };
 
 
@@ -62,14 +63,10 @@ function useJobTrackerProvider() {
     };
 
     return {
-        submissionCount,
-        setSubmissionCount,
         jobItem,
         newJobItem,
         setNewJobItem,
         setJobItem,
-        currentTab,
-        setCurrentTab,
         
         addJobItem,
         clearFields,
