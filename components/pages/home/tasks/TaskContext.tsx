@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useGlobalContext } from '@/components/GlobalContext';
 import { Todo } from '@/types/types';
+import localForage from '@/localForageConfig';
+
 
 const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
@@ -25,10 +27,36 @@ function useTaskProvider() {
         setTodoItems(todoList);
     }, [todoList]);
 
-    const addTodoItem = (newItem: Todo.TodoItem) => {
-        setTodoItems((prevItems) => [...prevItems, newItem]);
-        setSubmissionCount(submissionCount + 1);
+
+
+
+    const addTodoItem = async (newItem: Todo.DbTodoItem) => {
+        try {
+            const response  = await fetch('/api/firestore/todo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newItem),
+            });
+            if (!response.ok) throw new Error('Failed to save the todo item');
+            
+            const addedItem = await response .json(); 
+            
+            setTodoItems((prevItems) => [...prevItems, addedItem]);
+
+            const currentItems = await localForage.getItem<Todo.TodoItem[]>('todoItems') || [];
+            await localForage.setItem('todoItems', [...currentItems, addedItem]);
+
+            //@ts-ignore
+            setSubmissionCount((count: number) => count + 1);
+        } catch(error) {
+            console.error('Error adding todo item:', error);
+        }
     };
+
+
+
 
     const editTodoItem = (
         id: string,
@@ -41,9 +69,24 @@ function useTaskProvider() {
         return todoItem;
     };
 
-    const deleteTodoItem = (id: string) => {
-        setTodoItems((prevItems) => prevItems.filter((item) => item.id !== id));
-        setSubmissionCount(submissionCount + 1);
+    const deleteTodoItem = async (id: string) => {
+        try {
+            const response = await fetch('/api/firestore/todo', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id }),
+            });
+            if (!response.ok) throw new Error('Failed to delete the todo item');
+            setTodoItems((prevItems) => prevItems.filter((item) => item.id !== id));
+            setSubmissionCount(submissionCount + 1);
+            const currentItems = await localForage.getItem<Todo.TodoItem[]>('todoItems') || [];
+            // remove the item from localForage
+            await localForage.setItem('todoItems', currentItems.filter((item) => item.id !== id));
+        } catch (error) {
+            console.error('Error deleting todo item:', error);
+        }
     };
 
     const clearFields = () => {

@@ -10,7 +10,7 @@ import { JT } from '@/types/types';
  * ----------------------------------- /
  */
 export async function GET(request: Request) {
-    console.log('[/api/firestore/jobs] Hello from GET');
+    console.log('\n[/api/firestore/jobs] Hello from GET');
 
     const getUserId = cookies().get('userId');
 
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
  * ----------------------------------- /
  */
 export async function POST(request: Request) {
-    console.log('[/api/firestore/jobs] Hello from POST');
+    console.log('\n[/api/firestore/jobs] Hello from POST');
     
     if (!request.body) {
         return NextResponse.json({ message: 'No body provided' });
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
  * ---------------------------------------- /
 */
 export async function DELETE(request: Request) {
-    console.log('[/api/firestore] Hello from DELETE');
+    console.log('\n[/api/firestore] Hello from DELETE');
 
     // Check if the request has a body
     if (!request.body) {

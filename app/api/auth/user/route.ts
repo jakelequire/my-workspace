@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
 
 export async function POST(request: Request) {
-    console.log('[/api/auth/user] Hello from POST');
+    console.log('\n[/api/auth/user] Hello from POST');
 
     if (!request.body) {
         return NextResponse.json({ message: 'No body provided' });

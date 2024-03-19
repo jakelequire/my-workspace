@@ -17,8 +17,6 @@ export default function TaskInput(): JSX.Element {
     const { submissionCount } = useGlobalContext();
 
     const handleAddTask = async () => {
-        // format(date, 'PP')
-        // Date format: Mar 1, 2022
         const date = new Date();
         const formattedDate = format(date, 'PP');
 
@@ -34,29 +32,7 @@ export default function TaskInput(): JSX.Element {
         };
 
         clearFields();
-        const response = await sendTask(newTask);
-
-        if (response) {
-            // Verify response structure matches expected TodoItem
-            console.log('Adding todo item:', response);
-            addTodoItem(response);
-        } else {
-            console.error('Failed to add new task, response:', response);
-        }
-    };
-
-    const sendTask = async (task: Todo.DbTodoItem) => {
-        // Send the task to the server endpoint /api/firestore
-        const sendRequest = await fetch('/api/firestore', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(task),
-        });
-
-        const response: Todo.AddTodoServerResponse = await sendRequest.json();
-        return response;
+        addTodoItem(newTask);
     };
 
     return (

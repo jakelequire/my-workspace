@@ -22,7 +22,7 @@ export class JobTracker {
     }
 
     async addJobItem(jobItem: JT.DbJobItem): Promise<JT.AddJobServerResponse> {
-        console.warn("[JobTracker] {!API ENDPOINT CALLED!} addJobItem");
+        console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} addJobItem");
 
         const docRef = await this.db
             .collection('users')
@@ -33,7 +33,7 @@ export class JobTracker {
     }
 
     async getJobItem(id: string): Promise<JT.JobItem | undefined> {
-        console.warn("[JobTracker] {!API ENDPOINT CALLED!} getJobItem");
+        console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} getJobItem");
 
         const doc = await this.db
             .collection('users')
@@ -49,7 +49,7 @@ export class JobTracker {
     }
 
     async getAllJobItems(): Promise<JT.JobItem[]> {
-        console.warn("[JobTracker] {!API ENDPOINT CALLED!} getAllJobItems");
+        console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} getAllJobItems");
         
         const snapshot = await this.db
             .collection('users')
@@ -64,7 +64,7 @@ export class JobTracker {
     }
     
     async deleteJobItem(id: string): Promise<void> {
-        console.warn("[JobTracker] {!API ENDPOINT CALLED!} deleteJobItem");
+        console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} deleteJobItem");
         console.log("userId: ", this.userId);
         console.log("id: ", id);
 

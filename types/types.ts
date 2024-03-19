@@ -40,7 +40,7 @@ export namespace Todo {
         todoItem: TodoItem;
         todoItems: TodoItem[];
         setTodoItem: (todoItem: TodoItem) => void;
-        addTodoItem: (newItem: TodoItem) => void;
+        addTodoItem: (newItem: DbTodoItem) => void;
 
         clearFields: () => void;
         deleteTodoItem: (id: string) => void;

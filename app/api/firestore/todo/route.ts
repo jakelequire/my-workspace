@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
  * ----------------------------------- /
 */
 export async function GET(request: Request) {
-    console.log('[/api/firestore] Hello from GET');
+    console.log('\n[/api/firestore/todo] GET Hit!');
 
     const userId = cookies().get('userId')
     if (!userId) {
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
  * ----------------------------------- /
 */
 export async function POST(request: Request) {
-    console.log('[/api/firestore] Hello from POST');
+    console.log('\n[/api/firestore/todo] POST Hit!');
 
     // Check if the request has a body
     if (!request.body) {
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
  * ----------------------------------- /
 */
 export async function PUT(request: Request) {
-    console.log('[/api/firestore] Hello from PUT');
+    console.log('\n[/api/firestore/todo] PUT Hit!');
 
     // Check if the request has a body
     if (!request.body) {
@@ -115,7 +115,7 @@ export async function PUT(request: Request) {
  * ----------------------------------- /
 */
 export async function DELETE(request: Request) {
-    console.log('[/api/firestore] Hello from DELETE');
+    console.log('\n[/api/firestore/todo] DELETE Hit!');
 
     // Check if the request has a body
     if (!request.body) {
