@@ -20,7 +20,7 @@ function useJobTrackerProvider() {
         jobLink: "",
     })
 
-    const { jobList, submissionCount, setSubmissionCount } = useGlobalContext();
+    const { jobList, increaseSubmissionCount } = useGlobalContext();
     
     useEffect(() => {
         setJobItem(jobList); 
@@ -47,8 +47,7 @@ function useJobTrackerProvider() {
             const currentItems = (await localForage.getItem<JT.JobItem[]>('jobItems')) || [];
             await localForage.setItem('jobItems', [...currentItems, addedItem]);
 
-            //@ts-ignore
-            setSubmissionCount(submissionCount + 1);
+            increaseSubmissionCount();
         } catch(error) {
             console.error('Error adding job item:', error);
         }
@@ -75,7 +74,7 @@ function useJobTrackerProvider() {
             const updatedItem = await response.json();
 
             setJobItem((prevItems) => prevItems.map((item) => (item.id === id ? updatedItem : item)));
-            setSubmissionCount(submissionCount + 1);
+            increaseSubmissionCount();
 
             const { id: _, ...newJobItem } = updatedItem;
             if (!newJobItem) return;
@@ -104,7 +103,7 @@ function useJobTrackerProvider() {
             if (!response.ok) throw new Error('Failed to update the job item');
 
             setJobItem((prevItems) => prevItems.map((item) => (item.id === id ? updatedItem : item)));
-            setSubmissionCount(submissionCount + 1);
+            increaseSubmissionCount();
 
             const { id: _, ...newJobItem } = updatedItem;
             if (!newJobItem) return;
@@ -129,7 +128,7 @@ function useJobTrackerProvider() {
             if (!response.ok) throw new Error('Failed to delete the job item');
 
             setJobItem((prevItems) => prevItems.filter((item) => item.id !== id));
-            setSubmissionCount(submissionCount + 1);
+            increaseSubmissionCount();
 
             const currentItems = (await localForage.getItem<JT.JobItem[]>('jobItems')) || [];
             await localForage.setItem('jobItems', currentItems.filter((item) => item.id !== id));

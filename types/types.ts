@@ -13,7 +13,7 @@ export namespace GlobalState {
         jobList: JT.JobItem[];
         setJobList: (jobList: JT.JobItem[]) => void;
         submissionCount: number;
-        setSubmissionCount: (count: number) => void;
+        increaseSubmissionCount: () => void;
     }
 
 }

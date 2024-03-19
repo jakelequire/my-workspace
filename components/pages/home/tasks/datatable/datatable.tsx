@@ -170,7 +170,7 @@ export function DataTable() {
     });
 
     const { todoItems } = useTaskContext();
-    console.log("[DataTable.tsx] todoItems:", todoItems)
+    
     const table = useReactTable({
         data: todoItems,
         columns,

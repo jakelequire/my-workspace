@@ -3,8 +3,10 @@ import { TodoWidget } from './widget/todoWidget';
 import { DashNav } from './navigation/dashNav';
 import MiniTodo from './widget/miniTodo';
 import styles from './dashboard.module.css';
+import { useGlobalContext } from '@/components/GlobalContext';
 
 export default function Dashboard(): JSX.Element {
+    const { submissionCount } = useGlobalContext();
 
     return (
         <div className={styles.dashboard_container}>
@@ -35,7 +37,7 @@ export default function Dashboard(): JSX.Element {
 
                 </div>
                 <div className={styles.mini_widget_four}>
-                    <MiniTodo />
+                    <MiniTodo key={submissionCount} />
 
                 </div>
             </div>
@@ -45,7 +47,7 @@ export default function Dashboard(): JSX.Element {
 
                 </div>
                 <div className={styles.todo_widget}>
-                    <TodoWidget />
+                    <TodoWidget key={submissionCount} />
                 </div>
             </div>
         </div>

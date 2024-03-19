@@ -19,7 +19,7 @@ function useTaskProvider() {
         due: '',
     });
 
-    const { todoList, submissionCount, setSubmissionCount } = useGlobalContext();
+    const { todoList, increaseSubmissionCount } = useGlobalContext();
 
     useEffect(() => {
         setTodoItems(todoList);
@@ -46,8 +46,7 @@ function useTaskProvider() {
             const currentItems = (await localForage.getItem<Todo.TodoItem[]>('todoItems')) || [];
             await localForage.setItem('todoItems', [...currentItems, addedItem]);
 
-            //@ts-ignore
-            setSubmissionCount((count: number) => count + 1);
+            increaseSubmissionCount();
         } catch (error) {
             console.error('Error adding todo item:', error);
         }
@@ -74,7 +73,7 @@ function useTaskProvider() {
             setTodoItems((prevItems) =>
                 prevItems.map((item) => (item.id === id ? updatedItem : item))
             );
-            setSubmissionCount(submissionCount + 1);
+            increaseSubmissionCount();
 
             const currentItems = (await localForage.getItem<Todo.TodoItem[]>('todoItems')) || [];
             await localForage.setItem(
@@ -102,7 +101,7 @@ function useTaskProvider() {
             });
             if (!response.ok) throw new Error('Failed to delete the todo item');
             setTodoItems((prevItems) => prevItems.filter((item) => item.id !== id));
-            setSubmissionCount(submissionCount + 1);
+            increaseSubmissionCount();
             const currentItems = (await localForage.getItem<Todo.TodoItem[]>('todoItems')) || [];
             // remove the item from localForage
             await localForage.setItem(

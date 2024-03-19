@@ -21,6 +21,10 @@ function useGlobalProvider() {
     const auth = getAuth(firebase_app);
     const userId = auth.currentUser?.uid;
 
+    const increaseSubmissionCount = () => {
+        setSubmissionCount((count) => count + 1);
+    }
+
     /* ---------------------- */
     /* Fetch user and session */
     /* ---------------------- */
@@ -138,7 +142,7 @@ function useGlobalProvider() {
         jobList,
         setJobList,
         submissionCount,
-        setSubmissionCount,
+        increaseSubmissionCount,
     };
 }
 

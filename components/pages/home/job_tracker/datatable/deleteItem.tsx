@@ -1,24 +1,12 @@
 "use client"
-import { useGlobalContext } from '@/components/GlobalContext';
+import { useJobTrackerContext } from '../jobTrackerContext';
 
 
 export default function DeleteItem({id}: {id: string}) {
-    const { submissionCount, setSubmissionCount } = useGlobalContext();
-    const deleteItem = async () => {
-        setSubmissionCount(submissionCount + 1);
+    const { deleteJobItem } = useJobTrackerContext();
 
-        console.log("[DeleteItem] Item Deleted")
-
-        const response = await fetch('/api/firestore/jobs', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id: id }),
-        });
-        if (!response.ok) {
-            console.error('Failed to delete job');
-        }
+    const deleteItem = () => {
+        deleteJobItem(id);
     }
 
     return (
