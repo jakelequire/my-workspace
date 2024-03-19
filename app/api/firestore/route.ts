@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { Firestore } from '@/server/firestore/firestore';
+import { TodoService } from '@/server/firestore/todoService';
 import { Todo } from '@/types/types';
+import { cookies } from 'next/headers';
 
 /* ----------------------------------- /
  * ################################### /
@@ -11,8 +12,17 @@ import { Todo } from '@/types/types';
 export async function GET(request: Request) {
     console.log('[/api/firestore] Hello from GET');
 
-    const firestoreService = new Firestore();
-    const allTodoItems = await firestoreService.getAllTodoItems();
+    const userId = cookies().get('userId')
+    if (!userId) {
+        return new Response(JSON.stringify({ message: 'No user ID in cookies.' }), {
+            status: 400,
+        });
+    }
+
+    const todoService = new TodoService();
+    todoService.setUserId(userId.value);
+
+    const allTodoItems = await todoService.getAllTodoItems();
 
     return new Response(JSON.stringify(allTodoItems), {
         status: 200,
@@ -27,18 +37,25 @@ export async function GET(request: Request) {
 */
 export async function POST(request: Request) {
     console.log('[/api/firestore] Hello from POST');
-    const firestoreService = new Firestore();
-
     // Check if the request has a body
     if (!request.body) {
         return NextResponse.json({ message: 'No body provided' });
     }
 
+    const userId = cookies().get('userId')
+    if (!userId) {
+        return new Response(JSON.stringify({ message: 'No user ID in cookies.' }), {
+            status: 400,
+        });
+    }
+
+    const todoService = new TodoService();
+    todoService.setUserId(userId.value);
+
     try {
         // Directly await the JSON body parsing
         const requestBody = await request.json();
-        const addTodoItem = await firestoreService.addTodoItem(requestBody as Todo.TodoItem);
-
+        const addTodoItem = await todoService.addTodoItem(requestBody as Todo.DbTodoItem);
         return new Response(JSON.stringify({...addTodoItem}), {
             status: 200,
         });
@@ -58,17 +75,25 @@ export async function POST(request: Request) {
 */
 export async function PUT(request: Request) {
     console.log('[/api/firestore] Hello from PUT');
-    const firestoreService = new Firestore();
 
-    // Check if the request has a body
     if (!request.body) {
         return new Response(JSON.stringify({ message: 'No body provided' }), { status: 400 });
     }
 
+    const userId = cookies().get('userId')
+    if (!userId) {
+        return new Response(JSON.stringify({ message: 'No user ID in cookies.' }), {
+            status: 400,
+        });
+    }
+    
+    const todoService = new TodoService();
+    todoService.setUserId(userId.value);
+
     try {
         // Directly await the JSON body parsing
         const requestBody = await request.json();
-        await firestoreService.updateTodoItem(requestBody.id, requestBody.editedItem);
+        await todoService.updateTodoItem(requestBody.id, requestBody.editedItem);
 
         return new Response(JSON.stringify({ message: 'Item updated successfully' }), {
             status: 200,
@@ -89,19 +114,28 @@ export async function PUT(request: Request) {
 */
 export async function DELETE(request: Request) {
     console.log('[/api/firestore] Hello from DELETE');
-    const firestoreService = new Firestore();
 
     // Check if the request has a body
     if (!request.body) {
         return new Response(JSON.stringify({ message: 'No body provided' }), { status: 400 });
     }
 
+    const userId = cookies().get('userId')
+    if (!userId) {
+        return new Response(JSON.stringify({ message: 'No user ID in cookies.' }), {
+            status: 400,
+        });
+    }
+
+    const todoService = new TodoService();
+    todoService.setUserId(userId.value);
+
     try {
         // Directly await the JSON body parsing
         const requestBody = await request.json();
         console.log(requestBody);
 
-        await firestoreService.deleteTodoItem(requestBody.id);
+        await todoService.deleteTodoItem(requestBody.id);
         /*DEBUG*/ console.log("[/api/firestore] Deleted Item ID: ", requestBody.id)
 
         return new Response(JSON.stringify({ message: 'Item deleted successfully' }), {
