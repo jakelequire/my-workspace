@@ -38,42 +38,7 @@ export default function JobInput(): JSX.Element {
             jobLink: newJobItem.jobLink,
         };
         clearFields();
-        const response = await sendJob(newJob);
-
-        if (response) {
-            // Verify response structure matches expected TodoItem
-            console.log('Adding todo item:', response);
-            addJobItem(response);
-        } else {
-            console.error('Failed to add new task, response:', response);
-        }
-    };
-
-    const sendJob = async (jobItem: JT.DbJobItem) => {
-        const auth = getAuth(firebase_app);
-        const user = auth.currentUser?.uid;
-        /* DEBUG */ console.log('User ID:', user);
-        if(!user) {
-            console.error('User not found');
-            return;
-        }
-
-        const body = {
-            userId: user,
-            jobItem: jobItem,
-        };
-
-        // Send the task to the server endpoint /api/firestore
-        const sendRequest = await fetch('/api/firestore/jobs', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        });
-
-        const response: JT.AddJobServerResponse = await sendRequest.json();
-        return response;
+        addJobItem(newJob);
     };
 
     return (

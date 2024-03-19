@@ -44,7 +44,7 @@ export namespace Todo {
 
         clearFields: () => void;
         deleteTodoItem: (id: string) => void;
-        editTodoItem: (id: string, updatedItem: TodoItem) => Omit<TodoItem, 'id'> | undefined;
+        editTodoItem: (id: string, updatedItem: TodoItem) => Promise<Omit<Todo.TodoItem, 'id'> | undefined>
     }
 
     export type DbTodoItem = Omit<TodoItem, 'id'>;
@@ -78,11 +78,11 @@ export namespace JT {
         newJobItem: JobItem;
         setNewJobItem: (jobItem: JobItem) => void;
 
-        addJobItem: (newJobItem: JobItem) => void;
+        addJobItem: (newJobItem: DbJobItem) => void;
         clearFields: () => void;
         deleteJobItem: (id: string) => void;
-        editJobItem: (id: string, updatedItem: JobItem) => Omit<JobItem, 'id'> | undefined;
-        archiveJobItem: (id: string, updatedItem: JobItem) => Omit<JobItem, 'id'> | undefined;
+        editJobItem: (id: string, updatedItem: JobItem) => Promise<Omit<JT.JobItem, 'id'> | undefined>;
+        archiveJobItem: (id: string, updatedItem: JobItem) => Promise<Omit<JT.JobItem, 'id'> | undefined>;
     }
 
     export type DbJobItem = Omit<JobItem, 'id'>;

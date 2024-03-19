@@ -25,18 +25,7 @@ export default function EditStatusBtn({id, currentStatus}: Props) {
 
     const handleStatusChange = async (status: Todo.Status) => {
         if (!todoRef) return;
-        const editedItem = editTodoItem(id, { ...todoRef, status: status });
-
-        const response = await fetch('/api/firestore', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id, editedItem }),
-        });
-        if (!response.ok) {
-            console.error('Failed to update status');
-        }
+        editTodoItem(id, { ...todoRef, status: status });
     }
 
     return (
