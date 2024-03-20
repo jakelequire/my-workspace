@@ -115,10 +115,6 @@ export default function Navbar(): JSX.Element {
                     /*DEBUG*/ console.log('[Navbar] Redirecting to { /login } ');
                     setIsLoggedIn(false);
                     router.push('/login');
-                } else {
-                    /*DEBUG*/ console.log('[Navbar] Error in fetch { /api/logout }');
-                    setIsLoggedIn(true);
-                    router.push('/');
                 }
             })
             .catch((er) => {
@@ -129,7 +125,6 @@ export default function Navbar(): JSX.Element {
     const LoginButton = () => {
         if (isLoggedIn) {
             return (
-                // position link all the way to the right
                 <Link href='/login' legacyBehavior passHref>
                     <Button className={navigationMenuTriggerStyle()} onClick={handleSignOut}>
                         Logout

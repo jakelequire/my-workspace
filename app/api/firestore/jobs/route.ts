@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { JobTracker } from '@/server/firestore/jobtracker';
+import { JobTrackerService } from '@/server/firestore/jobtrackerService';
 import { cookies } from 'next/headers';
 import { JT } from '@/types/types';
 
@@ -15,8 +15,8 @@ export async function GET(request: Request) {
     const getUserId = cookies().get('userId');
 
     if (getUserId) {
-        const jobTracker = new JobTracker();
-        jobTracker.initUser(getUserId.value);
+        const jobTracker = new JobTrackerService();
+        jobTracker.setUserId(getUserId.value);
         const allJobItems = await jobTracker.getAllJobItems();
         const responseObject: JT.JobItem[] = [];
         for (const jobItem of allJobItems) {
@@ -62,8 +62,8 @@ export async function POST(request: Request) {
     if (getUserId) {
         const requestBody = await request.json();
         try {
-            const jobTrackerService = new JobTracker();
-            jobTrackerService.initUser(getUserId.value);
+            const jobTrackerService = new JobTrackerService();
+            jobTrackerService.setUserId(getUserId.value);
             const addTodoItem = await jobTrackerService.addJobItem(requestBody as JT.DbJobItem);
             return new Response(JSON.stringify(addTodoItem), {
                 status: 200,
@@ -100,12 +100,12 @@ export async function DELETE(request: Request) {
         });
     }
 
-    const jobTracker = new JobTracker();
+    const jobTracker = new JobTrackerService();
 
     try {
         // Directly await the JSON body parsing
         const requestBody = await request.json();
-        jobTracker.initUser(getUserId.value);
+        jobTracker.setUserId(getUserId.value);
         await jobTracker.deleteJobItem(requestBody.id);
         /*DEBUG*/ console.log("[/api/firestore] Deleted Item ID: ", requestBody.id)
 

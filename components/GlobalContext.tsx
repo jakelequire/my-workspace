@@ -4,6 +4,7 @@ import React, { useEffect, createContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { GlobalState, JT, Todo } from '@/types/types';
+import { synchronizeDb } from '@/utils/dbSync';
 import localForage from '@/localForageConfig';
 
 const GlobalContext = createContext<GlobalState.GlobalContextType | undefined>(undefined);
@@ -23,7 +24,27 @@ function useGlobalProvider() {
 
     const increaseSubmissionCount = () => {
         setSubmissionCount((count) => count + 1);
-    }
+    };
+
+    useEffect(() => {
+        // Set an interval for synchronization
+        const intervalId = setInterval(() => {
+            synchronizeDb();
+        }, 1000 * 60 * 30); // synchronize every 30 minutes
+
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, []);
+
+    useEffect(() => {
+        // Immediately try to sync when coming online
+        console.log("[GlobalContext.tsx] Adding event listener for 'online' event");
+        console.log('[GlobalContext.tsx] Synchronizing database with Firebase...');
+        const handleOnline = () => synchronizeDb();
+        window.addEventListener('online', handleOnline);
+
+        return () => window.removeEventListener('online', handleOnline);
+    }, []);
 
     /* ---------------------- */
     /* Fetch user and session */
@@ -82,23 +103,23 @@ function useGlobalProvider() {
 
                 // If the cache is empty or null, fetch from Firebase and update the cache
                 if (!todoItems) {
-                    console.log("[GlobalContext.tsx] Fetching todo items from Firestore")
+                    console.log('[GlobalContext.tsx] Fetching todo items from Firestore');
                     const response = await fetch('/api/firestore/todo');
                     if (!response.ok) throw new Error('Failed to fetch todo items');
                     todoItems = await response.json();
-                    
+
                     // Cache the fetched todo items in localForage
                     await localForage.setItem('todoItems', todoItems);
                 }
 
-                console.log("[GlobalContext.tsx] Loaded todo items from local storage:", todoItems);
+                console.log('[GlobalContext.tsx] Loaded todo items from local storage:', todoItems);
                 // Update local state with either cached or fetched data
                 setTodoList(todoItems as Todo.TodoItem[]);
             } catch (error) {
                 console.error('Error loading or fetching todo items:', error);
             }
         };
-        if(!user.id) return;
+        if (!user.id) return;
         loadTodoItems();
     }, [user.id]);
 
@@ -114,23 +135,23 @@ function useGlobalProvider() {
 
                 // If the cache is empty or null, fetch from Firebase and update the cache
                 if (!jobItems) {
-                    console.log("[GlobalContext.tsx] Fetching job items from Firestore")
+                    console.log('[GlobalContext.tsx] Fetching job items from Firestore');
                     const response = await fetch('/api/firestore/jobs');
                     if (!response.ok) throw new Error('Failed to fetch job items');
                     jobItems = await response.json();
-                    
+
                     // Cache the fetched job items in localForage
                     await localForage.setItem('jobItems', jobItems);
                 }
 
-                console.log("[GlobalContext.tsx] Loaded job items from local storage:", jobItems);
+                console.log('[GlobalContext.tsx] Loaded job items from local storage:', jobItems);
                 // Update local state with either cached or fetched data
                 setJobList(jobItems as JT.JobItem[]);
             } catch (error) {
                 console.error('Error loading or fetching job items:', error);
             }
         };
-        if(!user.id) return;
+        if (!user.id) return;
         loadJobItems();
     }, [user.id]);
 

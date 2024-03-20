@@ -4,7 +4,7 @@ import { JT } from '@/types/types';
 
 InitApp();
 
-export class JobTracker {
+export class JobTrackerService {
     private db: firestore.Firestore;
     private userId: string;
 
@@ -13,7 +13,7 @@ export class JobTracker {
         this.userId = '';
     }
 
-    initUser(userId: string): void {
+    setUserId(userId: string): void {
         if(!userId) {
             throw new Error('User not found');
         }

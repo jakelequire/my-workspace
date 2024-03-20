@@ -7,7 +7,7 @@ import { InitApp } from '@/lib/firebase-admin-config';
 //Initialize Firebase Admin
 InitApp();
 
-export async function POST(request: Request, response: NextResponse) {
+export async function POST(request: Request) {
     const error = request.headers.get('error');
     /*DEBUG*/ console.log("\n[POST /api/login] error: ", error);
     if(error) {
