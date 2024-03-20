@@ -3,10 +3,9 @@ import * as admin from 'firebase-admin';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { InitApp } from '@/lib/firebase-admin-config';
+
 //Initialize Firebase Admin
 InitApp();
-/*DEBUG*/ console.log("\n[POST /api/login] Firebase Admin initialized");
-
 
 export async function POST(request: Request, response: NextResponse) {
     const error = request.headers.get('error');
@@ -34,6 +33,14 @@ export async function POST(request: Request, response: NextResponse) {
     try {
         const decodedToken = await admin.auth().verifyIdToken(token)
         /*DEBUG*/ console.log("\n[POST /api/login] decodedToken: ", decodedToken);
+        cookies().set('userId', decodedToken.uid, {
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/',
+            sameSite: 'lax',
+            secure: true,
+            httpOnly: true,
+        })
+
         return NextResponse.json({ status: 200, body: 'User is verified' });
     } catch (error) {
         /*DEBUG*/ console.log("\n[POST /api/login] error: ", error);

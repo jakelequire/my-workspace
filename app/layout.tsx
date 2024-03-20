@@ -33,8 +33,8 @@ export default function RootLayout({
                     <AuthContextProvider>
                         <GlobalProvider>{children}</GlobalProvider>
                     </AuthContextProvider>
-                </ThemeProvider>
                 <Toaster richColors />
+                </ThemeProvider>
             </body>
         </html>
     );

@@ -98,9 +98,9 @@ function useGlobalProvider() {
                 console.error('Error loading or fetching todo items:', error);
             }
         };
-
+        if(!user.id) return;
         loadTodoItems();
-    }, []);
+    }, [user.id]);
 
     /* ------------------------------ */
     /* Fetch job items from Firestore */
@@ -130,9 +130,9 @@ function useGlobalProvider() {
                 console.error('Error loading or fetching job items:', error);
             }
         };
-
+        if(!user.id) return;
         loadJobItems();
-    }, []);
+    }, [user.id]);
 
     return {
         user,

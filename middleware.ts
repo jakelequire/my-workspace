@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 }
 
 async function validateSessionCookie(): Promise<boolean> {
-    const sessionCookie = cookies().get('session') || '';
+    const sessionCookie = cookies().get('session');
     if(sessionCookie) {
         return true;
     } else {

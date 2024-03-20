@@ -12,7 +12,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ userId });
 }
 
-
 export async function POST(request: Request) {
     console.log('\n[/api/auth/user] Hello from POST');
 
