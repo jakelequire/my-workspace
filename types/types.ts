@@ -10,8 +10,8 @@ export namespace GlobalState {
         setUser: (user: LocalUser) => void;
         todoList: Todo.TodoItem[];
         setTodoList: (todoList: Todo.TodoItem[]) => void;
-        jobList: JT.JobItem[];
-        setJobList: (jobList: JT.JobItem[]) => void;
+        jobList: JobsApp.JobItem[];
+        setJobList: (jobList: JobsApp.JobItem[]) => void;
         submissionCount: number;
         increaseSubmissionCount: () => void;
     }
@@ -54,7 +54,7 @@ export namespace Todo {
 
 
 
-export namespace JT {
+export namespace JobsApp {
     export type Status = 'Applied' | 'Saved' | 'Pending Interview' | 'Interviewed' | 'Waiting for Response' | 'Archived';
     export type ApplicationType = 'Job' | 'Internship' | 'Freelance' | 'Contract' | 'Other';
     export type Source = 'Indeed' | 'LinkedIn' | 'Glassdoor' | 'Monster' | 'Company Website' | 'Other';
@@ -81,8 +81,8 @@ export namespace JT {
         addJobItem: (newJobItem: DbJobItem) => void;
         clearFields: () => void;
         deleteJobItem: (id: string) => void;
-        editJobItem: (id: string, updatedItem: JobItem) => Promise<Omit<JT.JobItem, 'id'> | undefined>;
-        archiveJobItem: (id: string, updatedItem: JobItem) => Promise<Omit<JT.JobItem, 'id'> | undefined>;
+        editJobItem: (id: string, updatedItem: JobItem) => Promise<Omit<JobsApp.JobItem, 'id'> | undefined>;
+        archiveJobItem: (id: string, updatedItem: JobItem) => Promise<Omit<JobsApp.JobItem, 'id'> | undefined>;
     }
 
     export type DbJobItem = Omit<JobItem, 'id'>;

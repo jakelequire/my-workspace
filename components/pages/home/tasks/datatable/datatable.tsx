@@ -42,14 +42,12 @@ import { Input } from '@/components/ui/input';
 
 import CompletedBtn from './completedBtn';
 import EditStatusBtn from './editing/statusBtn';
-import { DialogDemo } from '../events/dialog';
+import { SkeletonDemo } from './skeleton';
 
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
 
 const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider';
-
-
 
 export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
@@ -132,7 +130,7 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const todo = row.original;
-            
+
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -170,7 +168,7 @@ export function DataTable() {
     });
 
     const { todoItems } = useTaskContext();
-    
+
     const table = useReactTable({
         data: todoItems,
         columns,
@@ -189,14 +187,16 @@ export function DataTable() {
             columnVisibility,
             rowSelection,
             pagination: {
-                ...tablePagination
+                ...tablePagination,
             },
         },
         manualPagination: false, // Set to false if your data is client-side
         pageCount: -1,
     });
 
-    const isLastPage = table.getState().pagination.pageIndex >= Math.ceil(todoItems.length / table.getState().pagination.pageSize) - 1;
+    const isLastPage =
+        table.getState().pagination.pageIndex >=
+        Math.ceil(todoItems.length / table.getState().pagination.pageSize) - 1;
 
     return (
         <div className='w-full'>
@@ -450,9 +450,9 @@ export function DataTable() {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext()
-                                                  )}
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
                                         </TableHead>
                                     );
                                 })}
@@ -460,8 +460,8 @@ export function DataTable() {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row, index) => (
+                        {table.getRowModel().rows?.length
+                            ? table.getRowModel().rows.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     id={todoItems[index].id}
@@ -476,13 +476,18 @@ export function DataTable() {
                                     ))}
                                 </TableRow>
                             ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className='h-24 text-center'>
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
+                            : [...Array(todoItems.length >= 7 ? todoItems.length : 7)].map(
+                                (_, index) => (
+                                    <TableRow key={index}>
+                                        {/* Assuming you want to span across all columns */}
+                                        <TableCell
+                                            colSpan={columns.length}
+                                            className='text-center'>
+                                            <SkeletonDemo />
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            )}
                     </TableBody>
                 </Table>
             </div>

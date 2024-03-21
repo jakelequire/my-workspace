@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 
 export async function GET(request: Request) {
-    console.log("\n[api/firestore/sync/route.ts] GET request received");
+    console.log("\n[api/firestore/sync] GET request received");
 
     const userId = cookies().get('userId');
     if(!userId) {

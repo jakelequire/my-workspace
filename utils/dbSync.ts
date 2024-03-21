@@ -1,9 +1,9 @@
-import { Todo, JT } from '@/types/types';
+import { Todo, JobsApp } from '@/types/types';
 import localForage from '@/localForageConfig';
 
 interface Updates {
     todoItems: Todo.DbTodoItem[];
-    jobItems: JT.DbJobItem[];
+    jobItems: JobsApp.DbJobItem[];
 }
 
 export async function synchronizeDb() {
@@ -16,7 +16,7 @@ export async function synchronizeDb() {
 
     try {
         const currentTodoItems = (await localForage.getItem<Todo.DbTodoItem[]>('todoItems')) || [];
-        const currentJobItems = (await localForage.getItem<JT.DbJobItem[]>('jobItems')) || [];
+        const currentJobItems = (await localForage.getItem<JobsApp.DbJobItem[]>('jobItems')) || [];
 
         const updates = await fetchDatabase();
         const updatesJson: Updates = await updates.json();
@@ -24,15 +24,19 @@ export async function synchronizeDb() {
         console.log('[synchronizeDb] Updates from Firebase:', updatesJson);
 
         const todoItems = updatesJson.todoItems.map((item: Todo.DbTodoItem) => ({ ...item }));
-        const jobItems = updatesJson.jobItems.map((item: JT.DbJobItem) => ({ ...item }));
+        const jobItems = updatesJson.jobItems.map((item: JobsApp.DbJobItem) => ({ ...item }));
 
         console.log('[synchronizeDb] Updates from Firebase Mapped:', todoItems, jobItems);
 
         if (hasDifferences(currentTodoItems, todoItems)) {
+            /*DEBUG*/ console.log('[synchronizeDb] There are differences in todoItems. Updating localForage...');
+            /*DEBUG*/ console.log('[synchronizeDb] TodoItems:', todoItems);
             await localForage.setItem('todoItems', jobItems);
         }
 
         if (hasDifferences(currentJobItems, todoItems)) {
+            /*DEBUG*/ console.log('[synchronizeDb] There are differences in jobItems. Updating localForage...');
+            /*DEBUG*/ console.log('[synchronizeDb] JobItems:', jobItems);
             await localForage.setItem('jobItems', jobItems);
         }
 

@@ -22,7 +22,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useJobTrackerContext } from '../jobTrackerContext';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 
 const job_locations = [
     "Tacoma, WA",
@@ -208,7 +208,7 @@ export function SourceInput() {
     const { newJobItem, setNewJobItem } = useJobTrackerContext();
 
     const handleSourceChange = (source: string) => {
-        setNewJobItem({ ...newJobItem, source: source as JT.Source });
+        setNewJobItem({ ...newJobItem, source: source as JobsApp.Source });
     };
 
     return (
@@ -248,7 +248,7 @@ export function StatusInput() {
     const { newJobItem, setNewJobItem } = useJobTrackerContext();
 
     const handleStatusChange = (status: string) => {
-        setNewJobItem({ ...newJobItem, status: status as JT.Status });
+        setNewJobItem({ ...newJobItem, status: status as JobsApp.Status });
     };
 
     return (
@@ -288,7 +288,7 @@ export function ApplicationTypeInput() {
     const { newJobItem, setNewJobItem } = useJobTrackerContext();
 
     const handleApplicationTypeChange = (applicationType: string) => {
-        setNewJobItem({ ...newJobItem, applicationType: applicationType as JT.ApplicationType });
+        setNewJobItem({ ...newJobItem, applicationType: applicationType as JobsApp.ApplicationType });
     };
 
     return (

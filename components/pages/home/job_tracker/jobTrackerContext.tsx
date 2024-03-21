@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useGlobalContext } from '@/components/GlobalContext';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 import localForage from '@/localForageConfig';
 
-const JobTrackerContext = createContext<JT.JobTrackerContext | undefined>(undefined);
+const JobTrackerContext = createContext<JobsApp.JobTrackerContext | undefined>(undefined);
 
 function useJobTrackerProvider() {
-    const [jobItem, setJobItem] = useState<JT.JobItem[]>([])
-    const [newJobItem, setNewJobItem] = useState<JT.JobItem>({
+    const [jobItem, setJobItem] = useState<JobsApp.JobItem[]>([])
+    const [newJobItem, setNewJobItem] = useState<JobsApp.JobItem>({
         id: "",
         companyName: "",
         position: "",
@@ -29,7 +29,7 @@ function useJobTrackerProvider() {
     /* ------------------------------ */
     /* ######## Add Job Item ######## */
     /* ------------------------------ */
-    const addJobItem = async (newItem: JT.DbJobItem) => {
+    const addJobItem = async (newItem: JobsApp.DbJobItem) => {
         try {
             const response = await fetch('/api/firestore/jobs', {
                 method: 'POST',
@@ -44,7 +44,7 @@ function useJobTrackerProvider() {
 
             setJobItem((prevItems) => [...prevItems, addedItem]);
 
-            const currentItems = (await localForage.getItem<JT.JobItem[]>('jobItems')) || [];
+            const currentItems = (await localForage.getItem<JobsApp.JobItem[]>('jobItems')) || [];
             await localForage.setItem('jobItems', [...currentItems, addedItem]);
 
             increaseSubmissionCount();
@@ -58,8 +58,8 @@ function useJobTrackerProvider() {
     /* ------------------------------ */
     const editJobItem = async (
         id: string,
-        updatedItem: JT.JobItem
-    ): Promise<Omit<JT.JobItem, 'id'> | undefined> => {
+        updatedItem: JobsApp.JobItem
+    ): Promise<Omit<JobsApp.JobItem, 'id'> | undefined> => {
         const editedItem = { ...updatedItem };
         try {
             const response = await fetch('/api/firestore/jobs', {
@@ -89,8 +89,8 @@ function useJobTrackerProvider() {
     /* ------------------------------ */
     const archiveJobItem = async (
         id: string,
-        updatedItem: JT.JobItem
-    ): Promise<Omit<JT.JobItem, 'id'> | undefined> => {
+        updatedItem: JobsApp.JobItem
+    ): Promise<Omit<JobsApp.JobItem, 'id'> | undefined> => {
         const editedItem = { ...updatedItem };
         try {
             const response = await fetch('/api/firestore/jobs', {
@@ -130,7 +130,7 @@ function useJobTrackerProvider() {
             setJobItem((prevItems) => prevItems.filter((item) => item.id !== id));
             increaseSubmissionCount();
 
-            const currentItems = (await localForage.getItem<JT.JobItem[]>('jobItems')) || [];
+            const currentItems = (await localForage.getItem<JobsApp.JobItem[]>('jobItems')) || [];
             await localForage.setItem('jobItems', currentItems.filter((item) => item.id !== id));
         } catch (error) {
             console.error('Error deleting job item:', error);

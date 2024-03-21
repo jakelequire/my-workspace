@@ -1,15 +1,15 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useJobTrackerContext } from '../jobTrackerContext';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 
 type Props = {
-    id: JT.JobItem['id'];
+    id: JobsApp.JobItem['id'];
 };
 
 export default function ArchiveButton({ id }: Props): JSX.Element {
     const { jobItem, archiveJobItem } = useJobTrackerContext();
-    const jobItemRef = jobItem.find((item: JT.JobItem) => item.id === id);
+    const jobItemRef = jobItem.find((item: JobsApp.JobItem) => item.id === id);
 
     const handleArchive = async () => {
         if (!jobItemRef) return;

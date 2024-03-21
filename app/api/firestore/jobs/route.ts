@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { JobTrackerService } from '@/server/firestore/jobtrackerService';
 import { cookies } from 'next/headers';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 
 /* ----------------------------------- /
  * ################################### /
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         const jobTracker = new JobTrackerService();
         jobTracker.setUserId(getUserId.value);
         const allJobItems = await jobTracker.getAllJobItems();
-        const responseObject: JT.JobItem[] = [];
+        const responseObject: JobsApp.JobItem[] = [];
         for (const jobItem of allJobItems) {
             const resObject = {
                 id: jobItem.id,
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
         try {
             const jobTrackerService = new JobTrackerService();
             jobTrackerService.setUserId(getUserId.value);
-            const addTodoItem = await jobTrackerService.addJobItem(requestBody as JT.DbJobItem);
+            const addTodoItem = await jobTrackerService.addJobItem(requestBody as JobsApp.DbJobItem);
             return new Response(JSON.stringify(addTodoItem), {
                 status: 200,
             });

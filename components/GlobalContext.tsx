@@ -3,8 +3,9 @@
 import React, { useEffect, createContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
-import { GlobalState, JT, Todo } from '@/types/types';
+import { GlobalState, JobsApp, Todo } from '@/types/types';
 import { synchronizeDb } from '@/utils/dbSync';
+import { InitDb } from '@/utils/initDb';
 import localForage from '@/localForageConfig';
 
 const GlobalContext = createContext<GlobalState.GlobalContextType | undefined>(undefined);
@@ -15,8 +16,8 @@ function useGlobalProvider() {
     });
     const [todoList, setTodoList] = React.useState<GlobalState.GlobalContextType['todoList']>([]);
     const [jobList, setJobList] = React.useState<GlobalState.GlobalContextType['jobList']>([]);
-
     const [submissionCount, setSubmissionCount] = React.useState(0);
+    
     console.log('[GlobalContext.tsx] Submission Count:', submissionCount);
 
     const auth = getAuth(firebase_app);
@@ -146,7 +147,7 @@ function useGlobalProvider() {
 
                 console.log('[GlobalContext.tsx] Loaded job items from local storage:', jobItems);
                 // Update local state with either cached or fetched data
-                setJobList(jobItems as JT.JobItem[]);
+                setJobList(jobItems as JobsApp.JobItem[]);
             } catch (error) {
                 console.error('Error loading or fetching job items:', error);
             }

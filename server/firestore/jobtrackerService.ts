@@ -1,6 +1,6 @@
 import { firestore } from 'firebase-admin';
 import { InitApp } from '@/lib/firebase-admin-config';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 
 InitApp();
 
@@ -21,7 +21,7 @@ export class JobTrackerService {
         this.userId = userId;
     }
 
-    async addJobItem(jobItem: JT.DbJobItem): Promise<JT.AddJobServerResponse> {
+    async addJobItem(jobItem: JobsApp.DbJobItem): Promise<JobsApp.AddJobServerResponse> {
         console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} addJobItem");
 
         const docRef = await this.db
@@ -29,10 +29,10 @@ export class JobTrackerService {
             .doc(this.userId)
             .collection('jobs')
             .add(jobItem);
-        return { id: docRef.id, ...jobItem } as JT.JobItem;
+        return { id: docRef.id, ...jobItem } as JobsApp.JobItem;
     }
 
-    async getJobItem(id: string): Promise<JT.JobItem | undefined> {
+    async getJobItem(id: string): Promise<JobsApp.JobItem | undefined> {
         console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} getJobItem");
 
         const doc = await this.db
@@ -42,13 +42,13 @@ export class JobTrackerService {
             .doc(id)
             .get();
         if (doc.exists) {
-            return { id: doc.id, ...doc.data() } as JT.JobItem;
+            return { id: doc.id, ...doc.data() } as JobsApp.JobItem;
         } else {
             return undefined;
         }
     }
 
-    async getAllJobItems(): Promise<JT.JobItem[]> {
+    async getAllJobItems(): Promise<JobsApp.JobItem[]> {
         console.warn("\n[JobTracker] {!API ENDPOINT CALLED!} getAllJobItems");
         
         const snapshot = await this.db
@@ -56,9 +56,9 @@ export class JobTrackerService {
             .doc(this.userId)
             .collection('jobs')
             .get();
-        const items: JT.JobItem[] = [];
+        const items: JobsApp.JobItem[] = [];
         snapshot.forEach((doc) => {
-            items.push({ id: doc.id, ...doc.data().jobItem } as JT.JobItem);
+            items.push({ id: doc.id, ...doc.data().jobItem } as JobsApp.JobItem);
         });
         return items;
     }

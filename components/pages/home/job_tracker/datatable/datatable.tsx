@@ -39,12 +39,12 @@ import ArchiveButton from './archiveButton';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 import { useGlobalContext } from '@/components/GlobalContext';
 import DeleteItem from './deleteItem';
 
 
-export const columns: ColumnDef<JT.JobItem>[] = [
+export const columns: ColumnDef<JobsApp.JobItem>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -146,7 +146,7 @@ export const columns: ColumnDef<JT.JobItem>[] = [
     },
 ];
 
-export function DataTable({ jobItem }: { jobItem: JT.JobItem[] }): JSX.Element {
+export function DataTable({ jobItem }: { jobItem: JobsApp.JobItem[] }): JSX.Element {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});

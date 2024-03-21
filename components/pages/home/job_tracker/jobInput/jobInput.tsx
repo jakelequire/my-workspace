@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useJobTrackerContext } from '../jobTrackerContext';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-import { JT } from '@/types/types';
+import { JobsApp } from '@/types/types';
 import {
     CompanyNameInput,
     PositionInput,
@@ -26,7 +26,7 @@ export default function JobInput(): JSX.Element {
         const date = new Date();
         const formattedDate = format(date, 'PP');
 
-        const newJob: JT.DbJobItem = {
+        const newJob: JobsApp.DbJobItem = {
             companyName: newJobItem.companyName,
             position: newJobItem.position,
             payRange: newJobItem.payRange,
