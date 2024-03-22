@@ -10,33 +10,32 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTaskContext } from '../../TaskContext';
+import { useTaskContext } from '../../../TaskContext';
 import { Todo } from '@/types/types';
 
 type Props = {
     id: Todo.TodoItem['id'];
-    currentStatus: Todo.Status;
 };
 
-export default function EditStatusBtn({id, currentStatus}: Props) {
-    const { todoItems, editTodoItem } = useTaskContext();
+export default function EditStatusBtn({id }: Props) {
+    const { todoItems, editedItem, setEditedItem } = useTaskContext();
 
     const todoRef = todoItems.find((item: Todo.TodoItem) => item.id === id);
 
     const handleStatusChange = async (status: Todo.Status) => {
         if (!todoRef) return;
-        editTodoItem(id, { ...todoRef, status: status });
+        setEditedItem({ ...todoRef, status });
     }
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant='ghost' className='w-fit'>{currentStatus}</Button>
+                <Button variant='outline' className='w-[100%]'>{editedItem.status}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className='w-56'>
                 <DropdownMenuLabel>Edit Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={status}>
+                <DropdownMenuRadioGroup value={editedItem.status}>
                     <DropdownMenuRadioItem
                         value='not started'
                         onClick={() => {

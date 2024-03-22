@@ -43,7 +43,7 @@ import { Input } from '@/components/ui/input';
 import CompletedBtn from './completedBtn';
 import EditStatusBtn from './editing/statusBtn';
 import { SkeletonDemo } from './skeleton';
-
+import PopupEditor from './editing/popupEditor';
 import { useTaskContext } from '../TaskContext';
 import { Todo } from '@/types/types';
 
@@ -142,7 +142,12 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                     <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={(e) => {
+                                e.preventDefault();
+                            }}>
+                            <PopupEditor id={todo.id} />
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(todo.id)}>
                             Copy todo ID
@@ -450,9 +455,9 @@ export function DataTable() {
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                      header.column.columnDef.header,
+                                                      header.getContext()
+                                                  )}
                                         </TableHead>
                                     );
                                 })}
@@ -462,32 +467,32 @@ export function DataTable() {
                     <TableBody>
                         {table.getRowModel().rows?.length
                             ? table.getRowModel().rows.map((row, index) => (
-                                <TableRow
-                                    key={row.id}
-                                    id={todoItems[index].id}
-                                    data-state={row.getIsSelected() && 'selected'}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
+                                  <TableRow
+                                      key={row.id}
+                                      id={todoItems[index].id}
+                                      data-state={row.getIsSelected() && 'selected'}>
+                                      {row.getVisibleCells().map((cell) => (
+                                          <TableCell key={cell.id}>
+                                              {flexRender(
+                                                  cell.column.columnDef.cell,
+                                                  cell.getContext()
+                                              )}
+                                          </TableCell>
+                                      ))}
+                                  </TableRow>
+                              ))
                             : [...Array(todoItems.length >= 7 ? todoItems.length : 7)].map(
-                                (_, index) => (
-                                    <TableRow key={index}>
-                                        {/* Assuming you want to span across all columns */}
-                                        <TableCell
-                                            colSpan={columns.length}
-                                            className='text-center'>
-                                            <SkeletonDemo />
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            )}
+                                  (_, index) => (
+                                      <TableRow key={index}>
+                                          {/* Assuming you want to span across all columns */}
+                                          <TableCell
+                                              colSpan={columns.length}
+                                              className='text-center'>
+                                              <SkeletonDemo />
+                                          </TableCell>
+                                      </TableRow>
+                                  )
+                              )}
                     </TableBody>
                 </Table>
             </div>

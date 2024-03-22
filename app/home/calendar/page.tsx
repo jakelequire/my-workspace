@@ -3,9 +3,6 @@ import CalendarInterface from '@/components/pages/home/calendar/calendarInterfac
 import styles from '../../page.module.css';
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-    title: 'Calendar | Jakes Workspace',
-};
 
 export default function Calendar() {
     return (

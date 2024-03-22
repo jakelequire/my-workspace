@@ -6,6 +6,17 @@ import localForage from '@/localForageConfig';
 const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
 function useTaskProvider() {
+    const [editedItem, setEditedItem] = useState<Todo.TodoItem>({
+        id: '',
+        title: '',
+        priority: 'Low',
+        category: 'Personal',
+        description: '',
+        completed: false,
+        status: 'not started',
+        started: '',
+        due: '',
+    });
     const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
     const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
         id: '',
@@ -128,6 +139,17 @@ function useTaskProvider() {
             started: '',
             due: '',
         });
+        setEditedItem({
+            id: '',
+            title: '',
+            priority: 'Low',
+            category: 'Personal',
+            description: '',
+            completed: false,
+            status: 'not started',
+            started: '',
+            due: '',
+        });
     };
 
     return {
@@ -138,6 +160,8 @@ function useTaskProvider() {
         clearFields,
         deleteTodoItem,
         editTodoItem,
+        editedItem,
+        setEditedItem,
     };
 }
 
