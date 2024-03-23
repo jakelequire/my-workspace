@@ -3,38 +3,42 @@ import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
+    DialogClose,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useTaskContext } from '../../TaskContext';
+
 import EditStatusBtn from './popupItems/editStatus';
 import EditDate from './popupItems/editDate';
 import EditCategory from './popupItems/editCategory';
 import EditPriority from './popupItems/editPriority';
-import { useCallback } from 'react';
+import EditTitle from './popupItems/editTitle';
+import EditDescription from './popupItems/editDescription';
 
 export default function PopupEditor({ id }: { id: string }) {
-    const { todoItems, editedItem, setEditedItem } = useTaskContext();
+    const { todoItems, editedItem, setEditedItem, editTodoItem } = useTaskContext();
 
     const item = todoItems.find((item) => item.id === id);
 
     const handleClick = () => {
-        if (!item) return;
+        if (!item) {
+            console.error('[PopupEditor]: Item not found');
+            return;
+        }
         setEditedItem(item);
     };
 
-    const Calendar = useCallback(() => {
-        return <EditDate />;
-    }, []);
+    const handleSave = () => {
+        editTodoItem(id, editedItem);
+    };
 
     return (
-        <Dialog>
+        <Dialog modal>
             <DialogTrigger asChild>
                 <a className='h-full w-full' onClick={handleClick}>
                     Edit
@@ -49,38 +53,28 @@ export default function PopupEditor({ id }: { id: string }) {
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className='flex flex-col'>
+                <div className='flex flex-col' onKeyDown={(e) => e.stopPropagation()}>
                     <div className='flex flex-row gap-6'>
                         <div className='flex flex-col w-1/2 gap-6'>
                             <div className='flex flex-col'>
                                 <Label className='mb-2'>Title</Label>
-                                <Input
-                                    value={editedItem.title}
-                                    onChange={(e) => {
-                                        setEditedItem({ ...editedItem, title: e.target.value });
-                                    }}></Input>
+                                <EditTitle />
                             </div>
 
                             <div className='flex flex-col'>
                                 <Label className='mb-2'>Description</Label>
-                                <Textarea
-                                    value={editedItem.description}
-                                    onChange={(e) => {
-                                        setEditedItem({
-                                            ...editedItem,
-                                            description: e.target.value,
-                                        });
-                                    }}
-                                    className='h-40 text-left p-2 resize-none'></Textarea>
+                                <EditDescription />
                             </div>
                         </div>
 
                         <div className='flex flex-col w-1/2 gap-6'>
                             <div className='flex flex-col'>
+                                <Label className='mb-2'>Priority</Label>
                                 <EditPriority />
                             </div>
 
                             <div className='flex flex-col'>
+                                <Label className='mb-2'>Category</Label>
                                 <EditCategory />
                             </div>
 
@@ -91,7 +85,8 @@ export default function PopupEditor({ id }: { id: string }) {
                                 </div>
 
                                 <div className='flex flex-col justify-start w-[50%]'>
-                                    <Calendar />
+                                    <Label className='mb-2'>Due Date</Label>
+                                    <EditDate />
                                 </div>
                             </div>
                         </div>
@@ -99,7 +94,9 @@ export default function PopupEditor({ id }: { id: string }) {
                 </div>
 
                 <DialogFooter>
-                    <Button type='submit'>Save changes</Button>
+                    <DialogClose asChild>
+                        <Button onClick={handleSave}>Save changes</Button>
+                    </DialogClose>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

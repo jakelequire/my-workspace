@@ -26,9 +26,6 @@ export default function EditPriority() {
 
     return (
         <div className="flex flex-col h-full w-full">
-            <div className='text-sm mb-2'>
-                <label className={``}>Priority</label>
-            </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button className={`w-full`} variant='outline'>

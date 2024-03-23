@@ -28,9 +28,6 @@ export default function EditCategory() {
 
     return (
         <div className="flex flex-col h-full w-full">
-            <div className='text-sm mb-2'>
-                <label className={``}>Category</label>
-            </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button className={`w-full`} variant='outline'>
