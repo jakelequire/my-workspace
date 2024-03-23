@@ -32,7 +32,7 @@ export default function Priority() {
             </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button className={`${styles.menu} w-24`} variant='outline'>
+                    <Button className={`${styles.menu} w-[100%]`} variant='outline'>
                         {todoItem.priority}
                     </Button>
                 </DropdownMenuTrigger>

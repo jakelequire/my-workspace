@@ -20,7 +20,7 @@ export class TodoService {
 
     // Add a new todo item
     async addTodoItem(todoItem: Todo.DbTodoItem): Promise<Todo.AddTodoServerResponse> {
-        console.warn("\n[firestore] {!API ENDPOINT CALLED!} addTodoItem");
+        console.warn("\n[firestore] {!API ENDPOINT CALLED!} <addTodoItem>");
 
         const docRef = await this.db
             .collection('users')
@@ -34,7 +34,7 @@ export class TodoService {
 
     // Update an existing todo item
     async updateTodoItem(id: string, todoItem: Partial<Todo.TodoItem>): Promise<void> {
-        console.warn("\n[firestore] {!API ENDPOINT CALLED!} updateTodoItem");
+        console.warn("\n[firestore] {!API ENDPOINT CALLED!} <updateTodoItem>");
 
         await this.db
             .collection('users')
@@ -48,7 +48,7 @@ export class TodoService {
 
     // Fetch a single todo item by id
     async getTodoItem(id: string): Promise<Todo.TodoItem | undefined> {
-        console.warn("\n[firestore] {!API ENDPOINT CALLED!} getTodoItem");
+        console.warn("\n[firestore] {!API ENDPOINT CALLED!} <getTodoItem>");
 
         const doc = await this.db
             .collection('users')
@@ -67,7 +67,7 @@ export class TodoService {
 
     // Fetch all todo items
     async getAllTodoItems(): Promise<Todo.TodoItem[]> {
-        console.warn("\n[firestore] {!API ENDPOINT CALLED!} getAllTodoItems");
+        console.warn("\n[firestore] {!API ENDPOINT CALLED!} <getAllTodoItems>");
 
         const snapshot = await this.db
             .collection('users')
@@ -83,7 +83,7 @@ export class TodoService {
 
     // Delete a todo item
     async deleteTodoItem(id: string): Promise<void> {
-        console.warn("\n[firestore] {!API ENDPOINT CALLED!} deleteTodoItem");
+        console.warn("\n[firestore] {!API ENDPOINT CALLED!} <deleteTodoItem>");
         
         await this.db
             .collection('users')
@@ -98,4 +98,30 @@ export class TodoService {
                 console.error("[deleteTodoItem] Error removing document: ", error);
             });
     }
+
+    // Move a todo item to /users/{userId}/todo/todoitem/archive
+    async archiveTodoItem(id: string): Promise<void> {
+        console.warn("\n[firestore] {!API ENDPOINT CALLED!} <archiveTodoItem>");
+
+        // Fetch the todo item
+        const todoItem = await this.getTodoItem(id);
+        if (!todoItem) {
+            console.error(`[archiveTodoItem] Todo item with id ${id} not found`);
+            return;
+        }
+
+        // Add the todo item to the archive
+        await this.db
+            .collection('users')
+            .doc(this.userId)
+            .collection('todo')
+            .doc('todoitem')
+            .collection('archive')
+            .doc(id)
+            .set(todoItem);
+
+        // Delete the todo item
+        await this.deleteTodoItem(id);
+    }
+
 }

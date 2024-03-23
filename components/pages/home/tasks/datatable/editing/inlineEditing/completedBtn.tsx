@@ -1,7 +1,7 @@
 'use client';
 import { CheckIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
-import { useTaskContext } from "../TaskContext";
+import { useTaskContext } from "../../../TaskContext";
 
 export default function CompletedBtn({ id }: any): JSX.Element {
     const { deleteTodoItem } = useTaskContext()

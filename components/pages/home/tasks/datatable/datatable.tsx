@@ -40,8 +40,8 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 
-import CompletedBtn from './completedBtn';
-import EditStatusBtn from './editing/statusBtn';
+import CompletedBtn from './editing/inlineEditing/completedBtn';
+import EditStatusBtn from './editing/inlineEditing/statusBtn';
 import { SkeletonDemo } from './skeleton';
 import PopupEditor from './editing/popupEditor';
 import { useTaskContext } from '../TaskContext';

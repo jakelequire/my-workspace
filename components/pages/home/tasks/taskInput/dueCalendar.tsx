@@ -36,7 +36,7 @@ export default function CalendarInput(): JSX.Element {
 
     return (
     <Form {...form}>
-        <form className='space-y-8'>
+        <form className='space-y-8 w-[100%]'>
             <FormField
                 control={form.control}
                 name='dob'
@@ -49,7 +49,7 @@ export default function CalendarInput(): JSX.Element {
                                     <Button
                                         variant={'outline'}
                                         className={cn(
-                                            'w-[160px] pl-3 text-left font-normal',
+                                            'w-[100%] pl-3 text-left font-normal',
                                             !field.value && 'text-muted-foreground'
                                         )}>
                                         {field.value ? (

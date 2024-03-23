@@ -2,10 +2,25 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useGlobalContext } from '@/components/GlobalContext';
 import { Todo } from '@/types/types';
 import localForage from '@/localForageConfig';
+import { format } from 'date-fns';
 
 const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 
 function useTaskProvider() {
+    const currentDate = format(new Date(), 'PP');
+
+    const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
+    const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
+        id: '',
+        title: '',
+        priority: 'Low',
+        category: 'Personal',
+        description: '',
+        completed: false,
+        status: 'not started',
+        started: currentDate,
+        due: '',
+    });
     const [editedItem, setEditedItem] = useState<Todo.TodoItem>({
         id: '',
         title: '',
@@ -17,19 +32,6 @@ function useTaskProvider() {
         started: '',
         due: '',
     });
-    const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
-    const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
-        id: '',
-        title: '',
-        priority: 'Low',
-        category: 'Personal',
-        description: '',
-        completed: false,
-        status: 'not started',
-        started: '',
-        due: '',
-    });
-
     const { todoList, increaseSubmissionCount } = useGlobalContext();
 
     useEffect(() => {
@@ -136,7 +138,7 @@ function useTaskProvider() {
             description: '',
             completed: false,
             status: 'not started',
-            started: '',
+            started: currentDate,
             due: '',
         });
         setEditedItem({

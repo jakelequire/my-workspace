@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTaskContext } from '../../TaskContext';
+import { useTaskContext } from '../../../TaskContext';
 import { Todo } from '@/types/types';
 
 type Props = {

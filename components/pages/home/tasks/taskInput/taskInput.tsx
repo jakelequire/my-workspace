@@ -1,25 +1,28 @@
 'use client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import CalendarInput from './calendar';
+
+import StartDateCalendar from './startCalendar';
+import CalendarInput from './dueCalendar';
 import Priority from './priority';
 import Category from './category';
+
 import { useTaskContext } from '../TaskContext';
 import { useGlobalContext } from '@/components/GlobalContext';
 import { Todo } from '@/types/types';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { Textarea } from '@/components/ui/textarea';
+import { Separator } from "@/components/ui/separator"
 
 import styles from './taskInput.module.css';
+import { Label } from '@/components/ui/label';
 
 export default function TaskInput(): JSX.Element {
     const { todoItem, clearFields, addTodoItem, setTodoItem } = useTaskContext();
     const { submissionCount } = useGlobalContext();
 
     const handleAddTask = async () => {
-        const date = new Date();
-        const formattedDate = format(date, 'PP');
-
         const newTask: Todo.DbTodoItem = {
             title: todoItem.title,
             priority: todoItem.priority,
@@ -27,7 +30,7 @@ export default function TaskInput(): JSX.Element {
             description: todoItem.description,
             completed: todoItem.completed,
             status: todoItem.status,
-            started: formattedDate,
+            started: todoItem.started,
             due: todoItem.due,
         };
 
@@ -49,35 +52,54 @@ export default function TaskInput(): JSX.Element {
                         onChange={(e) => setTodoItem({ ...todoItem, title: e.target.value })}
                         className={`${styles.taskinput_input} ${styles.textarea_title} `}
                     />
-                    <Input
-                        type='textarea'
+                    <Textarea
                         placeholder='Enter a description for the task'
                         value={todoItem.description}
                         onChange={(e) => setTodoItem({ ...todoItem, description: e.target.value })}
-                        className={`${styles.taskinput_input} ${styles.textarea_description}`}
+                        className={`${styles.taskinput_input} ${styles.textarea_description} resize-none`}
                     />
                 </div>
+                <Separator orientation='vertical' />
                 <div className={styles.datainfo}>
-                    <div className={styles.taskinput_duedate}>
-                        <CalendarInput key={submissionCount} />
+
+                    <div className={styles.date_wrapper}>
+                        <div className={styles.taskinput_duedate}>
+                            <Label>Start Date</Label>
+                            <StartDateCalendar key={submissionCount} />
+                        </div>
+                        <div className={styles.taskinput_duedate}>
+                            <CalendarInput key={submissionCount} />
+                        </div>
                     </div>
-                    <div className={styles.taskinput_priority}>
-                        <Priority />
+
+                    <div className={styles.type_wrapper}>
+                        <div className={styles.taskinput_priority}>
+                            <Priority />
+                        </div>
+                        <div className={styles.taskinput_category}>
+                            <Category />
+                        </div>
                     </div>
-                    <div className={styles.taskinput_category}>
-                        <Category />
-                    </div>
+
                 </div>
                 <div className={styles.button_container}>
                     <Button
                         type='submit'
                         className={`${styles.taskinput_button}`}
                         onClick={() => {
-                            handleAddTask();
-                            toast.success('A new task has been created.', {
-                                description: `Task: ${todoItem.title} has been added to the list.`,
-                                duration: 2000,
-                            });
+                            handleAddTask()
+                                .then(() => {
+                                    toast.success('A new task has been created.', {
+                                        description: `Task: ${todoItem.title} has been added to the list.`,
+                                        duration: 2000,
+                                    });
+                                })
+                                .catch((error) => {
+                                    toast.error('An error occurred.', {
+                                        description: error.message,
+                                        duration: 2000,
+                                    });
+                                });
                         }}>
                         Add Task
                     </Button>

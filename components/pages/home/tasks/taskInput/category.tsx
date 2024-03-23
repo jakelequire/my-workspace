@@ -33,7 +33,7 @@ export default function Category() {
             </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button className={`${styles.menu} w-32`} variant='outline'>
+                    <Button className={`${styles.menu} w-[100%]`} variant='outline'>
                         {todoItem.category}
                     </Button>
                 </DropdownMenuTrigger>
