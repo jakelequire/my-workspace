@@ -1,11 +1,10 @@
-"use client"
-import { DataTable } from './datatable/datatable'
-import TaskInput from './taskInput/taskInput'
-import styles from './tasks.module.css'
-import { TaskProvider } from './TaskContext'
+'use client';
+import { DataTable } from './datatable/datatable';
+import TaskInput from './taskInput/taskInput';
+import styles from './tasks.module.css';
+import { TaskProvider } from './TaskContext';
 
 export default function TasksInterface(): JSX.Element {
-
     return (
         <TaskProvider>
             <section className={styles.tasks_container}>
@@ -18,5 +17,5 @@ export default function TasksInterface(): JSX.Element {
                 </div>
             </section>
         </TaskProvider>
-    )
+    );
 }

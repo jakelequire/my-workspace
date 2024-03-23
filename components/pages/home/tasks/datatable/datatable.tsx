@@ -169,7 +169,7 @@ export function DataTable() {
     const [statusFilter, setStatusFilter] = React.useState('Status');
     const [tablePagination, setTablePagination] = React.useState({
         pageIndex: 0, //initial page index
-        pageSize: 7, //default page size
+        pageSize: 6, //default page size
     });
 
     const { todoItems } = useTaskContext();
