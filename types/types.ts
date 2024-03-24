@@ -1,5 +1,7 @@
-import type { User } from "firebase/auth";
 
+/* ------------------------------------------ */
+/* ######### Global Application Types ######### */
+/* ------------------------------------------ */
 export namespace GlobalState {
     interface LocalUser {
         id: string;
@@ -19,6 +21,9 @@ export namespace GlobalState {
 }
 
 
+/* ------------------------------------------ */
+/* ######### Todo Application Types ######### */
+/* ------------------------------------------ */
 export namespace Todo {
     export type Priority = 'Low' | 'Medium' | 'High' | 'Urgent';
     export type Category = 'Personal' | 'Appointment' | 'Project' | 'Work' | 'Other';
@@ -55,7 +60,9 @@ export namespace Todo {
 }
 
 
-
+/* ------------------------------------------ */
+/* ######### Jobs Application Types ######### */
+/* ------------------------------------------ */
 export namespace JobsApp {
     export type Status = 'Applied' | 'Saved' | 'Pending Interview' | 'Interviewed' | 'Waiting for Response' | 'Archived';
     export type ApplicationType = 'Job' | 'Internship' | 'Freelance' | 'Contract' | 'Other';
@@ -89,4 +96,33 @@ export namespace JobsApp {
 
     export type DbJobItem = Omit<JobItem, 'id'>;
     export type AddJobServerResponse = Promise<JobItem>
+}
+
+
+/* ------------------------------------------ */
+/* ######### Notes Application Types ######### */
+/* ------------------------------------------ */
+export namespace NotesApp {
+    export type Note = {
+        id: string;
+        title: string;
+        content: string;
+        created: string;
+        lastModified: string;
+        active: boolean;
+    }
+
+    export interface NotepadContextType {
+        notes: Note[];
+        setNotes: (notes: Note[]) => void;
+        selectedNote: Note | null;
+        setSelectedNote: (note: Note) => void;
+        tabs: Note[];
+        setTabs: (note: Note[]) => void;
+        saveNote: (note: NotesApp.Note) => void;
+        addNote: (note: Note) => void;
+        editNote: (note: Note) => void;
+        deleteNote: (note: Note) => void;
+        currentNoteHandler: () => Note | undefined;
+    }
 }
