@@ -9,6 +9,7 @@ const TaskContext = createContext<Todo.TaskContextType | undefined>(undefined);
 function useTaskProvider() {
     const currentDate = format(new Date(), 'PP');
 
+    const [archivedItems, setArchivedItems] = useState<Todo.TodoItem[]>([]);
     const [todoItems, setTodoItems] = useState<Todo.TodoItem[]>([]);
     const [newTodoItem, setNewTodoItem] = useState<Todo.TodoItem>({
         id: '',
@@ -100,6 +101,40 @@ function useTaskProvider() {
         }
     };
 
+    /* -------------------------------- */
+    /* ###### Archive Todo Item ####### */
+    /* -------------------------------- */
+    const archiveTodoItem = async (id: string) => {
+        try {
+            // Attempt to archive the todo item via an API call
+            const response = await fetch('/api/firestore/todo', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id }),
+            });
+            if (!response.ok) throw new Error('Failed to archive the todo item');
+    
+            // Filter out the archived item from the current todo items list
+            setTodoItems(prevItems => prevItems.filter(item => item.id !== id));
+            increaseSubmissionCount(); // Assuming this function updates some state or UI
+    
+            // Retrieve current items from local storage
+            const currentItems = await localForage.getItem<Todo.TodoItem[]>('todoItems') || [];
+            const archivedItem = currentItems.find(item => item.id === id);
+    
+            if (archivedItem) {
+                // Update the archived items list and local storage
+                setArchivedItems(prevItems => [...prevItems, archivedItem]);
+                await localForage.setItem('archivedItems', [archivedItem]);
+                await localForage.setItem('todoItems', currentItems.filter(item => item.id !== id));
+            }
+        } catch (error) {
+            console.error(`Error archiving todo item: ${error}`);
+            // Handle the error appropriately (e.g., show a user-friendly message)
+        }
+    }
+
+
     /* ------------------------------- */
     /* ###### Delete Todo Item ####### */
     /* ------------------------------- */
@@ -164,6 +199,7 @@ function useTaskProvider() {
         editTodoItem,
         editedItem,
         setEditedItem,
+        archiveTodoItem,
     };
 }
 

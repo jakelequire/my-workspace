@@ -86,24 +86,46 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         accessorKey: 'title',
         header: 'Title',
-        cell: ({ row }) => <a className='capitalize'>{row.getValue('title')}</a>,
+        cell: ({ row }) => (
+            <p className='capitalize'>
+                <ViewTask id={row.original.id} className="cursor-default">
+                    {row.getValue('title')}
+                </ViewTask>
+            </p>
+        ),
     },
     {
         accessorKey: 'priority',
         header: 'Priority',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('priority')}</div>,
+        cell: ({ row }) => (
+            <div className='capitalize flex'>
+                <ViewTask id={row.original.id} className="cursor-default">
+                    {row.getValue('priority')}
+                </ViewTask>
+            </div>
+        ),
     },
     {
         accessorKey: 'category',
         header: 'Category',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('category')}</div>,
+        cell: ({ row }) => (
+            <div className='capitalize'>
+                <ViewTask id={row.original.id} className="cursor-default">
+                    {row.getValue('category')}
+                </ViewTask>
+            </div>
+        ),
     },
     {
         accessorKey: 'description',
         header: 'Description',
         cell: ({ row }) => (
             <div className='capitalize line-clamp-2 max-w-80 overflow-ellipsis'>
-                {row.getValue('description')}
+                <ViewTask
+                    id={row.original.id}
+                    className='h-fit max-w-80 line-clamp-2 overflow-ellipsis cursor-default'>
+                    {row.getValue('description')}
+                </ViewTask>
             </div>
         ),
     },
@@ -119,12 +141,24 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
         accessorKey: 'started',
         header: 'Started',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('started')}</div>,
+        cell: ({ row }) => (
+            <div className='capitalize'>
+                <ViewTask id={row.original.id} className="cursor-default">
+                    {row.getValue('started')}
+                </ViewTask>
+            </div>
+        ),
     },
     {
         accessorKey: 'due',
         header: 'Due',
-        cell: ({ row }) => <div className='capitalize'>{row.getValue('due')}</div>,
+        cell: ({ row }) => (
+            <div className='capitalize'>
+                <ViewTask id={row.original.id} className="cursor-default">
+                    {row.getValue('due')}
+                </ViewTask>
+            </div>
+        ),
     },
     {
         id: 'actions',
@@ -143,24 +177,26 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                     <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                            onClick={(e) => {
-                                e.preventDefault();
-                            }}>
-                            <ViewTask id={todo.id} />
-                        </DropdownMenuItem>
+
                         <DropdownMenuItem
                             onClick={(e) => {
                                 e.preventDefault();
                             }}>
-                            <PopupEditor id={todo.id} className="w-full h-full">
+                            <ViewTask id={todo.id} className='w-full h-full'>
+                                <p className='text-white'>View</p>
+                            </ViewTask>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={(e) => {
+                                e.preventDefault();
+                            }}>
+                            <PopupEditor id={todo.id} className='w-full h-full'>
                                 <p className='text-white'>Edit</p>
                             </PopupEditor>
                         </DropdownMenuItem>
+
                         <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(todo.id)}>
-                            Copy todo ID
-                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

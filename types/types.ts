@@ -46,6 +46,7 @@ export namespace Todo {
         clearFields: () => void;
         deleteTodoItem: (id: string) => void;
         editTodoItem: (id: string, updatedItem: TodoItem) => Promise<Omit<Todo.TodoItem, 'id'> | undefined>
+        archiveTodoItem: (id: string) => Promise<void>
     }
 
     export type DbTodoItem = Omit<TodoItem, 'id'>;

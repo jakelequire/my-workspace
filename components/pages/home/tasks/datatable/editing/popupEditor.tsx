@@ -64,7 +64,7 @@ export default function PopupEditor({ id, children, ...props }: Props) {
                     <div className='flex flex-row gap-6'>
                         <div className='flex flex-col w-1/2 gap-6'>
                             <div className='flex flex-col'>
-                                <Label className='mb-2'>Title</Label>
+                                <Label className='mb-2 '>Title</Label>
                                 <EditTitle />
                             </div>
 
