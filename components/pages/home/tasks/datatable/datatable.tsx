@@ -35,17 +35,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { useTaskContext } from '../TaskContext';
+import { Todo } from '@/types/types';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 
+import { SkeletonDemo } from './skeleton';
 import CompletedBtn from './editing/inlineEditing/completedBtn';
 import EditStatusBtn from './editing/inlineEditing/statusBtn';
-import { SkeletonDemo } from './skeleton';
 import PopupEditor from './editing/popupEditor';
-import { useTaskContext } from '../TaskContext';
-import { Todo } from '@/types/types';
+import ViewTask from './view_task/viewTask';
 
 const menuHeaderStyle = 'text-font-semibold text-sm text-muted-foreground tracking-wider';
 
@@ -142,11 +143,19 @@ export const columns: ColumnDef<Todo.TodoItem>[] = [
                     <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem 
+                            onClick={(e) => {
+                                e.preventDefault();
+                            }}>
+                            <ViewTask id={todo.id} />
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={(e) => {
                                 e.preventDefault();
                             }}>
-                            <PopupEditor id={todo.id} />
+                            <PopupEditor id={todo.id} className="w-full h-full">
+                                <p className='text-white'>Edit</p>
+                            </PopupEditor>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigator.clipboard.writeText(todo.id)}>

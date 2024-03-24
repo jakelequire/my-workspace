@@ -20,8 +20,15 @@ import EditPriority from './popupItems/editPriority';
 import EditTitle from './popupItems/editTitle';
 import EditDescription from './popupItems/editDescription';
 
-export default function PopupEditor({ id }: { id: string }) {
+type Props = {
+    id: string;
+    children: React.ReactNode;
+    className?: string;
+}
+
+export default function PopupEditor({ id, children, ...props }: Props) {
     const { todoItems, editedItem, setEditedItem, editTodoItem } = useTaskContext();
+    const { className } = props;
 
     const item = todoItems.find((item) => item.id === id);
 
@@ -40,8 +47,8 @@ export default function PopupEditor({ id }: { id: string }) {
     return (
         <Dialog modal>
             <DialogTrigger asChild>
-                <a className='h-full w-full' onClick={handleClick}>
-                    Edit
+                <a className={`h-fit w-fit ${className}`} w-fit onClick={handleClick}>
+                    {children}
                 </a>
             </DialogTrigger>
 
