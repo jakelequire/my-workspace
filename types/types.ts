@@ -120,9 +120,11 @@ export namespace NotesApp {
         tabs: Note[];
         setTabs: (note: Note[]) => void;
         saveNote: (note: NotesApp.Note) => void;
-        addNote: (note: Note) => void;
         editNote: (note: Note) => void;
         deleteNote: (note: Note) => void;
         currentNoteHandler: () => Note | undefined;
+        createNewNote: () => void;
     }
+
+    export type DbNote = Omit<Note, 'id' | 'active'>;
 }

@@ -6,6 +6,7 @@ export default function NoteExplorer(): JSX.Element {
     const { notes, selectedNote, setSelectedNote, setTabs } = useNotepadContext();
 
     const handleNoteClick = (note: NotesApp.Note) => {
+        setSelectedNote(note);
         //@ts-ignore
         setTabs((prev) => {
             //@ts-ignore

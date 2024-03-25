@@ -5,23 +5,10 @@ import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
 
 export default function NewNote(): JSX.Element {
-    const { notes, setNotes } = useNotepadContext();
-
+    const { createNewNote } = useNotepadContext();
 
     const handleNewNote = () => {
-        const currentDate = format(new Date(), 'PP');
-
-        const newNote: NotesApp.Note = {
-            id: 'note-' + notes.length + 1,
-            title: 'Untitled Note',
-            content: '',
-            active: false,
-            created: currentDate,
-            lastModified: currentDate
-        }
-
-        //@ts-ignore
-        setNotes((prev) => [...prev, newNote]);
+        createNewNote();
     }
 
     return (

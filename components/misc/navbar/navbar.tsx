@@ -84,7 +84,7 @@ const tools: { title: string; href: string; description: string, active: boolean
         title: 'Notes',
         href: '/tools/notes',
         description: 'Create and manage my personal notes.',
-        active: false,
+        active: true,
     },
     {
         title: 'Cloud Storage',

@@ -6,8 +6,10 @@ export default function Toolbar(): JSX.Element {
     const { selectedNote, notes, saveNote } = useNotepadContext()
 
     const handleSaveNote = () => {
-        console.log("[Toolbar.tsx] handleSaveNote: ", notes)
-        if(!selectedNote) return
+        //console.log("[Toolbar.tsx] handleSaveNote: ", notes)
+        if(!selectedNote) {
+            throw new Error('No note selected')
+        }
         saveNote(selectedNote)
     }
 
