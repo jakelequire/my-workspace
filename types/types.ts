@@ -119,9 +119,10 @@ export namespace NotesApp {
         setSelectedNote: (note: Note) => void;
         tabs: Note[];
         setTabs: (note: Note[]) => void;
+        requestCount: number;
         saveNote: (note: NotesApp.Note) => void;
         editNote: (note: Note) => void;
-        deleteNote: (note: Note) => void;
+        deleteNote: (id: string) => void;
         currentNoteHandler: () => Note | undefined;
         createNewNote: () => void;
     }

@@ -4,7 +4,7 @@ import { NotesApp } from '@/types/types';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export default function NotepadTabs(): JSX.Element {
-    const { tabs, setTabs, setSelectedNote } = useNotepadContext();
+    const { tabs, setTabs, setSelectedNote, requestCount } = useNotepadContext();
 
     const handleTabClick = (note: NotesApp.Note) => {
         //@ts-ignore
@@ -26,7 +26,7 @@ export default function NotepadTabs(): JSX.Element {
     };
 
     return (
-        <div className='border-b flex h-full w-full'>
+        <div className='border-b flex h-full w-full' key={requestCount}>
             {tabs.map((note) => (
                 <Tab
                     key={note.id}
@@ -51,6 +51,7 @@ function Tab({
     onClick: () => void;
     onClose: () => void;
 }) {
+    const { requestCount } = useNotepadContext();
     return (
         <div
             className={`flex items-center justify-between gap-4 h-full pl-4 pr-2 min-w-32 border-x text-sm cursor-pointer

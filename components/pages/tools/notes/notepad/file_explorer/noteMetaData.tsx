@@ -30,7 +30,7 @@ export default function NoteMetaData(): JSX.Element {
             />
             <Button
                 className='w-full'
-                onClick={() => console.log('Save')}
+                onClick={handleSave}
             > Save </Button>
         </div>
     )

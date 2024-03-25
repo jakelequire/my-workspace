@@ -8,6 +8,7 @@ function useNotepadProvider() {
     const [notes, setNotes] = useState<NotesApp.Note[]>([]);
     const [selectedNote, setSelectedNote] = useState<NotesApp.Note | null>(null);
     const [tabs, setTabs] = useState<NotesApp.Note[]>([]);
+    const [requestCount, setRequestCount] = useState(0);
 
     const saveNote = async (note: NotesApp.Note) => {
         const dbNote = {
@@ -41,8 +42,9 @@ function useNotepadProvider() {
             }
             return n;
         });
-
+        
         setNotes(updatedNotes);
+        setRequestCount(requestCount + 1);
     }
 
     const createNewNote = async () => {
@@ -62,6 +64,7 @@ function useNotepadProvider() {
         console.log("[createNewNote] data", data);
 
         setNotes((prev) => [...prev, data]);
+        setRequestCount(requestCount + 1);
     }
 
     /** @private */
@@ -82,6 +85,25 @@ function useNotepadProvider() {
         fetchNotes();
     }, []);
 
+    const deleteNote = async (id: string) => {
+        const response = await fetch('/api/firestore/notes', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: id }),
+        });
+        if (!response.ok) {
+            console.error("[deleteNote] Error deleting note", response);
+            return;
+        }
+        console.log("[deleteNote] response", response);
+
+        const updatedNotes = notes.filter((n) => n.id !== id);
+        setNotes(updatedNotes);
+        setRequestCount(requestCount + 1);
+    }
+
     const currentNoteHandler = () => {
         return notes.find((note) => note.id === selectedNote?.id);
     }
@@ -90,9 +112,7 @@ function useNotepadProvider() {
         // Todo
     }
     
-    const deleteNote = (note: NotesApp.Note) => {
-        // Todo
-    }
+
 
     return {
         notes,
@@ -101,6 +121,7 @@ function useNotepadProvider() {
         setSelectedNote,
         tabs,
         setTabs,
+        requestCount,
         saveNote,
         editNote,
         deleteNote,
