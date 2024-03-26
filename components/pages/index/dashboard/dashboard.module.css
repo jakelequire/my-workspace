@@ -91,7 +91,7 @@
     height: 100%;
     width: 25%;
     border-radius: 0.5rem;
-    border: 1px solid hsl(240 3.7% 15.9%)
+    border: 1px solid hsl(var(--primary-border-color));
 }
 
 /* ------------------ */
@@ -115,7 +115,7 @@
     height: 100%;
     width: 40%;
     border-radius: 0.5rem;
-    border: 1px solid hsl(240 3.7% 15.9%)
+    border: 1px hsl(var(--primary-border-color));
 }
 
 .bank_widget {
@@ -126,6 +126,6 @@
     height: 100%;
     width: 60%;
     border-radius: 0.5rem;
-    border: 1px solid hsl(240 3.7% 15.9%)
+    border: 1px solid hsl(var(--primary-border-color));
 }
 

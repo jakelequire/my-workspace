@@ -1,5 +1,15 @@
 'use client';
-import { Button } from '@/components/ui/button';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { useNotepadContext } from '../../NotepadContext';
 import { NotesApp } from '@/types/types';
 import { TrashIcon } from '@radix-ui/react-icons';
@@ -42,14 +52,7 @@ function NoteCard({
     selected: boolean;
     onClick: () => void;
 }) {
-    const { selectedNote, deleteNote } = useNotepadContext();
-
-    const handleDelete = () => {
-        if (!selectedNote) {
-            throw new Error('No note selected');
-        }
-        deleteNote?.(selectedNote.id);
-    }
+    const id = note.id;
 
     return (
         <div
@@ -58,9 +61,45 @@ function NoteCard({
             }`}
             onClick={onClick}>
             <p className='text-xs'>{note.title}</p>
-            <Button variant='destructive' className='flex items-center gap-2' onClick={handleDelete}>
-                <TrashIcon />
-            </Button>
+            <a className='flex items-center gap-2'>
+                <DeleteAlertDialog id={id}/>
+            </a>
         </div>
+    );
+}
+
+function DeleteAlertDialog({id}: {id: string}) {
+    const { selectedNote, deleteNote } = useNotepadContext();
+
+    const handleDelete = () => {
+        if (!selectedNote) {
+            throw new Error('No note selected');
+        }
+        deleteNote?.(selectedNote.id);
+    };
+
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <a>
+                    <TrashIcon />
+                </a>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. Deleting <span className='font-semibold italic text-white'>{selectedNote?.title}</span>{' '}
+                        will permanently remove it from your notes.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction className='bg-red-900 text-white' onClick={handleDelete}>
+                        Continue
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 }

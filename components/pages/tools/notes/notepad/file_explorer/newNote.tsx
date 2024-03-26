@@ -12,7 +12,7 @@ export default function NewNote(): JSX.Element {
     }
 
     return (
-        <Button variant='outline' className='text-sm w-full border-t-0 border-x-0 border-b rounded-none' onClick={handleNewNote}>
+        <Button variant='ghost' className='text-sm w-full border-t-0 border-x-0 rounded-none' onClick={handleNewNote}>
             New Note
         </Button>
     )

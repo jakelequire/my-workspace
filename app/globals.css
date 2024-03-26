@@ -25,6 +25,7 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+    --primary-border-color: 240, 5%, 20%;
   }
 
   .dark {
@@ -47,6 +48,7 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --primary-border-color: 240, 5%, 20%;
   }
 }
 

@@ -119,6 +119,8 @@ export namespace NotesApp {
         setSelectedNote: (note: Note) => void;
         tabs: Note[];
         setTabs: (note: Note[]) => void;
+        currentTab: Note | null;
+        setCurrentTab: (note: Note) => void;
         requestCount: number;
         saveNote: (note: NotesApp.Note) => void;
         editNote: (note: Note) => void;

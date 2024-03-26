@@ -8,6 +8,7 @@ function useNotepadProvider() {
     const [notes, setNotes] = useState<NotesApp.Note[]>([]);
     const [selectedNote, setSelectedNote] = useState<NotesApp.Note | null>(null);
     const [tabs, setTabs] = useState<NotesApp.Note[]>([]);
+    const [currentTab, setCurrentTab] = useState<NotesApp.Note | null>(null);
     const [requestCount, setRequestCount] = useState(0);
 
     const saveNote = async (note: NotesApp.Note) => {
@@ -45,6 +46,33 @@ function useNotepadProvider() {
         
         setNotes(updatedNotes);
         setRequestCount(requestCount + 1);
+
+        const updatedTabs = tabs.map((t) => {
+            if (t.id === note.id) {
+                return {
+                    ...t,
+                    title: note.title,
+                    content: note.content,
+                    lastModified: new Date().toLocaleString(),
+                }
+            }
+            return t;
+        }
+        );
+        setTabs(updatedTabs);
+        
+        const updatedSelectedNote = () => {
+            if (selectedNote) {
+                return {
+                    ...selectedNote,
+                    title: note.title,
+                    content: note.content,
+                    lastModified: new Date().toLocaleString(),
+                }
+            }
+            return null;
+        }
+        setSelectedNote(updatedSelectedNote);
     }
 
     const createNewNote = async () => {
@@ -101,6 +129,7 @@ function useNotepadProvider() {
 
         const updatedNotes = notes.filter((n) => n.id !== id);
         setNotes(updatedNotes);
+        setTabs((prev) => prev.filter((tab) => tab.id !== id));
         setRequestCount(requestCount + 1);
     }
 
