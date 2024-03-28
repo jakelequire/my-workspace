@@ -149,6 +149,7 @@ export namespace GitHubApp {
         created_at: string;
         updated_at: string;
         statuses_url: string;
+        target_url: string;
     }
 
     export interface CommitHistory {

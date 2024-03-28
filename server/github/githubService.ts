@@ -26,7 +26,7 @@ export class GitHubService {
     repoitories: GitHubApi.RepoData[];
     deploymentData: GitHubApi.DeploymentData[];
     deploymentResponse: GitHubApi.DeploymentResponse[];
-    commitHistory: []
+    commitHistory: [];
 
     constructor() {
         this.octokit = octokit;
@@ -66,36 +66,39 @@ export class GitHubService {
     async fetchDeploymentStatuses() {
         await this.getDeployments();
 
-        for (let i = 0; i < this.deploymentData.length; i++) {
-            const deploymentStatuses = await this.octokit.request(
-                'GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses',
-                {
-                    owner: 'jakelequire',
-                    repo: 'my-workspace',
-                    deployment_id: this.deploymentData[i].id,
-                    headers: {
-                        'X-GitHub-Api-Version': '2022-11-28',
-                    },
-                }
-            );
+        console.log('[fetchDeploymentStatuses] deploymentData', this.deploymentData[0], '\n');
 
-            const formatDate = (date: string) => {
-                // format to 'MM/dd/yyyy HH:MM AM/PM'
-                return format(new Date(date), 'MM/dd/yyyy hh:mm a');
-            };
+        const deploymentStatuses = await this.octokit.request(
+            'GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses',
+            {
+                owner: 'jakelequire',
+                repo: 'my-workspace',
+                deployment_id: this.deploymentData[0].id,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28',
+                },
+            }
+        );
 
-            const responseObject = {
-                id: deploymentStatuses.data[0].id,
-                node_id: deploymentStatuses.data[0].node_id,
-                state: deploymentStatuses.data[0].state,
-                description: deploymentStatuses.data[0].description,
-                environment: deploymentStatuses.data[0].environment || 'No Environment',
-                created_at: formatDate(deploymentStatuses.data[0].created_at),
-                updated_at: formatDate(deploymentStatuses.data[0].updated_at),
-            };
-            // The array starting at index 0 is the most recent deployment status (should be)
-            this.deploymentResponse.push(responseObject);
-        }
+        console.log('[fetchDeploymentStatuses] deploymentStatuses', deploymentStatuses.data[0].target_url, '\n');
+
+        const formatDate = (date: string) => {
+            return format(new Date(date), 'MM/dd/yyyy hh:mm a');
+        };
+
+        const responseObject = {
+            id: deploymentStatuses.data[0].id,
+            node_id: deploymentStatuses.data[0].node_id,
+            state: deploymentStatuses.data[0].state,
+            description: deploymentStatuses.data[0].description,
+            environment: deploymentStatuses.data[0].environment || 'No Environment',
+            created_at: formatDate(deploymentStatuses.data[0].created_at),
+            updated_at: formatDate(deploymentStatuses.data[0].updated_at),
+            target_url: deploymentStatuses.data[0].target_url,
+        };
+        // The array starting at index 0 is the most recent deployment status (should be)
+        this.deploymentResponse.push(responseObject);
+
         return this.deploymentResponse;
     }
 
@@ -172,14 +175,17 @@ export class GitHubService {
             body: JSON.stringify(body),
         });
         const response = await res.json();
-        const commitHistory = this.commitHistory = response.data.user.contributionsCollection.contributionCalendar.totalContributions;
-        console.log('\ncommitHistory', commitHistory, '\n')
+        const commitHistory = (this.commitHistory =
+            response.data.user.contributionsCollection.contributionCalendar.totalContributions);
+        console.log('\ncommitHistory', commitHistory, '\n');
         return response;
     }
 
     /* DEBUGGING */
     logDeploymentData() {
-        console.log('\ndeploymentData', this.deploymentData, '\n');
+        this.fetchDeploymentStatuses();
+        console.log('\deploymentResponse', this.deploymentResponse, '\n');
+        // console.log('\ndeploymentData', this.deploymentData, '\n');
     }
     /* DEBUGGING */
     logDeploymentResponse() {

@@ -1,5 +1,6 @@
 'use client';
 import { useCodeSpaceContext } from '../CodeSpaceContext';
+import { Button } from '@/components/ui/button';
 import { CheckIcon } from '@radix-ui/react-icons';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
@@ -42,10 +43,18 @@ export default function MiniDeployment(): JSX.Element {
                     <span className='font-medium'>Created At: </span>
                     <span className='text-sm text-neutral-300'>{mostRecentDeployment.created_at}</span>
                 </p>
+                
+                <br />
+                <Button variant={'outline'}>
+                    <a href={mostRecentDeployment.target_url} target='_blank' rel='noreferrer' className='h-full w-full'>
+                        View Deployment
+                    </a>
+                </Button>
                 {/* Include Deployment URL */}
             </>
         );
     };
+
 
     return (
         <div className='h-full w-full border rounded-lg py-4 px-6'>

@@ -45,7 +45,7 @@ function useCodeSpaceProvider() {
         const fetchDeployments = async () => {
             const response = await fetch('/api/services/github/deployments');
             const data = await response.json();
-            console.log('[CodeSpaceContext.tsx] data: ', data);
+            console.log('[CodeSpaceContext.tsx] Fetch Deployments data: ', data);
             setDeploymentData(data);
         };
         fetchDeployments();

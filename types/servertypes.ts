@@ -37,6 +37,7 @@ export namespace GitHubApi {
         environment: string | undefined;
         created_at: string;
         updated_at: string;
+        target_url: string;
     }
 
     export interface GitHubCommitHistoryResponse {
