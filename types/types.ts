@@ -135,8 +135,8 @@ export namespace GitHubApp {
     export interface CodeSpaceContextType {
         deploymentData: GitHubApp.DeploymentData[];
         setDeploymentData: (deploymentData: GitHubApp.DeploymentData[]) => void;
-        commitHistory: GitHubApp.CommitHistory[];
-        setCommitHistory: (commitHistory: GitHubApp.CommitHistory[]) => void;
+        commitHistory: GitHubApp.GitHubCommitHistoryResponse | undefined;
+        setCommitHistory: (commitHistory: GitHubApp.GitHubCommitHistoryResponse) => void;
         filteredCommitHistory: GitHubApp.CommitHistoryData[];
     }
 

@@ -5,7 +5,7 @@ const CodeSpaceContext = createContext<GitHubApp.CodeSpaceContextType | undefine
 
 function useCodeSpaceProvider() {
     const [deploymentData, setDeploymentData] = useState<GitHubApp.DeploymentData[]>([]);
-    const [commitHistory, setCommitHistory] = useState<GitHubApp.CommitHistory[]>([]);
+    const [commitHistory, setCommitHistory] = useState<GitHubApp.GitHubCommitHistoryResponse>();
     const [filteredCommitHistory, setFilteredCommitHistory] = useState<
         GitHubApp.CommitHistoryData[]
     >([]);
