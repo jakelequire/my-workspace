@@ -13,7 +13,7 @@ export class DebugLogger {
         console.log("-----------------------------------------");
     }
 
-    public endpointHit(endpoint: stirng, method: string) {
+    public endpointHit(endpoint: string, method: string) {
         console.log("-----------------------------------------");
         console.log(`  ###########  ${method}  #############  `)
         console.log(`<!> Endpoint Hit: ${endpoint}`)
