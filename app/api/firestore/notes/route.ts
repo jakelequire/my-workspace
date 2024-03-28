@@ -1,8 +1,9 @@
 import { NotepadService } from '@/server/firestore/notepadService';
 import { cookies } from 'next/headers';
 import { NotesApp } from '@/types/types';
+import { DebugLogger } from '@/lib/logger/debuglogger'
 
-
+const logger = new DebugLogger();
 
 /* --------------------------------------- /
  * ####################################### /
@@ -11,6 +12,8 @@ import { NotesApp } from '@/types/types';
  * --------------------------------------- /
 */
 export async function GET(request: Request) {
+    logger.endpointHit('[/api/firestore/notes]', 'GET')
+
     const userId = cookies().get('userId')
     if (!userId) {
         return new Response(JSON.stringify({ message: 'No user ID in cookies.' }), {

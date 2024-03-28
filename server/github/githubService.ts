@@ -8,18 +8,26 @@ const octokit = new Octokit({
     auth: GITHUB_AUTH_TOKEN,
 });
 
-interface GitCommitHistoryObject {
-    totalContributions: number;
-    weeks: {
-        contributionDays: {
-            color: string;
-            contributionCount: number;
-            date: string;
-            weekday: number;
-        }[];
-        firstDay: string;
-    }[];
+const QUERY = `
+query($userName:String!) {
+  user(login: $userName){
+    contributionsCollection(from: "2024-01-01T00:00:00Z") {
+      contributionCalendar {
+        totalContributions
+        weeks {
+          contributionDays {
+            color
+            contributionCount
+            date
+            weekday
+          }
+          firstDay
+        }
+      }
+    }
+  }
 }
+`;
 
 export class GitHubService {
     octokit = octokit;
@@ -36,6 +44,10 @@ export class GitHubService {
         this.commitHistory = [];
     }
 
+    /* ----------------------------------------- */
+    /*  ########## { getDeployments } ########## */
+    /* Lists all deployments for a specific repo */
+    /* ----------------------------------------- */
     async getDeployments() {
         try {
             const res = await this.octokit.rest.repos.listDeployments({
@@ -63,6 +75,11 @@ export class GitHubService {
         }
     }
 
+    /* ---------------------------------------------- */
+    /* ######### { fetchDeploymentStatuses } ######## */
+    /* Retreives the status of a specific deployment, */
+    /*  currently set to the most recent deployment   */
+    /* ---------------------------------------------- */
     async fetchDeploymentStatuses() {
         await this.getDeployments();
 
@@ -138,26 +155,7 @@ export class GitHubService {
 
     async viewCommitsData() {
         const TOKEN = GITHUB_AUTH_TOKEN;
-        const query = `
-        query($userName:String!) {
-          user(login: $userName){
-            contributionsCollection(from: "2024-01-01T00:00:00Z") {
-              contributionCalendar {
-                totalContributions
-                weeks {
-                  contributionDays {
-                    color
-                    contributionCount
-                    date
-                    weekday
-                  }
-                  firstDay
-                }
-              }
-            }
-          }
-        }
-        `;
+        const query = QUERY
         const variables = `
         {
             "userName": "jakelequire"

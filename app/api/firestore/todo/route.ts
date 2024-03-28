@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { Todo } from '@/types/types';
 import { TodoService } from '@/server/firestore/todoService';
 import { cookies } from 'next/headers';
+import { DebugLogger } from '@/lib/logger/debuglogger'
+
+const logger = new DebugLogger();
 
 /* --------------------------------------- /
  * ####################################### /
@@ -10,7 +13,7 @@ import { cookies } from 'next/headers';
  * --------------------------------------- /
 */
 export async function GET(request: Request) {
-    console.log('\n[/api/firestore/todo] GET Hit!');
+    logger.endpointHit('[/api/firestore/todo]', 'GET')
 
     const userId = cookies().get('userId')
     if (!userId) {
@@ -35,7 +38,7 @@ export async function GET(request: Request) {
  * ---------------------------------------- /
 */
 export async function POST(request: Request) {
-    console.log('\n[/api/firestore/todo] POST Hit!');
+    logger.endpointHit('[/api/firestore/todo]', 'POST')
 
     // Check if the request has a body
     if (!request.body) {
@@ -75,7 +78,8 @@ export async function POST(request: Request) {
  * --------------------------------------- /
 */
 export async function PUT(request: Request) {
-    console.log('\n[/api/firestore/todo] PUT Hit!');
+    logger.endpointHit('[/api/firestore/todo]', 'PUT')
+
 
     // Check if the request has a body
     if (!request.body) {
@@ -115,7 +119,7 @@ export async function PUT(request: Request) {
  * ---------------------------------------- /
 */
 export async function PATCH(request: Request) {
-    console.log('\n[/api/firestore/todo] PATCH Hit!');
+    logger.endpointHit('[/api/firestore/todo]', 'PATCH')
 
     // Check if the request has a body
     if (!request.body) {
@@ -159,7 +163,7 @@ export async function PATCH(request: Request) {
  * ----------------------------------------- /
 */
 export async function DELETE(request: Request) {
-    console.log('\n[/api/firestore/todo] DELETE Hit!');
+    logger.endpointHit('[/api/firestore/todo]', 'DELETE')
 
     // Check if the request has a body
     if (!request.body) {

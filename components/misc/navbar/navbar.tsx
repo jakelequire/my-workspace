@@ -48,7 +48,7 @@ const home_life: { title: string; href: string; description: string, active: boo
         title: 'Code Space',
         href: '/home/code',
         description: 'My personal code space. Data and information about my coding projects.',
-        active: false,
+        active: true,
     }
 ];
 
