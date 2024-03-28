@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 
 const auth = getAuth(firebase_app);
 
-const components: { title: string; href: string; description: string, active: boolean }[] = [
+const home_life: { title: string; href: string; description: string, active: boolean }[] = [
     {
         title: 'Calendar',
         href: '/home/calendar',
@@ -43,6 +43,12 @@ const components: { title: string; href: string; description: string, active: bo
         href: '/home/jobs',
         description: 'My personal job tracker. Manage my job applications and interviews.',
         active: true,
+    },
+    {
+        title: 'Code Space',
+        href: '/home/code',
+        description: 'My personal code space. Data and information about my coding projects.',
+        active: false,
     }
 ];
 
@@ -161,7 +167,7 @@ export default function Navbar(): JSX.Element {
                                 <NavigationMenuTrigger>Home Life</NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
-                                        {components.map((component) => (
+                                        {home_life.map((component) => (
                                             <ListItem
                                                 key={component.title}
                                                 className={component.active ? '' : 'text-accent'}

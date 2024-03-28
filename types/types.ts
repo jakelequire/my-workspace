@@ -129,3 +129,62 @@ export namespace NotesApp {
 
     export type DbNote = Omit<Note, 'id' | 'active'>;
 }
+
+
+export namespace GitHubApp {
+    export interface CodeSpaceContextType {
+        deploymentData: GitHubApp.DeploymentData[];
+        setDeploymentData: (deploymentData: GitHubApp.DeploymentData[]) => void;
+        commitHistory: GitHubApp.CommitHistory[];
+        setCommitHistory: (commitHistory: GitHubApp.CommitHistory[]) => void;
+        filteredCommitHistory: GitHubApp.CommitHistoryData[];
+    }
+
+    export interface DeploymentData {
+        url: string;
+        id: number;
+        node_id: string;
+        state: string;
+        environment: string;
+        created_at: string;
+        updated_at: string;
+        statuses_url: string;
+    }
+
+    export interface CommitHistory {
+        totalContributions: number;
+        weeks: {
+            contributionDays: {
+                contributionCount: number;
+                date: string;
+            }[];
+            firstDay: string;
+        }[];
+    }
+
+    export interface GitHubCommitHistoryResponse {
+        data: {
+            user: {
+                contributionsCollection: {
+                    contributionCalendar: {
+                        totalContributions: number;
+                        weeks: Array<{
+                            contributionDays: Array<{
+                                color: string;
+                                contributionCount: number;
+                                date: string;
+                                weekday: number;
+                            }>;
+                            firstDay: string;
+                        }>;
+                    };
+                };
+            };
+        };
+    }
+
+    export interface CommitHistoryData {
+        day: string;
+        value: number;
+    }
+}

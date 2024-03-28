@@ -42,3 +42,8 @@ next-env.d.ts
 .env*
 
 notes.md
+
+# Dev
+/components/dev
+/app/api/dev
+/app/dev

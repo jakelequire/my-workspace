@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
+    "@nivo/calendar": "^0.85.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -30,6 +32,7 @@
     "@tanstack/react-table": "^8.13.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cmdk": "^1.0.0",
     "date-fns": "^3.3.1",
     "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.0.0",
