@@ -30,7 +30,7 @@ export class VercelService {
      * @see https://vercel.com/docs/rest-api/endpoints/deployments#get-deployment-events
      */
     public async getDeploymentEvents() {
-        const response = await fetch(`/v3/deployments/${PROJECT_ID}/events`, {
+        const response = await fetch(`/v3/deployments/${this.PROJECT_ID}/events`, {
             method: "GET",
             headers: {
                 Authorization: "Bearer " + this.API_TOKEN,
