@@ -7,7 +7,5 @@ export async function GET(request: Request) {
     const fetchCommitsData = await githubService.viewCommitsData();
     if (!fetchCommitsData) { return new Response('Error fetching deployment statuses')}
 
-    githubService.logDeploymentData();
-
     return new Response(JSON.stringify(fetchCommitsData));
 }
