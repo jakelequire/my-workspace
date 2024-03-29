@@ -28,6 +28,9 @@ function useCodeSpaceProvider() {
     }, []);
 
 
+    /* ------------------------------------------ */
+    /* ########## FETCH COMMIT HISTORY ########## */
+    /* ------------------------------------------ */
     const filterCommitHistory = (weeks: CodespaceApp.CommitHistory['weeks']) => {
         const filteredData = weeks.flatMap(week =>
             week.contributionDays.map(day => ({
@@ -38,11 +41,6 @@ function useCodeSpaceProvider() {
         console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
         setFilteredCommitHistory(filteredData);
     };
-
-
-    /* ------------------------------------------ */
-    /* ########## FETCH COMMIT HISTORY ########## */
-    /* ------------------------------------------ */
     useEffect(() => {
         const fetchCommits = async () => {
             const response = await fetch('/api/services/github/commits');

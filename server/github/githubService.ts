@@ -41,6 +41,9 @@ export class GitHubService {
     }
 
 
+    /**
+     * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
+     */
     async fullCommitHistory() {
         const res = await this.octokit.rest.repos.listCommits({
             owner: 'jakelequire',
