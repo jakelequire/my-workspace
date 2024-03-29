@@ -51,9 +51,9 @@ export function MiniRecentBuild() {
         if (!recentBuilds) return <p>No deployments</p>;
         return (
             <>
-                <p className='flex flex-col mb-6'>
-                    <span className='text-lg font-semibold'>Project</span>
-                    <span className='text-base'>
+                <p className='flex flex-col mb-8'>
+                    <span className='text-xl font-semibold self-center mb-2'>Project</span>
+                    <span className='text-base self-center'>
                         {recentBuilds.meta.githubRepo}
                         {' '}
                         <span className='text-sm italic text-gray-400'>
@@ -62,7 +62,7 @@ export function MiniRecentBuild() {
                     </span>
                 </p>
 
-                <div className='flex flex-row gap-6'>
+                <div className='flex flex-row justify-center gap-6'>
                     <p className='flex flex-col mb-4'>
                         <span className='text-base font-semibold text-gray-400'>Created</span>
                         <span className='text-sm'>{recentBuilds.created_at}</span>
@@ -138,8 +138,8 @@ export function MiniRecentBuild() {
                 <IconToDisplay />
             </div>
             <div className='flex flex-col'>
-                <Carousel className='w-full max-w-xs'>
-                    <CarouselContent>
+                <Carousel className='w-full max-w-xs h-full'>
+                    <CarouselContent className='w-full max-w-xs h-full'>
                         {slideItems.map((item, index) => (
                             <CarouselItem key={index} className='w-full h-full'>
                                 <Card className='w-full h-full border-none'>
@@ -151,8 +151,8 @@ export function MiniRecentBuild() {
                         ))}
                     </CarouselContent>
                     <div className='flex items-center justify-end w-full h-full'>
-                        <CarouselPrevious variant={'outline'} className={'h-7 w-7 left-0 top-[225px]'} />
-                        <CarouselNext variant={'outline'} className={'h-7 w-7 right-0 top-[225px]'} />
+                        <CarouselPrevious variant={'outline'} className={'h-7 w-7 left-0 top-[235px]'} />
+                        <CarouselNext variant={'outline'} className={'h-7 w-7 right-0 top-[235px]'} />
                     </div>
                 </Carousel>
             </div>
