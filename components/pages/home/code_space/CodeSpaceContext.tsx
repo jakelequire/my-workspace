@@ -1,33 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { GitHubApp } from '@/types/types';
+import { CodespaceApp } from '@/types/types';
 
-const CodeSpaceContext = createContext<GitHubApp.CodeSpaceContextType | undefined>(undefined);
+const CodeSpaceContext = createContext<CodespaceApp.CodeSpaceContextType | undefined>(undefined);
 
 function useCodeSpaceProvider() {
-    const [deploymentData, setDeploymentData] = useState<GitHubApp.DeploymentData[]>([]);
-    const [commitHistory, setCommitHistory] = useState<GitHubApp.GitHubCommitHistoryResponse>();
+    const [deploymentData, setDeploymentData] = useState<CodespaceApp.DeploymentData[]>([]);
+    const [commitHistory, setCommitHistory] = useState<CodespaceApp.GitHubCommitHistoryResponse>();
+    const [recentBuild, setRecentBuild] = useState<CodespaceApp.VercelDeploymentResponse[]>([]);
+
     const [filteredCommitHistory, setFilteredCommitHistory] = useState<
-        GitHubApp.CommitHistoryData[]
+        CodespaceApp.CommitHistoryData[]
     >([]);
 
-    /*
-    export interface CommitHistory {
-        totalContributions: number;
-        weeks: {
-            contributionDays: {
-                contributionCount: number;
-                date: string;
-            }[];
-            firstDay: string;
-        }[];
-    }
-
-    export interface CommitHistoryData {
-        day: string;
-        count: number;
-    }
-*/
-    const filterCommitHistory = (weeks: GitHubApp.CommitHistory['weeks']) => {
+    const filterCommitHistory = (weeks: CodespaceApp.CommitHistory['weeks']) => {
         const filteredData = weeks.flatMap(week =>
             week.contributionDays.map(day => ({
                 day: day.date,
@@ -37,6 +22,19 @@ function useCodeSpaceProvider() {
         console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
         setFilteredCommitHistory(filteredData);
     };
+
+    /* ----------------------------------------- */
+    /* ########### VERCEL API { ... } ########## */
+    /* ----------------------------------------- */
+    useEffect(() => {
+        const fetchRecentBuilds = async () => {
+            const response = await fetch('/api/services/vercel');
+            const data: CodespaceApp.VercelDeploymentResponse[] = await response.json();
+            console.log('[CodeSpaceContext.tsx] Fetch Recent Builds data: ', data);
+            setRecentBuild(data);
+        };
+        fetchRecentBuilds();
+    }, []);
 
     /* ------------------------------------------ */
     /* ######## FETCH DEPLOYMENT HISTORY ######## */
@@ -57,7 +55,7 @@ function useCodeSpaceProvider() {
     useEffect(() => {
         const fetchCommits = async () => {
             const response = await fetch('/api/services/github/commits');
-            const data: GitHubApp.GitHubCommitHistoryResponse = await response.json();
+            const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
             console.log('[CodeSpaceContext.tsx] data: ', data);
             setCommitHistory(data);
             const commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
@@ -72,6 +70,8 @@ function useCodeSpaceProvider() {
         commitHistory,
         setCommitHistory,
         filteredCommitHistory,
+        recentBuild,
+        setRecentBuild,
     };
 }
 

@@ -131,13 +131,33 @@ export namespace NotesApp {
 }
 
 
-export namespace GitHubApp {
+export namespace CodespaceApp {
     export interface CodeSpaceContextType {
-        deploymentData: GitHubApp.DeploymentData[];
-        setDeploymentData: (deploymentData: GitHubApp.DeploymentData[]) => void;
-        commitHistory: GitHubApp.GitHubCommitHistoryResponse | undefined;
-        setCommitHistory: (commitHistory: GitHubApp.GitHubCommitHistoryResponse) => void;
-        filteredCommitHistory: GitHubApp.CommitHistoryData[];
+        deploymentData: CodespaceApp.DeploymentData[];
+        setDeploymentData: (deploymentData: CodespaceApp.DeploymentData[]) => void;
+        commitHistory: CodespaceApp.GitHubCommitHistoryResponse | undefined;
+        setCommitHistory: (commitHistory: CodespaceApp.GitHubCommitHistoryResponse) => void;
+        filteredCommitHistory: CodespaceApp.CommitHistoryData[];
+        recentBuild: CodespaceApp.VercelDeploymentResponse[];
+        setRecentBuild: (recentBuild: CodespaceApp.VercelDeploymentResponse[]) => void;
+    }
+
+
+    export interface VercelDeploymentResponse {
+        name: string;
+        url: string;
+        created: string;
+        state: string;
+        inspectorUrl: string;
+        meta : {
+            githubCommitMessage: string;
+            githubRepo: string;
+            githubRepoVisibility: string;
+        };
+        target: string;
+        created_at: string;
+        building_at: string;
+        ready_at: string;
     }
 
     export interface DeploymentData {

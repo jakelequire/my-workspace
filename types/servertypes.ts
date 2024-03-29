@@ -64,3 +64,72 @@ export namespace GitHubApi {
     export type ClientResponse = DeploymentResponse[];
 
 }
+
+
+
+export namespace VercelApi {
+    /* --------------------------------------- */
+    /* ###### Vercel API Response Types ###### */
+    /* --------------------------------------- */
+    export interface VercelApiDeploymentResponse {
+        deployments: {
+            uid: string;
+            name: string;
+            url: string;
+            created: number;
+            source: string;
+            state: string;
+            readyState: string;
+            readySubstate: string;
+            type: string;
+            creator: {};
+            inspectorUrl: string;
+            meta: {
+                githubCommitAuthorName: string;
+                githubCommitMessage: string;
+                githubCommitOrg: string;
+                githubCommitRef: string;
+                githubCommitRepo: string;
+                githubCommitSha: string;
+                githubDeployment: string;
+                githubOrg: string;
+                githubRepo: string;
+                githubRepoOwnerType: string;
+                githubCommitRepoId: string;
+                githubRepoId: string;
+                githubRepoVisibility: string;
+                githubCommitAuthorLogin: string;
+                branchAlias: string;
+            };
+            target: string;
+            aliasError: null;
+            aliasAssigned: number;
+            isRollbackCandidate: boolean;
+            createdAt: number;
+            buildingAt: number;
+            ready: number;
+            projectSettings: {};
+        }[];
+    }
+    
+    /* --------------------------------------- */
+    /* ######## Client Response Types ######## */
+    /* --------------------------------------- */
+    export interface DeploymentResponse {
+        name: string;
+        url: string;
+        created: string;
+        state: string;
+        inspectorUrl: string;
+        meta : {
+            githubCommitMessage: string;
+            githubRepo: string;
+            githubRepoVisibility: string;
+        };
+        target: string;
+        created_at: string;
+        building_at: string;
+        ready_at: string;
+    }
+    
+}

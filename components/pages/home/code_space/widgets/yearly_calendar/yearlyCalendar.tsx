@@ -1,4 +1,4 @@
-import { useCodeSpaceContext } from '../CodeSpaceContext';
+import { useCodeSpaceContext } from '../../CodeSpaceContext';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 export default function YearlyCalendar(): JSX.Element {
