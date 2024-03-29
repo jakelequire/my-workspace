@@ -4,13 +4,29 @@ import { CodespaceApp } from '@/types/types';
 const CodeSpaceContext = createContext<CodespaceApp.CodeSpaceContextType | undefined>(undefined);
 
 function useCodeSpaceProvider() {
-    const [deploymentData, setDeploymentData] = useState<CodespaceApp.DeploymentData[]>([]);
     const [commitHistory, setCommitHistory] = useState<CodespaceApp.GitHubCommitHistoryResponse>();
     const [recentBuild, setRecentBuild] = useState<CodespaceApp.VercelDeploymentResponse[]>([]);
 
     const [filteredCommitHistory, setFilteredCommitHistory] = useState<
         CodespaceApp.CommitHistoryData[]
     >([]);
+
+
+    /* ----------------------------------------------------------- */
+    /* ### VERCEL API { /api/services/vercel/listdeployments } ### */
+    /* ----------------------------------------------------------- */
+    useEffect(() => {
+        const fetchRecentBuilds = async () => {
+            const response = await fetch('/api/services/vercel/listdeployments');
+            const data: CodespaceApp.VercelDeploymentResponse[] = await response.json();
+
+            /*DEBUG*/ console.log('[CodeSpaceContext.tsx] Fetch Recent Builds data: ', data);
+
+            setRecentBuild(data);
+        };
+        fetchRecentBuilds();
+    }, []);
+
 
     const filterCommitHistory = (weeks: CodespaceApp.CommitHistory['weeks']) => {
         const filteredData = weeks.flatMap(week =>
@@ -23,31 +39,6 @@ function useCodeSpaceProvider() {
         setFilteredCommitHistory(filteredData);
     };
 
-    /* ----------------------------------------- */
-    /* ########### VERCEL API { ... } ########## */
-    /* ----------------------------------------- */
-    useEffect(() => {
-        const fetchRecentBuilds = async () => {
-            const response = await fetch('/api/services/vercel');
-            const data: CodespaceApp.VercelDeploymentResponse[] = await response.json();
-            console.log('[CodeSpaceContext.tsx] Fetch Recent Builds data: ', data);
-            setRecentBuild(data);
-        };
-        fetchRecentBuilds();
-    }, []);
-
-    /* ------------------------------------------ */
-    /* ######## FETCH DEPLOYMENT HISTORY ######## */
-    /* ------------------------------------------ */
-    useEffect(() => {
-        const fetchDeployments = async () => {
-            const response = await fetch('/api/services/github/deployments');
-            const data = await response.json();
-            console.log('[CodeSpaceContext.tsx] Fetch Deployments data: ', data);
-            setDeploymentData(data);
-        };
-        fetchDeployments();
-    }, []);
 
     /* ------------------------------------------ */
     /* ########## FETCH COMMIT HISTORY ########## */
@@ -65,8 +56,6 @@ function useCodeSpaceProvider() {
     }, []);
 
     return {
-        deploymentData,
-        setDeploymentData,
         commitHistory,
         setCommitHistory,
         filteredCommitHistory,

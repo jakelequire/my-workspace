@@ -133,8 +133,6 @@ export namespace NotesApp {
 
 export namespace CodespaceApp {
     export interface CodeSpaceContextType {
-        deploymentData: CodespaceApp.DeploymentData[];
-        setDeploymentData: (deploymentData: CodespaceApp.DeploymentData[]) => void;
         commitHistory: CodespaceApp.GitHubCommitHistoryResponse | undefined;
         setCommitHistory: (commitHistory: CodespaceApp.GitHubCommitHistoryResponse) => void;
         filteredCommitHistory: CodespaceApp.CommitHistoryData[];

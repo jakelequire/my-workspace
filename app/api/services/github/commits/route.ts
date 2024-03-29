@@ -1,4 +1,3 @@
-import { GitHubApi } from "@/types/servertypes";
 import { GitHubService } from "@/server/github/githubService";
 
 

@@ -5,8 +5,6 @@ const timestampToDate = (timestamp: number) => {
     return format(new Date(timestamp), "MM/dd/yy hh:mm a");
 }
 
-
-
 export class VercelService {
     API_TOKEN = process.env.NEXT_PUBLIC_VERCEL_API_TOKEN;
     PROJECT_ID = process.env.NEXT_PUBLIC_VERCEL_PROJECT_ID;
