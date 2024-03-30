@@ -3,7 +3,6 @@
 
 
 export namespace GitHubApi {
-
     export interface RepoData {
         id: number;
         node_id: string;
@@ -69,50 +68,6 @@ export namespace GitHubApi {
 
 export namespace VercelApi {
     /* --------------------------------------- */
-    /* ###### Vercel API Response Types ###### */
-    /* --------------------------------------- */
-    export interface VercelApiDeploymentResponse {
-        deployments: {
-            uid: string;
-            name: string;
-            url: string;
-            created: number;
-            source: string;
-            state: string;
-            readyState: string;
-            readySubstate: string;
-            type: string;
-            creator: {};
-            inspectorUrl: string;
-            meta: {
-                githubCommitAuthorName: string;
-                githubCommitMessage: string;
-                githubCommitOrg: string;
-                githubCommitRef: string;
-                githubCommitRepo: string;
-                githubCommitSha: string;
-                githubDeployment: string;
-                githubOrg: string;
-                githubRepo: string;
-                githubRepoOwnerType: string;
-                githubCommitRepoId: string;
-                githubRepoId: string;
-                githubRepoVisibility: string;
-                githubCommitAuthorLogin: string;
-                branchAlias: string;
-            };
-            target: string;
-            aliasError: null;
-            aliasAssigned: number;
-            isRollbackCandidate: boolean;
-            createdAt: number;
-            buildingAt: number;
-            ready: number;
-            projectSettings: {};
-        }[];
-    }
-    
-    /* --------------------------------------- */
     /* ######## Client Response Types ######## */
     /* --------------------------------------- */
     export interface DeploymentResponse {
@@ -131,5 +86,15 @@ export namespace VercelApi {
         building_at: string;
         ready_at: string;
     }
+
+    export interface DeploymentError extends DeploymentResponse {
+        aliasError: {
+            code: string;
+            message: string;
+        };
+        aliasAssigned: number;
+        isRollbackCandidate: boolean;
+    }
+
     
 }
