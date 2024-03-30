@@ -31,7 +31,7 @@ import {
     }
 */
 export function MiniRecentBuild() {
-    const { recentBuild } = useCodeSpaceContext();
+    const { recentBuild, refreshBuildStatus } = useCodeSpaceContext();
 
     const recentBuilds = recentBuild[0];
 
@@ -119,6 +119,11 @@ export function MiniRecentBuild() {
                         <span className='text-sm'>{recentBuilds.meta.githubCommitMessage}</span>
                     </p>
                 </div>
+                <div className='flex self-center'>
+                    <Button variant={'outline'} onClick={refreshBuildStatus}>
+                        Refresh
+                    </Button>
+                </div>
             </div>
         );
     }
@@ -138,7 +143,7 @@ export function MiniRecentBuild() {
                 <IconToDisplay />
             </div>
             <div className='flex flex-col'>
-                <Carousel className='w-full max-w-xs h-full'>
+                <Carousel className='w-full max-w-xs h-full ml-2'>
                     <CarouselContent className='w-full max-w-xs h-full'>
                         {slideItems.map((item, index) => (
                             <CarouselItem key={index} className='w-full h-full'>
@@ -150,9 +155,9 @@ export function MiniRecentBuild() {
                             </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <div className='flex items-center justify-end w-full h-full'>
-                        <CarouselPrevious variant={'outline'} className={'h-7 w-7 left-0 top-[235px]'} />
-                        <CarouselNext variant={'outline'} className={'h-7 w-7 right-0 top-[235px]'} />
+                    <div className='flex items-center justify-center w-full h-full'>
+                        <CarouselPrevious variant={'ghost'} className={'h-7 w-7 right-2 left-0 top-[255px]'} />
+                        <CarouselNext variant={'ghost'} className={'h-7 w-7 right-2 top-[255px]'} />
                     </div>
                 </Carousel>
             </div>

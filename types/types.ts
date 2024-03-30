@@ -138,6 +138,7 @@ export namespace CodespaceApp {
         filteredCommitHistory: CodespaceApp.CommitHistoryData[];
         recentBuild: CodespaceApp.VercelDeploymentResponse[];
         setRecentBuild: (recentBuild: CodespaceApp.VercelDeploymentResponse[]) => void;
+        refreshBuildStatus: () => void;
     }
 
 

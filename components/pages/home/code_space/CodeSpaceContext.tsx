@@ -15,6 +15,11 @@ function useCodeSpaceProvider() {
     /* ----------------------------------------------------------- */
     /* ### VERCEL API { /api/services/vercel/listdeployments } ### */
     /* ----------------------------------------------------------- */
+    const refreshBuildStatus = async () => {
+        const response = await fetch('/api/services/vercel/listdeployments');
+        const data: CodespaceApp.VercelDeploymentResponse[] = await response.json();
+        setRecentBuild(data);
+    }
     useEffect(() => {
         const fetchRecentBuilds = async () => {
             const response = await fetch('/api/services/vercel/listdeployments');
@@ -38,14 +43,14 @@ function useCodeSpaceProvider() {
                 value: day.contributionCount,
             }))
         );
-        console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
+        // console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
         setFilteredCommitHistory(filteredData);
     };
     useEffect(() => {
         const fetchCommits = async () => {
             const response = await fetch('/api/services/github/commits');
             const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
-            console.log('[CodeSpaceContext.tsx] data: ', data);
+            // console.log('[CodeSpaceContext.tsx] data: ', data);
             setCommitHistory(data);
             const commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
             filterCommitHistory(commitHistory);
@@ -59,6 +64,7 @@ function useCodeSpaceProvider() {
         filteredCommitHistory,
         recentBuild,
         setRecentBuild,
+        refreshBuildStatus,
     };
 }
 

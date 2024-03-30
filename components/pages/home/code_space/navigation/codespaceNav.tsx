@@ -1,8 +1,10 @@
 'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import YearlyCalendar from '../widgets/yearly_calendar/yearlyCalendar';
 import SelectRepo from './selectRepo';
+
+import YearlyCalendar from '../widgets/yearly_calendar/yearlyCalendar';
 import { MiniRecentBuild } from '../widgets/recent_builds/recentBuild';
+import Commits from '../widgets/commits/commits';
 
 export default function CodeSpaceNav(): JSX.Element {
 
@@ -17,8 +19,11 @@ export default function CodeSpaceNav(): JSX.Element {
                         </div>
                     </div>
                     <div className='flex flex-row w-full h-[50%] gap-5'>
-                        <div className='flex w-max h-max'>
+                        <div className='flex w-max h-full'>
                             <MiniRecentBuild />
+                        </div>
+                        <div className='flex min-w-[350px] w-max h-full'>
+                            <Commits />
                         </div>
                     </div>
                 </div>

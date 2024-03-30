@@ -65,6 +65,9 @@ export namespace ExternalApi {
 
 
     export namespace GitHub {
+        /**
+         * @untested
+         */
         export interface ListCommits {
             url: string;
             sha: string;
