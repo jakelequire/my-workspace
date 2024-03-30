@@ -42,9 +42,12 @@ export class VercelService {
                 Authorization: "Bearer " + this.API_TOKEN,
             },
         })
-        if(!response.ok) { throw new Error("Error in fetching data.") }
-
         const data: VercelApi.VercelApiDeploymentResponse = await response.json();
+
+        if(data.deployments[0].aliasError !== null) { 
+            return data.deployments[0].aliasError;
+        }
+
         /*DEBUG*/ console.log("\n[VercelService] listDeployments\n", data, '\n')
         const deploymentData = data.deployments.map((deployment) => {
             return {

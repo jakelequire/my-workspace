@@ -50,7 +50,10 @@ export namespace ExternalApi {
                     branchAlias: string;
                 };
                 target: string;
-                aliasError: null;
+                aliasError: {
+                    code: string;
+                    message: string;
+                };
                 aliasAssigned: number;
                 isRollbackCandidate: boolean;
                 createdAt: number;
@@ -59,6 +62,7 @@ export namespace ExternalApi {
                 projectSettings: {};
             }[];
         }
+
     }
 
 
