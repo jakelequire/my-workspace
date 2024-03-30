@@ -15,13 +15,52 @@ export class VercelService {
 
     constructor() {
         // this.PROJECT_ID = projectId;
+        this.responseDeploymentObj = {
+            name: "",
+            url: "",
+            created: "",
+            state: "",
+            inspectorUrl: "",
+            meta: {
+                githubCommitMessage: "",
+                githubRepo: "",
+                githubRepoVisibility: "",
+            },
+            target: "",
+            created_at: "",
+            building_at: "",
+            ready_at: "",
+        };
+
+        this.errorDeploymentObj = {
+            name: "",
+            url: "",
+            created: "",
+            state: "",
+            inspectorUrl: "",
+            aliasError: {
+                code: "",
+                message: "",
+            },
+            aliasAssigned: 0,
+            isRollbackCandidate: false,
+            meta: {
+                githubCommitMessage: "",
+                githubRepo: "",
+                githubRepoVisibility: "",
+            },
+            target: "",
+            created_at: "",
+            building_at: "",
+            ready_at: "",
+        };
     }
 
 
     /**
      * @see https://vercel.com/docs/rest-api/endpoints/deployments#list-deployments-response
      */
-    public async listDeployments(): Promise<> {
+    public async listDeployments(): Promise<VercelApi.DeploymentResponse[] | VercelApi.DeploymentError> {
         const response = await fetch(`https://api.vercel.com/v6/deployments?projectId=${this.PROJECT_ID}`, {
             method: "get",
             headers: {
@@ -29,18 +68,21 @@ export class VercelService {
             },
         })
         const data: ExternalApi.Vercel.ListDeploymentResponse = await response.json();
+        if(!response.ok) { throw new Error("Error in fetching data.") }
 
-        if(data.deployments[0].aliasError !== null) { 
-            this.errorDeploymentObj = {
+        if(data.deployments[0].aliasError) { 
+            return this.errorDeploymentObj = {
                 name: data.deployments[0].name,
                 url: data.deployments[0].url,
                 created: timestampToDate(data.deployments[0].created),
                 state: data.deployments[0].state,
                 inspectorUrl: data.deployments[0].inspectorUrl,
                 aliasError: {
-                    code: data.deployments[0].aliasError.code,
-                    message: data.deployments[0].aliasError.message
+                    code: data.deployments[0].aliasError.code || "",
+                    message: data.deployments[0].aliasError.message || "",
                 },
+                aliasAssigned: data.deployments[0].aliasAssigned,
+                isRollbackCandidate: data.deployments[0].isRollbackCandidate,
                 meta: {
                     githubCommitMessage: data.deployments[0].meta.githubCommitMessage,
                     githubRepo: data.deployments[0].meta.githubRepo,
@@ -53,7 +95,6 @@ export class VercelService {
             }
         }
 
-        /*DEBUG*/ console.log("\n[VercelService] listDeployments\n", data, '\n')
         const deploymentData = data.deployments.map((deployment) => {
             return {
                 name: deployment.name,
@@ -72,10 +113,8 @@ export class VercelService {
                 ready_at: timestampToDate(deployment.ready),
             }
         })
-
         this.responseDeploymentObj = deploymentData[0];
         
-        console.log("\n[VercelService] listDeployments\n", this.responseDeploymentObj, '\n')
         return deploymentData;
     }
 
