@@ -52,11 +52,11 @@ export function MiniRecentBuild() {
         return (
             <>
                 <p className='flex flex-col mb-8'>
-                    <span className='text-xl font-semibold self-center mb-2'>Project</span>
+                    <span className='text-xl font-semibold self-center mb-2 text-gray-400'>Project</span>
                     <span className='text-base self-center'>
                         {recentBuilds.meta.githubRepo}
                         {' '}
-                        <span className='text-sm italic text-gray-400'>
+                        <span className='text-xs italic text-gray-400'>
                             ({recentBuilds.meta.githubRepoVisibility})
                         </span>
                     </span>
