@@ -3,7 +3,6 @@ import { CheckIcon } from '@radix-ui/react-icons';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 
-import { CarouselApi } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
 import {
     Carousel,

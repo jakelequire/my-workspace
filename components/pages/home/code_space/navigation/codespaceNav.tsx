@@ -5,9 +5,10 @@ import SelectRepo from './selectRepo';
 import YearlyCalendar from '../widgets/yearly_calendar/yearlyCalendar';
 import { MiniRecentBuild } from '../widgets/recent_builds/recentBuild';
 import Commits from '../widgets/commits/commits';
+import ApiUsage from '../widgets/api_usage/apiUsage';
+import ExampleWidget from '../widgets/example_widget/exampleWidget';
 
 export default function CodeSpaceNav(): JSX.Element {
-
 
     const OverviewContainer = () => {
         return (
@@ -19,11 +20,17 @@ export default function CodeSpaceNav(): JSX.Element {
                         </div>
                     </div>
                     <div className='flex flex-row w-full h-[50%] gap-5'>
-                        <div className='flex w-max h-full'>
+                        <div className='flex w-[25%] h-full'>
                             <MiniRecentBuild />
                         </div>
-                        <div className='flex min-w-[350px] w-max h-full'>
+                        <div className='flex w-[25%] h-full'>
                             <Commits />
+                        </div>
+                        <div className='flex w-[25%] h-full'>
+                            <ApiUsage />
+                        </div>
+                        <div className='flex w-[25%] h-full'>
+                            <ExampleWidget />
                         </div>
                     </div>
                 </div>
@@ -33,14 +40,15 @@ export default function CodeSpaceNav(): JSX.Element {
 
     const DeploymentContainer = () => {
         return (
-            <div className='h-full w-full border rounded-lg'>
+            <div className='h-full w-full'>
                 <div className='flex flex-col w-max h-max p-4'>
-                    <MiniRecentBuild />
+                    <>
+                    {/* TODO */}
+                    </>
                 </div>
             </div>
         )
     }
-
 
     return (
         <Tabs defaultValue='overview' className='w-[100%] h-[90%]'>
