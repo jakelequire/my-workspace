@@ -12,24 +12,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from '@/components/ui/carousel';
-/*
-    export interface VercelDeploymentResponse {
-        !name: string;
-        !url: string;
-        !created: string;
-        !state: string;
-        !inspectorUrl: string;
-        meta : {
-            !githubCommitMessage: string;
-            !githubRepo: string;
-            !githubRepoVisibility: string;
-        };
-        !target: string;
-        !created_at: string;
-        !building_at: string;
-        ready_at: string;
-    }
-*/
+
 export function MiniRecentBuild() {
     const { recentBuild, refreshBuildStatus } = useCodeSpaceContext();
 
