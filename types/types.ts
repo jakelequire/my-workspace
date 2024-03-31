@@ -139,6 +139,7 @@ export namespace CodespaceApp {
         recentBuild: CodespaceApp.VercelDeploymentResponse[];
         setRecentBuild: (recentBuild: CodespaceApp.VercelDeploymentResponse[]) => void;
         refreshBuildStatus: () => void;
+        contributionCount: CodespaceApp.ContributionCount;
     }
 
 
@@ -206,5 +207,14 @@ export namespace CodespaceApp {
     export interface CommitHistoryData {
         day: string;
         value: number;
+    }
+
+    export interface ContributionCount {
+        total: number;
+        year: {
+            '2022': number;
+            '2023': number;
+            '2024': number;
+        };
     }
 }

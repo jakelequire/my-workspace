@@ -6,6 +6,14 @@ const CodeSpaceContext = createContext<CodespaceApp.CodeSpaceContextType | undef
 function useCodeSpaceProvider() {
     const [commitHistory, setCommitHistory] = useState<CodespaceApp.GitHubCommitHistoryResponse>();
     const [recentBuild, setRecentBuild] = useState<CodespaceApp.VercelDeploymentResponse[]>([]);
+    const [contributionCount, setContributionCount] = useState<CodespaceApp.ContributionCount>({
+        total: 0,
+        year: {
+            '2022': 0,
+            '2023': 0,
+            '2024': 0,
+        },
+    });
 
     const [filteredCommitHistory, setFilteredCommitHistory] = useState<
         CodespaceApp.CommitHistoryData[]
@@ -58,6 +66,19 @@ function useCodeSpaceProvider() {
         fetchCommits();
     }, []);
 
+
+    /* ------------------------------------------ */
+    /* ########## FETCH COMMIT HISTORY ########## */
+    /* ------------------------------------------ */
+    const fetchContributionCount = async () => {
+        const response = await fetch('/api/services/github/contributions');
+        const data: CodespaceApp.ContributionCount = await response.json();
+        setContributionCount(data);
+    };
+    useEffect(() => {
+        fetchContributionCount();
+    },[])
+
     return {
         commitHistory,
         setCommitHistory,
@@ -65,6 +86,7 @@ function useCodeSpaceProvider() {
         recentBuild,
         setRecentBuild,
         refreshBuildStatus,
+        contributionCount,
     };
 }
 
