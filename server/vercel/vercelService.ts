@@ -71,28 +71,31 @@ export class VercelService {
         if(!response.ok) { throw new Error("Error in fetching data.") }
 
         if(data.deployments[0].aliasError) { 
-            return this.errorDeploymentObj = {
-                name: data.deployments[0].name,
-                url: data.deployments[0].url,
-                created: timestampToDate(data.deployments[0].created),
-                state: data.deployments[0].state,
-                inspectorUrl: data.deployments[0].inspectorUrl,
+            const deployments = data.deployments[0];
+            this.errorDeploymentObj = {
+                name: deployments.name,
+                url: deployments.url,
+                created: timestampToDate(deployments.created),
+                state: deployments.state,
+                inspectorUrl: deployments.inspectorUrl,
                 aliasError: {
-                    code: data.deployments[0].aliasError.code || "",
-                    message: data.deployments[0].aliasError.message || "",
+                    code: deployments.aliasError.code || "",
+                    message: deployments.aliasError.message || "",
                 },
-                aliasAssigned: data.deployments[0].aliasAssigned,
-                isRollbackCandidate: data.deployments[0].isRollbackCandidate,
+                aliasAssigned: deployments.aliasAssigned,
+                isRollbackCandidate: deployments.isRollbackCandidate,
                 meta: {
-                    githubCommitMessage: data.deployments[0].meta.githubCommitMessage,
-                    githubRepo: data.deployments[0].meta.githubRepo,
-                    githubRepoVisibility: data.deployments[0].meta.githubRepoVisibility,
+                    githubCommitMessage: deployments.meta.githubCommitMessage,
+                    githubRepo: deployments.meta.githubRepo,
+                    githubRepoVisibility: deployments.meta.githubRepoVisibility,
                 },
-                target: data.deployments[0].target,
-                created_at: timestampToDate(data.deployments[0].createdAt),
-                building_at: timestampToDate(data.deployments[0].buildingAt),
-                ready_at: timestampToDate(data.deployments[0].ready),
+                target: deployments.target,
+                created_at: timestampToDate(deployments.createdAt),
+                building_at: timestampToDate(deployments.buildingAt),
+                ready_at: timestampToDate(deployments.ready),
             }
+
+            return this.errorDeploymentObj;
         }
 
         const deploymentData = data.deployments.map((deployment) => {

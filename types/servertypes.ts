@@ -62,6 +62,15 @@ export namespace GitHubApi {
 
     export type ClientResponse = DeploymentResponse[];
 
+
+    export interface ContributionCount {
+        total: number;
+        year: {
+            '2022': number;
+            '2023': number;
+            '2024': number;
+        };
+    }
 }
 
 

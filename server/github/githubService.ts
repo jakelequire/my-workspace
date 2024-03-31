@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Octokit } from 'octokit';
 import { GitHubApi } from '@/types/servertypes';
+import { ExternalApi } from '@/types/apiTypes';
 
 const GITHUB_AUTH_TOKEN = process.env.NEXT_PUBLIC_GITHUB_KEY;
 
@@ -10,78 +11,89 @@ const octokit = new Octokit({
 
 const QUERY = `
 query($userName:String!) {
-  user(login: $userName){
-    contributionsCollection(from: "2024-01-01T00:00:00Z") {
-      contributionCalendar {
-        totalContributions
-        weeks {
-          contributionDays {
-            color
-            contributionCount
-            date
-            weekday
-          }
-          firstDay
+    user(login: $userName){
+        contributionsCollection(from: "2024-01-01T00:00:00Z") {
+            contributionCalendar {
+                totalContributions
+                weeks {
+                    contributionDays {
+                        color
+                        contributionCount
+                        date
+                        weekday
+                    }
+                    firstDay
+                }
+            }
         }
-      }
     }
-  }
 }
 `;
 
-/*
-The ContributionsCollection object provides total contributions for each contribution type between two dates.
-
-Note: from and to can be a maximum of one year apart, for a longer timeframe make multiple requests.
-
-query ContributionsView($username: String!, $from: DateTime!, $to: DateTime!) {
-    user(login: $username) {
-    contributionsCollection(from: $from, to: $to) {
-        totalCommitContributions
-        totalIssueContributions
-        totalPullRequestContributions
-        totalPullRequestReviewContributions
-    }
-}
-*/
 const DATE_RANGES = [
+    // 2022
     {
-        from: '2022-10-01T00:00:00Z',
+        from: '2022-08-01T00:00:00Z',
         to: '2022-12-31T00:00:00Z',
     },
+    // 2023
     {
         from: '2023-01-01T00:00:00Z',
         to: '2023-12-31T00:00:00Z',
     },
+    // 2024
     {
         from: '2024-01-01T00:00:00Z',
         to: '2024-12-31T00:00:00Z',
     },
-]
+];
 
 const TOTAL_CONTRIBUTIONS_QUERY = `
-    query($userName:String!) {
-        user(login: $userName){
-            contributionsCollection(from: $from, to: $to) {
-                totalCommitContributions
-                totalIssueContributions
-                totalPullRequestContributions
-                totalPullRequestReviewContributions
+query ($userName: String!, $from: DateTime!, $to: DateTime!) {
+    user(login: $userName) {
+        email
+        createdAt
+        contributionsCollection(from: $from , to: $to) {
+            contributionCalendar {
+                totalContributions
+                weeks {
+                    contributionDays {
+                        weekday
+                        date 
+                        contributionCount 
+                        color
+                    }
+                }
+                months  {
+                    name
+                    year
+                    firstDay 
+                    totalWeeks 
+                }
             }
+        }
     }
+}
 `;
 
 export class GitHubService {
     octokit = octokit;
     repoitories: GitHubApi.RepoData[];
     commitHistory: [];
-    contribution_count: number;
+    contribution_count: GitHubApi.ContributionCount;
 
     constructor() {
         this.octokit = octokit;
         this.repoitories = [];
         this.commitHistory = [];
-        this.contribution_count = 0;
+        this.contribution_count = {
+            total: 0,
+            year: {
+                '2022': 0,
+                '2023': 0,
+                '2024': 0,
+            },
+        };
     }
 
     /**
@@ -103,7 +115,7 @@ export class GitHubService {
         const query = QUERY;
         const variables = `
         {
-            "userName": "jakelequire"
+            "userName": "jakelequire",
         }
         `;
         const body = {
@@ -118,46 +130,65 @@ export class GitHubService {
             body: JSON.stringify(body),
         });
         const response = await res.json();
+        if (!response.ok) {
+            throw new Error('Error in fetching data.');
+        }
         const commitHistory = (this.commitHistory =
             response.data.user.contributionsCollection.contributionCalendar.totalContributions);
         console.log('\ncommitHistory', commitHistory, '\n');
         return response;
     }
 
-    async totalContributions() {
+    /**
+     * @description Fetches the total contributions made by the user
+     */
+    public async totalContributions(): Promise<GitHubApi.ContributionCount> {
         const TOKEN = GITHUB_AUTH_TOKEN;
         const query = TOTAL_CONTRIBUTIONS_QUERY;
-        const date_variables = DATE_RANGES;
 
-        for(let i = 0; i < date_variables.length; i++) {
-            const variables = `
-            {
-                "userName": "jakelequire"
-                "from": "${date_variables[i].from}"
-                "to": "${date_variables[i].to}"
+        try {
+            for(let i = 0; i < DATE_RANGES.length; i++) {
+                const variables = `
+                    {
+                        "userName": "jakelequire",
+                        "from": "${DATE_RANGES[i].from}",
+                        "to": "${DATE_RANGES[i].to}"
+                    }
+                `;
+
+                const body = {
+                    query,
+                    variables,
+                };
+
+                const res = await fetch('https://api.github.com/graphql', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${TOKEN}`,
+                    },
+                    body: JSON.stringify(body),
+                });
+
+                const response: ExternalApi.GitHub.ContributionResponse = await res.json();
+                const contributionNum =
+                response.data.user.contributionsCollection.contributionCalendar.totalContributions;
+                /*DEBUG*/ console.log('[GitHubService] totalContributions response', contributionNum);
+                this.contribution_count.year = {
+                    ...this.contribution_count.year,
+                    [`${2022 + i}`]: contributionNum,
+                };
             }
-            `;
-            const body = {
-                query,
-                variables,
-            };
-            const res = await fetch('https://api.github.com/graphql', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${TOKEN}`,
-                },
-                body: JSON.stringify(body),
-            });
 
-            const response = await res.json();
-            const totalContributions =
-                response.data.user.contributionsCollection.totalCommitContributions;
-            console.log('\ntotalContributions', totalContributions, '\n');
-            // update total contribution count
-            this.contribution_count += totalContributions.length;
+            this.contribution_count.total = 
+                this.contribution_count.year['2022'] +
+                this.contribution_count.year['2023'] +
+                this.contribution_count.year['2024'];
+
+            return this.contribution_count;
+
+        } catch (error) {
+            throw new Error(`Error in fetching data: ${error}`);
         }
-
-        return this.contribution_count;
     }
 
     /* -------------------------------------------------------------------------------- */

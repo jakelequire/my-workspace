@@ -149,6 +149,40 @@ export namespace ExternalApi {
             }>
         }
 
+        export interface TotalContributions {
+            data: {
+                user: {
+                    contributionsCollection: {
+                        totalCommitContributions: number;
+                        totalIssueContributions: number;
+                        totalPullRequestContributions: number;
+                        totalPullRequestReviewContributions: number;
+                    };
+                };
+            };
+        }
+
+        export interface ContributionResponse {
+            data: {
+                user: {
+                    contributionsCollection: {
+                        contributionCalendar: {
+                            totalContributions: number;
+                            weeks: Array<{
+                                contributionDays: Array<{
+                                    color: string;
+                                    contributionCount: number;
+                                    date: string;
+                                    weekday: number;
+                                }>;
+                                firstDay: string;
+                            }>;
+                        };
+                    };
+                };
+            };
+        }
+
     }
 
 
