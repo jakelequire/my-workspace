@@ -1,10 +1,4 @@
-
-
-
-
-
 export namespace ExternalApi {
-
     export namespace Vercel {
         /**
          * @see https://vercel.com/docs/rest-api/endpoints/deployments#list-deployments-response
@@ -18,7 +12,7 @@ export namespace ExternalApi {
          *      method: "get"
          *      })
          * ```
-        */
+         */
         export interface ListDeploymentResponse {
             deployments: {
                 uid: string;
@@ -62,11 +56,7 @@ export namespace ExternalApi {
                 projectSettings: {};
             }[];
         }
-
     }
-
-
-
 
     export namespace GitHub {
         /**
@@ -100,8 +90,8 @@ export namespace ExternalApi {
                     verified: boolean;
                     reason: string;
                     signature: any;
-                    payload: any
-                }
+                    payload: any;
+                };
             };
             author: {
                 login: string;
@@ -146,23 +136,10 @@ export namespace ExternalApi {
             parents: Array<{
                 url: string;
                 sha: string;
-            }>
+            }>;
         }
-
-        export interface TotalContributions {
-            data: {
-                user: {
-                    contributionsCollection: {
-                        totalCommitContributions: number;
-                        totalIssueContributions: number;
-                        totalPullRequestContributions: number;
-                        totalPullRequestReviewContributions: number;
-                    };
-                };
-            };
-        }
-
-        export interface ContributionResponse {
+        
+        export interface CommitsData {
             data: {
                 user: {
                     contributionsCollection: {
@@ -184,6 +161,4 @@ export namespace ExternalApi {
         }
 
     }
-
-
 }

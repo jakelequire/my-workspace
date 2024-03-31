@@ -39,29 +39,19 @@ export namespace GitHubApi {
         target_url: string;
     }
 
-    export interface GitHubCommitHistoryResponse {
-        data: {
-            user: {
-                contributionsCollection: {
-                    contributionCalendar: {
-                        totalContributions: number;
-                        weeks: Array<{
-                            contributionDays: Array<{
-                                color: string;
-                                contributionCount: number;
-                                date: string;
-                                weekday: number;
-                            }>;
-                            firstDay: string;
-                        }>;
-                    };
-                };
-            };
-        };
-    }
-
     export type ClientResponse = DeploymentResponse[];
 
+    export interface CommitHistory {
+        totalContributions: number;
+        weeks: {
+            totalContributions: number;
+            contributionDays: {
+                contributionCount: number;
+                date: string;
+            }[];
+            firstDay: string;
+        }[];
+    }
 
     export interface ContributionCount {
         total: number;

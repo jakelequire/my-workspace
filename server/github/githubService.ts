@@ -79,13 +79,13 @@ query ($userName: String!, $from: DateTime!, $to: DateTime!) {
 export class GitHubService {
     octokit = octokit;
     repoitories: GitHubApi.RepoData[];
-    commitHistory: [];
+    commitHistory: GitHubApi.CommitHistory;
     contribution_count: GitHubApi.ContributionCount;
 
     constructor() {
         this.octokit = octokit;
         this.repoitories = [];
-        this.commitHistory = [];
+        this.commitHistory = {} as GitHubApi.CommitHistory;
         this.contribution_count = {
             total: 0,
             year: {
@@ -115,7 +115,7 @@ export class GitHubService {
         const query = QUERY;
         const variables = `
         {
-            "userName": "jakelequire",
+            "userName": "jakelequire"
         }
         `;
         const body = {
@@ -129,12 +129,22 @@ export class GitHubService {
             },
             body: JSON.stringify(body),
         });
-        const response = await res.json();
-        if (!response.ok) {
-            throw new Error('Error in fetching data.');
-        }
-        const commitHistory = (this.commitHistory =
-            response.data.user.contributionsCollection.contributionCalendar.totalContributions);
+
+        const response: ExternalApi.GitHub.CommitsData = await res.json();
+        console.log('[GitHubService] viewCommitsData response', response);
+
+        const clientResponse = {
+            totalContributions:
+                response.data.user.contributionsCollection.contributionCalendar.totalContributions,
+            weeks: response.data.user.contributionsCollection.contributionCalendar.weeks,
+        };
+
+        const commitHistory = clientResponse.weeks.flatMap((week) => {
+            return week.contributionDays.map((day) => ({
+                day: day.date,
+                value: day.contributionCount,
+            }));
+        });
         console.log('\ncommitHistory', commitHistory, '\n');
         return response;
     }
@@ -147,7 +157,7 @@ export class GitHubService {
         const query = TOTAL_CONTRIBUTIONS_QUERY;
 
         try {
-            for(let i = 0; i < DATE_RANGES.length; i++) {
+            for (let i = 0; i < DATE_RANGES.length; i++) {
                 const variables = `
                     {
                         "userName": "jakelequire",
@@ -169,23 +179,26 @@ export class GitHubService {
                     body: JSON.stringify(body),
                 });
 
-                const response: ExternalApi.GitHub.ContributionResponse = await res.json();
+                const response: ExternalApi.GitHub.CommitsData = await res.json();
                 const contributionNum =
-                response.data.user.contributionsCollection.contributionCalendar.totalContributions;
-                /*DEBUG*/ console.log('[GitHubService] totalContributions response', contributionNum);
+                    response.data.user.contributionsCollection.contributionCalendar
+                        .totalContributions;
+                /*DEBUG*/ console.log(
+                    '[GitHubService] totalContributions response',
+                    contributionNum
+                );
                 this.contribution_count.year = {
                     ...this.contribution_count.year,
                     [`${2022 + i}`]: contributionNum,
                 };
             }
 
-            this.contribution_count.total = 
+            this.contribution_count.total =
                 this.contribution_count.year['2022'] +
                 this.contribution_count.year['2023'] +
                 this.contribution_count.year['2024'];
 
             return this.contribution_count;
-
         } catch (error) {
             throw new Error(`Error in fetching data: ${error}`);
         }
