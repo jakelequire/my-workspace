@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/analytics": "^0.10.2",
     "@hookform/resolvers": "^3.3.4",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@nivo/calendar": "^0.85.1",

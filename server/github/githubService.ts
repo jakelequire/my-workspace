@@ -131,7 +131,6 @@ export class GitHubService {
         });
 
         const response: ExternalApi.GitHub.CommitsData = await res.json();
-        console.log('[GitHubService] viewCommitsData response', response);
 
         const clientResponse = {
             totalContributions:
@@ -145,7 +144,6 @@ export class GitHubService {
                 value: day.contributionCount,
             }));
         });
-        console.log('\ncommitHistory', commitHistory, '\n');
         return response;
     }
 
@@ -181,12 +179,8 @@ export class GitHubService {
 
                 const response: ExternalApi.GitHub.CommitsData = await res.json();
                 const contributionNum =
-                    response.data.user.contributionsCollection.contributionCalendar
-                        .totalContributions;
-                /*DEBUG*/ console.log(
-                    '[GitHubService] totalContributions response',
-                    contributionNum
-                );
+                    response.data.user.contributionsCollection.contributionCalendar.totalContributions;
+
                 this.contribution_count.year = {
                     ...this.contribution_count.year,
                     [`${2022 + i}`]: contributionNum,
