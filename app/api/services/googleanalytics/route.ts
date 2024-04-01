@@ -5,6 +5,6 @@ export async function GET(request: Request) {
     // const data = await googleAnalyticsService.requestData()
 
 
-    return new Response(JSON.stringify(data))
+    return new Response(JSON.stringify("Hello world!"))
 }
 
