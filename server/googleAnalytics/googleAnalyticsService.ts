@@ -1,5 +1,5 @@
 
-import serviceaccount from '@/env/serviceaccount.json'
+// import serviceaccount from '@/env/serviceaccount.json'
 
 const FIREBASE_APP_ID = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
 const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
