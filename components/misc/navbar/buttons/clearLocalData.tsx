@@ -1,5 +1,6 @@
 'use client';
 import localForage from '@/localForageConfig';
+import { Button } from '@/components/ui/button';
 
 type Props = {
     className: any
@@ -15,8 +16,8 @@ export default function ClearLocalData({ className }: Props): JSX.Element {
     }
 
     return (
-        <a className={`h-full w-full ${className}`} onClick={clearLocalForage}>
+        <Button className={`h-full w-full ${className}`} onClick={clearLocalForage}>
             Clear Local
-        </a>
+        </Button>
     )
 }

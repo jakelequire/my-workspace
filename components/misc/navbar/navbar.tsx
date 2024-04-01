@@ -219,7 +219,7 @@ export default function Navbar(): JSX.Element {
                     </NavigationMenu>
                 ) : null}
             </div>
-            <div className='flex justify-end flex-initial w-24 '>
+            <div className='flex justify-end flex-initial w-32 '>
                 {(isLoggedIn ? <ClearLocalData className={navigationMenuTriggerStyle()}/> : null)}
                 {(isLoggedIn ? <LoginButton /> : null)}
             </div>
