@@ -1,7 +1,11 @@
 'use client';
 import localForage from '@/localForageConfig';
 
-export default function ClearLocalData(): JSX.Element {
+type Props = {
+    className: any
+}
+
+export default function ClearLocalData({ className }: Props): JSX.Element {
     const clearLocalForage = () => {
         // remove the item from localForage
         const clearLocal = async () => {
@@ -11,7 +15,7 @@ export default function ClearLocalData(): JSX.Element {
     }
 
     return (
-        <a className='h-full w-full' onClick={clearLocalForage}>
+        <a className={`h-full w-full ${className}`} onClick={clearLocalForage}>
             Clear Local
         </a>
     )

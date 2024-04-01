@@ -220,8 +220,8 @@ export default function Navbar(): JSX.Element {
                 ) : null}
             </div>
             <div className='flex justify-end flex-initial w-24 '>
+                {(isLoggedIn ? <ClearLocalData className={navigationMenuTriggerStyle()}/> : null)}
                 {(isLoggedIn ? <LoginButton /> : null)}
-                {(isLoggedIn ? <ClearLocalData /> : null)}
             </div>
         </div>
     );
