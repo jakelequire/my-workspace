@@ -142,12 +142,13 @@ export namespace CodespaceApp {
         contributionCount: CodespaceApp.ContributionCount;
     }
 
+    export type DeploymentStates = "BUILDING" | "ERROR" | "INITIALIZING" | "QUEUED" | "READY" | "CANCELED" | ""
 
     export interface VercelDeploymentResponse {
         name: string;
         url: string;
         created: string;
-        state: string;
+        state: DeploymentStates;
         inspectorUrl: string;
         meta : {
             githubCommitMessage: string;

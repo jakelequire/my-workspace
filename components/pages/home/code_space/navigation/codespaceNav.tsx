@@ -8,6 +8,9 @@ import Commits from '../widgets/commits/commits';
 import ApiUsage from '../widgets/api_usage/apiUsage';
 import ExampleWidget from '../widgets/example_widget/exampleWidget';
 
+import Builds from '../tabs/builds/builds';
+import Deployments from '../tabs/deployments/deployments';
+
 export default function CodeSpaceNav(): JSX.Element {
 
     const OverviewContainer = () => {
@@ -38,17 +41,6 @@ export default function CodeSpaceNav(): JSX.Element {
         )
     }
 
-    const DeploymentContainer = () => {
-        return (
-            <div className='h-full w-full'>
-                <div className='flex flex-col w-max h-max p-4'>
-                    <>
-                    {/* TODO */}
-                    </>
-                </div>
-            </div>
-        )
-    }
 
     return (
         <Tabs defaultValue='overview' className='w-[100%] h-[90%]'>
@@ -56,6 +48,7 @@ export default function CodeSpaceNav(): JSX.Element {
                 <TabsList>
                     <TabsTrigger value='overview'>Overview</TabsTrigger>
                     <TabsTrigger value='deployments'>Deployments</TabsTrigger>
+                    <TabsTrigger value='builds'>Builds</TabsTrigger>
                 </TabsList>
                 <SelectRepo />
             </div>
@@ -63,7 +56,10 @@ export default function CodeSpaceNav(): JSX.Element {
                 <OverviewContainer />
             </TabsContent>
             <TabsContent value='deployments' className='h-full'>
-                <DeploymentContainer />
+                <Deployments />
+            </TabsContent>
+            <TabsContent value='builds' className='h-full'>
+                <Builds />
             </TabsContent>
         </Tabs>
     );
