@@ -208,6 +208,7 @@ export function RecentDeployments() {
     const table = useReactTable({
         //@ts-ignore
         data: newRecentBuild,
+        //@ts-ignore
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
