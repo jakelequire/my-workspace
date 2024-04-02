@@ -29,25 +29,6 @@ import { CheckIcon } from '@radix-ui/react-icons';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 
-import styles from './recentDeployments.module.css';
-/*
-    export interface VercelDeploymentResponse {
-        name: string;
-        url: string;
-        created: string;
-        state: string;
-        inspectorUrl: string;
-        meta : {
-            githubCommitMessage: string;
-            githubRepo: string;
-            githubRepoVisibility: string;
-        };
-        target: string;
-        created_at: string;
-        building_at: string;
-        ready_at: string;
-    }
-*/
 
 interface RecentDeployments {
     name: string;
@@ -68,6 +49,7 @@ export const columns: ColumnDef<RecentDeployments>[] = [
     {
         accessorKey: 'state',
         header: '',
+        enableHiding: false,
         cell: ({ row }) => {
             const state: string = row.getValue('state');
             const IconToDisplay = () => {
@@ -91,14 +73,15 @@ export const columns: ColumnDef<RecentDeployments>[] = [
     {
         accessorKey: 'name',
         header: '',
+        enableHiding: false,
         cell: ({ row }) => {
             const name: string = row.getValue('name');
             const createdAt: string = row.getValue('created');
 
             return (
-                <div className='capitalize text-xs h-10 px-4'>
-                    <div className='flex flex-col'>
-                        <div>{name}</div>
+                <div className='capitalize text-xs h-12 px-4 min-w-24 flex justify-center'>
+                    <div className='flex flex-col justify-center'>
+                        <div className='text-sm'>{name}</div>
                         <div className='text-gray-400 text-xs'>{createdAt}</div>
                     </div>
                 </div>
@@ -106,21 +89,35 @@ export const columns: ColumnDef<RecentDeployments>[] = [
         },
     },
     {
+        accessorKey: 'created',
+        id: 'created',
+        enableHiding: true,
+        cell: ({ row }) => <></>,
+    },
+    {
         accessorKey: 'githubCommitMessage',
         header: '',
+        enableHiding: false,
         cell: ({ row }) => {
             const commit: string = row.getValue('githubCommitMessage');
 
             return (
-                <div className='capitalize h-10 px-4 text-xs max-w-52 overflow-ellipsis line-clamp-2'>
-                    {commit}
+                <div className='capitalize h-12 px-4 text-xs max-w-60 overflow-ellipsis line-clamp-2 text-start flex'>
+                    <p className='self-center'>{commit}</p>
                 </div>
             );
         },
     },
     {
+        accessorKey: 'inspectorUrl',
+        id: 'inspectorUrl',
+        enableHiding: true,
+        cell: ({ row }) => <></>,
+    },
+    {
         accessorKey: 'url',
         header: '',
+        enableHiding: false,
         cell: ({ row }) => {
             const url: string = row.getValue('url');
             const inspectorUrl: string = row.getValue('inspectorUrl');
@@ -130,51 +127,55 @@ export const columns: ColumnDef<RecentDeployments>[] = [
                 switch (state) {
                     case 'READY':
                         return (
-                            <span className='flex flex-col justify-center text-end gap-1'>
-                                <a
-                                    href={url}
-                                    target='_blank'
-                                    rel='noreferrer'
-                                    className='h-full w-full self-center hover:underline-offset-2 hover:underline '>
-                                    Live Site
-                                </a>
-                                <a
-                                    href={inspectorUrl}
-                                    target='_blank'
-                                    rel='noreferrer'
-                                    className='h-full w-full self-center hover:underline-offset-2 hover:underline '>
-                                    View Build
-                                </a>
+                            <span className='flex flex-row justify-center text-end gap-1'>
+                                <Button size='sm' className='self-center bg-emerald-300'>
+                                    <a
+                                        href={url}
+                                        target='_blank'
+                                        rel='noreferrer'
+                                        className='text-xs'>
+                                        Live Site
+                                    </a>
+                                </Button>
+                                <Button variant={'outline'} size='sm' className='self-center'>
+                                    <a
+                                        href={inspectorUrl}
+                                        target='_blank'
+                                        rel='noreferrer'
+                                        className='text-xs'>
+                                        Inspect
+                                    </a>
+                                </Button>
                             </span>
                         );
                     default:
                         return (
-                            <span className='flex flex-col justify-center text-center gap-1'>
-                                <p className='h-full w-full self-center text-red-500 font-semibold'>
+                            <span className='flex flex-row justify-center text-center gap-1'>
+                                <Button size='sm' variant={'destructive'} className='self-center before:text-xs cursor-default'>
                                     Unavailable
-                                </p>
-                                <a
-                                    href={inspectorUrl}
-                                    target='_blank'
-                                    rel='noreferrer'
-                                    className='h-full w-full self-center hover:underline-offset-2 hover:underline '>
-                                    View Build
-                                </a>
+                                </Button>
+                                <Button variant={'outline'} size='sm' className='self-center'>
+                                    <a
+                                        href={inspectorUrl}
+                                        target='_blank'
+                                        rel='noreferrer'
+                                        className='text-xs'>
+                                        Inspect
+                                    </a>
+                                </Button>
                             </span>
                         );
                 }
             };
 
             return (
-                <div className='capitalize text-xs h-10 px-4'>
+                <div className='capitalize text-xs w-full h-12 px-4 flex justify-end'>
                     <LinkToDisplay />
                 </div>
             );
         },
     },
 ];
-
-
 
 export function RecentDeployments() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -183,7 +184,7 @@ export function RecentDeployments() {
     const [rowSelection, setRowSelection] = React.useState({});
     const [tablePagination, setTablePagination] = React.useState({
         pageIndex: 0, //initial page index
-        pageSize: 9, //default page size
+        pageSize: 8, //default page size
     });
 
     const { recentBuild } = useCodeSpaceContext();
@@ -192,7 +193,7 @@ export function RecentDeployments() {
         return {
             name: build.name,
             url: build.url,
-            created: format(new Date(build.created_at), 'MMM dd, yyyy'),
+            created: format(new Date(build.created_at), 'MM/dd/yy'),
             state: build.state,
             inspectorUrl: build.url,
             githubCommitMessage: build.meta.githubCommitMessage,
