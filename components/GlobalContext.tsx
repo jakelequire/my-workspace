@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { GlobalState, JobsApp, Todo } from '@/types/types';
 import { synchronizeDb } from '@/utils/dbSync';
-import { InitDb } from '@/utils/initDb';
+// import { InitDb } from '@/utils/initDb';
 import localForage from '@/localForageConfig';
 
 const GlobalContext = createContext<GlobalState.GlobalContextType | undefined>(undefined);
