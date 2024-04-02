@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { getAuth, signOut } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { useRouter } from 'next/navigation';
+import ClearLocalData from './buttons/clearLocalData'
 
 const auth = getAuth(firebase_app);
 
@@ -218,7 +219,8 @@ export default function Navbar(): JSX.Element {
                     </NavigationMenu>
                 ) : null}
             </div>
-            <div className='flex justify-end flex-initial w-24 '>
+            <div className='flex justify-end flex-initial w-32 '>
+                {(isLoggedIn ? <ClearLocalData className={navigationMenuTriggerStyle()}/> : null)}
                 {(isLoggedIn ? <LoginButton /> : null)}
             </div>
         </div>
