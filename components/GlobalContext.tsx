@@ -3,7 +3,7 @@
 import React, { useEffect, createContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
-import { GlobalState, JobsApp, Todo } from '@/types/types';
+import { GlobalState, JobsApp, Todo, CodespaceApp } from '@/types/types';
 import { synchronizeDb } from '@/utils/dbSync';
 // import { InitDb } from '@/utils/initDb';
 import localForage from '@/localForageConfig';
@@ -18,10 +18,10 @@ function useGlobalProvider() {
     const [jobList, setJobList] = React.useState<GlobalState.GlobalContextType['jobList']>([]);
     const [submissionCount, setSubmissionCount] = React.useState(0);
 
-    /*NEW*/ const [commitData, setCommitData] = React.useState<GlobalState.GlobalContextType['jobList']>();
+    /*NEW*/ const [commitData, setCommitData] = React.useState<GlobalState.GlobalContextType['commitData']>();
 
 
-    const setCommitHistory = (data: any) => {
+    const setCommitHistory = (data: CodespaceApp.CommitHistoryData) => {
         if(!data) {
             throw new Error("[GlobalContext.tsx]: No data has been provided.")
         }
