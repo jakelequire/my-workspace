@@ -175,8 +175,8 @@ function useGlobalProvider() {
         setJobList,
         submissionCount,
         increaseSubmissionCount,
-        commitData,
-        setCommitHistory,
+        // commitData,
+        // setCommitHistory,
     };
 }
 
