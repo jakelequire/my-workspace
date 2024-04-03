@@ -24,7 +24,7 @@ function useJobTrackerProvider() {
     
     useEffect(() => {
         setJobItem(jobList); 
-    }, [jobList]);
+    }, []);
 
     /* ------------------------------ */
     /* ######## Add Job Item ######## */
