@@ -50,6 +50,11 @@ const home_life: { title: string; href: string; description: string, active: boo
         href: '/home/code',
         description: 'My personal code space. Data and information about my coding projects.',
         active: true,
+    }, {
+        title: 'Health & Fitness',
+        href: '/home/healthandfitness',
+        description: 'My personal health and fitness tracker. Manage my workouts and diet.',
+        active: false,
     }
 ];
 
