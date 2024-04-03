@@ -8,7 +8,7 @@ const NotificationsContext = createContext(undefined)
 function useNotificationsProvider() {
 
 
-
+    return void 0;
 }
 
 
