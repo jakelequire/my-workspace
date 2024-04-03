@@ -18,11 +18,11 @@ function useCodeSpaceProvider() {
         },
     });
 
-    const { setCommitData } = useGlobalContext();
+    // const { setCommitData } = useGlobalContext();
 
-    useEffect(() => {
-        setCommitData(filteredCommitHistory);
-    },[filteredCommitHistory])
+    //useEffect(() => {
+    //    setCommitData(filteredCommitHistory);
+    //},[filteredCommitHistory])
 
 
     /* ----------------------------------------------------------- */
