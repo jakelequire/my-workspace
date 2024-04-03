@@ -18,10 +18,18 @@ function useGlobalProvider() {
     const [jobList, setJobList] = React.useState<GlobalState.GlobalContextType['jobList']>([]);
     const [submissionCount, setSubmissionCount] = React.useState(0);
 
-    /*NEW*/ const [] = React.useState();
-    
-    console.log('[GlobalContext.tsx] Submission Count:', submissionCount);
+    /*NEW*/ const [commitData, setCommitData] = React.useState<GlobalState.GlobalContextType['jobList']>();
 
+
+    const setCommitHistory = (data: any) => {
+        if(!data) {
+            throw new Error("[GlobalContext.tsx]: No data has been provided.")
+        }
+
+        setCommitData(data);
+    }
+
+    
     const auth = getAuth(firebase_app);
     const userId = auth.currentUser?.uid;
 
@@ -167,6 +175,8 @@ function useGlobalProvider() {
         setJobList,
         submissionCount,
         increaseSubmissionCount,
+        commitData,
+        setCommitHistory,
     };
 }
 

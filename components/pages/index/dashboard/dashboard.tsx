@@ -2,8 +2,10 @@
 import { TodoWidget } from './widget/todoWidget';
 import { DashNav } from './navigation/dashNav';
 import MiniTodo from './widget/miniTodo';
-import styles from './dashboard.module.css';
+import CommitsCalendar from './widget/commits_calendar/commitsCalendar'
 import { useGlobalContext } from '@/components/GlobalContext';
+
+import styles from './dashboard.module.css';
 
 export default function Dashboard(): JSX.Element {
     const { submissionCount } = useGlobalContext();
@@ -28,7 +30,7 @@ export default function Dashboard(): JSX.Element {
 
             <div className={styles.top_widget_container}>
                 <div className={styles.mini_widget_one}>
-
+                    <CommitsCalendar />
                 </div>
                 <div className={styles.mini_widget_two}>
 

@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useGlobalContext } from '@/components/GlobalContext';
 import { CodespaceApp } from '@/types/types';
 
 const CodeSpaceContext = createContext<CodespaceApp.CodeSpaceContextType | undefined>(undefined);
 
 function useCodeSpaceProvider() {
     const [commitHistory, setCommitHistory] = useState<CodespaceApp.GitHubCommitHistoryResponse>();
+    const [filteredCommitHistory, setFilteredCommitHistory] = useState<CodespaceApp.CommitHistoryData[]>([]);
+
     const [recentBuild, setRecentBuild] = useState<CodespaceApp.VercelDeploymentResponse[]>([]);
     const [contributionCount, setContributionCount] = useState<CodespaceApp.ContributionCount>({
         total: 0,
@@ -15,9 +18,11 @@ function useCodeSpaceProvider() {
         },
     });
 
-    const [filteredCommitHistory, setFilteredCommitHistory] = useState<
-        CodespaceApp.CommitHistoryData[]
-    >([]);
+    const { setCommitData } = useGlobalContext();
+
+    useEffect(() => {
+        setCommitData(filteredCommitHistory);
+    },[filteredCommitHistory])
 
 
     /* ----------------------------------------------------------- */

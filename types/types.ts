@@ -16,6 +16,8 @@ export namespace GlobalState {
         setJobList: (jobList: JobsApp.JobItem[]) => void;
         submissionCount: number;
         increaseSubmissionCount: () => void;
+        commitData: CodespaceApp.CommitHistoryData;
+        setCommitHistory: (data: CodespaceApp.CommitHistoryData) => void;
     }
 
 }
