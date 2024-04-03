@@ -17,6 +17,8 @@ function useGlobalProvider() {
     const [todoList, setTodoList] = React.useState<GlobalState.GlobalContextType['todoList']>([]);
     const [jobList, setJobList] = React.useState<GlobalState.GlobalContextType['jobList']>([]);
     const [submissionCount, setSubmissionCount] = React.useState(0);
+
+    /*NEW*/ const [] = React.useState();
     
     console.log('[GlobalContext.tsx] Submission Count:', submissionCount);
 
@@ -180,3 +182,4 @@ export const useGlobalContext = () => {
     }
     return context;
 };
+
