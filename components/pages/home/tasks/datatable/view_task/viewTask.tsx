@@ -69,9 +69,9 @@ export default function ViewTask({ id, children, ...props }: Props): JSX.Element
                                 </p>
                             </div>
 
-                            <div className='flex flex-col'>
+                            <div className='flex flex-col text-wrap'>
                                 <Label className='mb-2 text-base font-semibold text-muted-foreground'>Description</Label>
-                                <p className='w-full min-h-52 justify-start text-start p-2 mt-1 border-2 border-primary-foreground'>
+                                <p className='w-full min-h-52 justify-start text-start p-2 mt-1 border-2 border-primary-foreground break-words'>
                                     {taskItem.description}
                                 </p>
                             </div>

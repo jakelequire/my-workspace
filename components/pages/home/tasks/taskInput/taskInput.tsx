@@ -49,12 +49,14 @@ export default function TaskInput(): JSX.Element {
                         type='text'
                         placeholder='Enter a title for the task'
                         value={todoItem.title}
+                        maxLength={150}
                         onChange={(e) => setTodoItem({ ...todoItem, title: e.target.value })}
                         className={`${styles.taskinput_input} ${styles.textarea_title} `}
                     />
                     <Textarea
                         placeholder='Enter a description for the task'
                         value={todoItem.description}
+                        maxLength={1000}
                         onChange={(e) => setTodoItem({ ...todoItem, description: e.target.value })}
                         className={`${styles.taskinput_input} ${styles.textarea_description} resize-none`}
                     />
