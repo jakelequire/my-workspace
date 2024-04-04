@@ -17,26 +17,45 @@ function useGlobalProvider() {
     const [todoList, setTodoList] = React.useState<GlobalState.GlobalContextType['todoList']>([]);
     const [jobList, setJobList] = React.useState<GlobalState.GlobalContextType['jobList']>([]);
     const [submissionCount, setSubmissionCount] = React.useState(0);
-
-    /*NEW*/ // const [commitData, setCommitData] = React.useState<GlobalState.GlobalContextType['commitData']>();
-
-
-    // const setCommitHistory = (data: CodespaceApp.CommitHistoryData) => {
-    //     if(!data) {
-    //         throw new Error("[GlobalContext.tsx]: No data has been provided.")
-    //     }
-// 
-    //     setCommitData(data);
-    // }
-
+    const [commitData, setCommitData] = React.useState<CodespaceApp.CommitHistoryData[]>([]);
     
     const auth = getAuth(firebase_app);
     const userId = auth.currentUser?.uid;
 
+    /* --------------------------------------------------------- */
+    /* Fetch commit history from Github API                      */
+    /* --------------------------------------------------------- */
+    const filterCommitHistory = (weeks: CodespaceApp.CommitHistory['weeks']) => {
+        const filteredData = weeks.flatMap(week =>
+            week.contributionDays.map(day => ({
+                day: day.date,
+                value: day.contributionCount,
+            }))
+        );
+        // console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
+        setCommitData(filteredData);
+    };
+    useEffect(() => {
+        const fetchCommits = async () => {
+            const response = await fetch('/api/services/github/commits');
+            const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
+            // console.log('[CodeSpaceContext.tsx] data: ', data);
+            const commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
+            filterCommitHistory(commitHistory);
+        };
+        fetchCommits();
+    }, []);
+
+    /* --------------------------------------------------------- */
+    /* Increase Submission Count                                 */
+    /* --------------------------------------------------------- */
     const increaseSubmissionCount = () => {
         setSubmissionCount((count) => count + 1);
     };
 
+    /* --------------------------------------------------------- */
+    /* Commit data synchronization                               */
+    /* --------------------------------------------------------- */
     useEffect(() => {
         // Set an interval for synchronization
         const intervalId = setInterval(() => {
@@ -57,9 +76,9 @@ function useGlobalProvider() {
         return () => window.removeEventListener('online', handleOnline);
     }, []);
 
-    /* ---------------------- */
-    /* Fetch user and session */
-    /* ---------------------- */
+    /* --------------------------------------------------------- */
+    /* Fetch user and session                                    */
+    /* --------------------------------------------------------- */
     useEffect(() => {
         const fetchUserAndSession = async () => {
             try {
@@ -102,9 +121,9 @@ function useGlobalProvider() {
         fetchUserAndSession();
     }, [userId]);
 
-    /* ------------------------------- */
-    /* Fetch todo items from Firestore */
-    /* ------------------------------- */
+    /* --------------------------------------------------------- */
+    /* Fetch todo items from Firestore                           */
+    /* --------------------------------------------------------- */
     useEffect(() => {
         // Function to load todo items
         const loadTodoItems = async () => {
@@ -134,9 +153,9 @@ function useGlobalProvider() {
         loadTodoItems();
     }, [user.id]);
 
-    /* ------------------------------ */
-    /* Fetch job items from Firestore */
-    /* ------------------------------ */
+    /* --------------------------------------------------------- */
+    /* Fetch job items from Firestore                            */
+    /* --------------------------------------------------------- */
     useEffect(() => {
         // Function to load job items
         const loadJobItems = async () => {
@@ -165,6 +184,7 @@ function useGlobalProvider() {
         if (!user.id) return;
         loadJobItems();
     }, [user.id]);
+    /* --------------------------------------------------------- */
 
     return {
         user,
@@ -175,8 +195,7 @@ function useGlobalProvider() {
         setJobList,
         submissionCount,
         increaseSubmissionCount,
-        // commitData,
-        // setCommitHistory,
+        commitData,
     };
 }
 

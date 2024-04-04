@@ -18,11 +18,11 @@ function useCodeSpaceProvider() {
         },
     });
 
-    // const { setCommitData } = useGlobalContext();
+    const { commitData } = useGlobalContext();
 
-    //useEffect(() => {
-    //    setCommitData(filteredCommitHistory);
-    //},[filteredCommitHistory])
+    useEffect(() => {
+        setFilteredCommitHistory(commitData);
+    },[commitData])
 
 
     /* ----------------------------------------------------------- */
@@ -43,32 +43,6 @@ function useCodeSpaceProvider() {
             setRecentBuild(data);
         };
         fetchRecentBuilds();
-    }, []);
-
-
-    /* ------------------------------------------ */
-    /* ########## FETCH COMMIT HISTORY ########## */
-    /* ------------------------------------------ */
-    const filterCommitHistory = (weeks: CodespaceApp.CommitHistory['weeks']) => {
-        const filteredData = weeks.flatMap(week =>
-            week.contributionDays.map(day => ({
-                day: day.date,
-                value: day.contributionCount,
-            }))
-        );
-        // console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
-        setFilteredCommitHistory(filteredData);
-    };
-    useEffect(() => {
-        const fetchCommits = async () => {
-            const response = await fetch('/api/services/github/commits');
-            const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
-            // console.log('[CodeSpaceContext.tsx] data: ', data);
-            setCommitHistory(data);
-            const commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
-            filterCommitHistory(commitHistory);
-        };
-        fetchCommits();
     }, []);
 
 

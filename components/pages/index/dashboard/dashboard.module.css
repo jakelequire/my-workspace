@@ -75,7 +75,7 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    height: 20%;
+    height: 30%;
     width: 100%;
     gap: 1.5rem;
 }

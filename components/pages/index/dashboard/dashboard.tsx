@@ -40,7 +40,6 @@ export default function Dashboard(): JSX.Element {
                 </div>
                 <div className={styles.mini_widget_four}>
                     <MiniTodo key={submissionCount} />
-
                 </div>
             </div>
             
