@@ -17,6 +17,7 @@ export namespace GlobalState {
         submissionCount: number;
         increaseSubmissionCount: () => void;
         commitData: CodespaceApp.CommitHistoryData[];
+        commitHistory: CodespaceApp.CommitHistory[];
     }
 
 }

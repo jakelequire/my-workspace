@@ -4,6 +4,7 @@ import { DashNav } from './navigation/dashNav';
 import MiniTodo from './widget/todo_widget/miniTodo';
 import CommitsCalendar from './widget/commits_calendar/commitsCalendar'
 import MiniJobs from './widget/jobs_widget/miniJobs';
+import CommitsData from './widget/commits_data/commitsData';
 
 import { useGlobalContext } from '@/components/GlobalContext';
 import styles from './dashboard.module.css';
@@ -24,7 +25,7 @@ export default function Dashboard(): JSX.Element {
                         <DashNav />
                     </div>
                     <div className={styles.profile_wrapper}>
-
+                        
                     </div>
                 </div>
             </div>
@@ -45,10 +46,10 @@ export default function Dashboard(): JSX.Element {
             </div>
             
             <div className={styles.bottom_widget_container}>
-                <div className={styles.bank_widget}>
-
+                <div className={styles.large_widget_one}>
+                    <CommitsData />
                 </div>
-                <div className={styles.todo_widget}>
+                <div className={styles.large_widget_two}>
                     <TodoWidget key={submissionCount} />
                 </div>
             </div>

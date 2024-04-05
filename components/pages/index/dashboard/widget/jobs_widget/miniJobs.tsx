@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/carousel';
 import { CarouselApi } from '@/components/ui/carousel';
 import { useGlobalContext } from '@/components/GlobalContext';
-import { BackpackIcon } from '@radix-ui/react-icons';
+import { BackpackIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 
 export default function MiniJobs(): JSX.Element {
     const { jobList } = useGlobalContext();
@@ -91,12 +91,22 @@ export default function MiniJobs(): JSX.Element {
     return (
         <div className='flex justify-start flex-col h-full w-full'>
             <Carousel className='flex justify-between align-middle w-full h-full flex-col' setApi={setCarouselApi}>
+                <div className='flex items-center justify-between w-full h-10 pl-8 pt-5'>
                 <a
                     href='/home/jobs'
-                    className='flex items-center justify-start w-fit h-10 pl-8 pt-5'>
+                    className='flex items-center self-start w-fit h-full'>
                     <h1 className='text-base font-bold'>Jobs</h1>
                     <BackpackIcon className='w-5 h-5 ml-4' />
                 </a>
+                    {/* TODO:
+                        Implement a dropdown menu to choose from different widgets.
+                        The idea is to make the UI more dynamic.
+                    */}
+                    <a
+                        className='flex items-center self-end w-fit h-full'>
+                        <HamburgerMenuIcon color={'#636363'} className='w-5 h-5 mr-4' />
+                    </a>
+                </div>
 
                 <CarouselContent className='w-full h-full ml-0' ref={carouselContentRef}>
                     {Array.from(jobStats).map(({ title, value }, index) => (
@@ -118,6 +128,7 @@ export default function MiniJobs(): JSX.Element {
                         </CarouselItem>
                     ))}
                 </CarouselContent>
+
                 <div className='flex items-center justify-end w-full h-10'>
                     <div className='flex justify-center content-center h-full w-full relative'>
                         <CarouselPrevious
@@ -139,6 +150,7 @@ export default function MiniJobs(): JSX.Element {
                         />
                     </div>
                 </div>
+
             </Carousel>
         </div>
     );

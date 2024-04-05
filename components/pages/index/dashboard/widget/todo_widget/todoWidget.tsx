@@ -91,7 +91,7 @@ export function TodoWidget() {
 
     return (
         <div className='w-full'>
-            <div className='pl-6 pt-6'>
+            <div className='pl-6 pt-5'>
                 <a href='/home/tasks' className='text-xl font-bold'>
                     Todo List
                 </a>

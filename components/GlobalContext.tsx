@@ -18,7 +18,8 @@ function useGlobalProvider() {
     const [jobList, setJobList] = React.useState<GlobalState.GlobalContextType['jobList']>([]);
     const [submissionCount, setSubmissionCount] = React.useState(0);
     const [commitData, setCommitData] = React.useState<CodespaceApp.CommitHistoryData[]>([]);
-    
+    const [commitHistory, setCommitHistory] = React.useState<CodespaceApp.CommitHistory[]>([]);
+
     const auth = getAuth(firebase_app);
     const userId = auth.currentUser?.uid;
 
@@ -39,8 +40,9 @@ function useGlobalProvider() {
         const fetchCommits = async () => {
             const response = await fetch('/api/services/github/commits');
             const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
-            // console.log('[CodeSpaceContext.tsx] data: ', data);
             const commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
+            const defaultCommitHistory = data.data.user.contributionsCollection.contributionCalendar;
+            setCommitHistory([defaultCommitHistory]);
             filterCommitHistory(commitHistory);
         };
         fetchCommits();
@@ -196,6 +198,7 @@ function useGlobalProvider() {
         submissionCount,
         increaseSubmissionCount,
         commitData,
+        commitHistory,
     };
 }
 
