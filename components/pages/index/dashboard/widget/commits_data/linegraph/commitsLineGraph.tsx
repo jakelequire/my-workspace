@@ -90,10 +90,10 @@ export default function CommitsLineGraph(): JSX.Element {
                 enableGridY={false}
                 axisBottom={{
                     tickSize: 5,
-                    tickPadding: 8,
-                    tickRotation: 0,
+                    tickPadding: 6,
+                    tickRotation: 45,
                     legend: 'Days',
-                    legendOffset: 36,
+                    legendOffset: 43,
                     legendPosition: 'middle',
                     ariaHidden: true,
                     format: "%b %d",
@@ -121,7 +121,7 @@ export default function CommitsLineGraph(): JSX.Element {
                     crosshair: { line: { stroke: '#fff' } },
                     axis: {
                         ticks: {
-                            line: { stroke: '#777' },
+                            line: { stroke: '#777', border: '1px solid #fff' },
                             text: { fill: '#fff', fontSize: 9 },
                         },
                     }
