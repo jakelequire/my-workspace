@@ -54,7 +54,7 @@ export default function Navigator(): JSX.Element {
                     <div className='flex h-full w-full relative'>
                         <CarouselNext
                             variant={'ghost'}
-                            className={'flex absolute h-8 w-8 right-8'}
+                            className={'flex absolute h-8 w-8 right-2'}
                         />
                     </div>
                 </div>

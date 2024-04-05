@@ -21,8 +21,10 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 import { useGlobalContext } from '@/components/GlobalContext';
 import { Todo } from '@/types/types';
+import { ListBulletIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 
 export const columns: ColumnDef<Todo.TodoItem>[] = [
     {
@@ -89,13 +91,26 @@ export function TodoWidget() {
         pageCount: 1,
     });
 
+    const isLastPage =
+    table.getState().pagination.pageIndex >=
+    Math.ceil(todoList.length / table.getState().pagination.pageSize) - 1;
+
     return (
-        <div className='w-full'>
-            <div className='pl-6 pt-5'>
-                <a href='/home/tasks' className='text-xl font-bold'>
-                    Todo List
+        <div className='w-full h-full'>
+            <div className='flex items-center justify-between w-full pl-8 pt-4'>
+                <a href='/home/tasks' className='flex flex-row justify-center'>
+                    <h1 className='text-xl font-bold'>Todo List</h1>
+                    <ListBulletIcon className='w-5 h-5 ml-4 self-center' />
+                </a>
+                {/* TODO:
+                    Implement a dropdown menu to choose from different widgets.
+                    The idea is to make the UI more dynamic.
+                */}
+                <a className='flex items-center self-end w-fit h-full'>
+                    <HamburgerMenuIcon color={'#636363'} className='w-5 h-5 mr-4' />
                 </a>
             </div>
+
             <div className='rounded-md p-6'>
                 <Table>
                     <TableHeader>
@@ -141,6 +156,26 @@ export function TodoWidget() {
                         )}
                     </TableBody>
                 </Table>
+            </div>
+            <div className='flex items-center justify-end space-x-2 py-4 mr-5'>
+                <div className='space-x-2'>
+                    <Button
+                        variant='outline'
+                        size='sm'
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}>
+                        Previous
+                    </Button>
+                    <Button
+                        variant='outline'
+                        size='sm'
+                        onClick={() => {
+                            table.nextPage();
+                        }}
+                        disabled={isLastPage || !table.getCanNextPage()}>
+                        Next
+                    </Button>
+                </div>
             </div>
         </div>
     );
