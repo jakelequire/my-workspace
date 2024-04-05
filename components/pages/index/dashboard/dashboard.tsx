@@ -32,7 +32,7 @@ export default function Dashboard(): JSX.Element {
 
             <div className={styles.top_widget_container}>
                 <div className={styles.mini_widget_one}>
-                    <CommitsCalendar />
+                    {/* <CommitsCalendar /> */}
                 </div>
                 <div className={styles.mini_widget_two}>
 
