@@ -1,10 +1,11 @@
 'use client';
-import { TodoWidget } from './widget/todoWidget';
+import { TodoWidget } from './widget/todo_widget/todoWidget';
 import { DashNav } from './navigation/dashNav';
-import MiniTodo from './widget/miniTodo';
+import MiniTodo from './widget/todo_widget/miniTodo';
 import CommitsCalendar from './widget/commits_calendar/commitsCalendar'
-import { useGlobalContext } from '@/components/GlobalContext';
+import MiniJobs from './widget/jobs_widget/miniJobs';
 
+import { useGlobalContext } from '@/components/GlobalContext';
 import styles from './dashboard.module.css';
 
 export default function Dashboard(): JSX.Element {
@@ -36,7 +37,7 @@ export default function Dashboard(): JSX.Element {
 
                 </div>
                 <div className={styles.mini_widget_three}>
-
+                    <MiniJobs />
                 </div>
                 <div className={styles.mini_widget_four}>
                     <MiniTodo key={submissionCount} />

@@ -72,12 +72,12 @@ export default function MiniTodo(): JSX.Element {
                 setSelectedIndex(currentIndex);
             }
         };
-    
+
         // Attach the event listener
         if (carouselApi) {
             carouselApi.on('select', onSelect);
         }
-    
+
         // Cleanup function to remove the event listener
         return () => {
             if (carouselApi) {
@@ -87,42 +87,58 @@ export default function MiniTodo(): JSX.Element {
     }, [carouselApi]);
 
     return (
-        <Carousel className='flex align-middle w-full h-full flex-col' setApi={setCarouselApi} >
-            <div className='flex items-center justify-start w-full h-10 pl-8 pt-5'>
-                <h1 className='text-base font-bold'>Todo</h1>
-                <ReaderIcon className='w-6 h-6 ml-4' />
-            </div>
+        <div className='flex justify-center flex-col h-full w-full'>
+            <Carousel className='flex justify-between align-middle w-full h-full flex-col' setApi={setCarouselApi}>
+                <a
+                    href='/home/tasks'
+                    className='flex items-center justify-start w-fit h-10 pl-8 pt-5'>
+                    <h1 className='text-base font-bold'>Todo</h1>
+                    <ReaderIcon className='w-6 h-6 ml-4' />
+                </a>
 
-            <CarouselContent className='w-full h-full ml-0' ref={carouselContentRef}>
-                {Array.from(todoStats).map(({ title, value }, index) => (
-                    <CarouselItem
-                        key={index}
-                        className='w-[70%] h-[100%] flex items-center justify-center p-0 '>
-                        <div className='flex items-center justify-center w-full h-full'>
-                            <Card className='flex items-center justify-center w-[70%] h-full border-none'>
-                                <CardContent className='flex items-center justify-center p-6 w-full h-full gap-12'>
-                                    <div className='flex items-start justify-between w-fit h-fit'>
-                                        <h1 className='text-base font-normal'>{title}</h1>
-                                    </div>
-                                    <div className='flex items-center justify-center w-fit h-fit'>
-                                        <h1 className='text-4xl font-bold'>{value}</h1>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
-            <div className='flex items-center justify-end w-full h-10'>
-                <CarouselPrevious variant={'outline'} className={'h-7 w-7 left-3'} />
-                <CustomDotNavigation
-                    totalItems={totalItems}
-                    selectedIndex={selectedIndex}
-                    onSelect={handleSelect}
-                />
-                <CarouselNext variant={'outline'} className={'h-7 w-7 right-3'} />
-            </div>
-        </Carousel>
+                <CarouselContent className='w-full h-full ml-0' ref={carouselContentRef}>
+                    {Array.from(todoStats).map(({ title, value }, index) => (
+                        <CarouselItem
+                            key={index}
+                            className='w-[70%] h-[100%] flex items-center justify-center p-0 '>
+                            <div className='flex items-center justify-center w-full h-full'>
+                                <Card className='flex items-center justify-center w-[70%] h-full border-none'>
+                                    <CardContent className='flex items-center justify-center p-6 w-full h-full gap-12'>
+                                        <div className='flex items-start justify-between w-fit h-fit'>
+                                            <h1 className='text-base font-normal'>{title}</h1>
+                                        </div>
+                                        <div className='flex items-center justify-center w-fit h-fit'>
+                                            <h1 className='text-4xl font-bold'>{value}</h1>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <div className='flex items-center justify-end w-full h-10'>
+                    <div className='flex justify-center content-center h-full w-full relative'>
+                        <CarouselPrevious
+                            variant={'ghost'}
+                            className={'flex absolute h-8 w-8 left-8'}
+                        />
+                    </div>
+                    <div className='flex justify-end w-full h-full'>
+                        <CustomDotNavigation
+                            totalItems={totalItems}
+                            selectedIndex={selectedIndex}
+                            onSelect={handleSelect}
+                        />
+                    </div>
+                    <div className='flex h-full w-full relative'>
+                        <CarouselNext
+                            variant={'ghost'}
+                            className={'flex absolute h-8 w-8 right-8'}
+                        />
+                    </div>
+                </div>
+            </Carousel>
+        </div>
     );
 }
 
@@ -134,12 +150,14 @@ type CustomDotProps = {
 
 const CustomDotNavigation: React.FC<CustomDotProps> = ({ totalItems, selectedIndex, onSelect }) => {
     return (
-        <div className="flex items-center justify-center w-full h-10">
+        <div className='flex items-center justify-center w-full h-10'>
             {Array.from({ length: totalItems }).map((_, index) => (
                 <button
                     key={index}
                     onClick={() => onSelect(index)}
-                    className={`embla__dot${index === selectedIndex ? ' embla__dot--selected' : ''}`}
+                    className={`embla__dot${
+                        index === selectedIndex ? ' embla__dot--selected' : ''
+                    }`}
                     aria-label={`Go to item ${index + 1}`}
                 />
             ))}
