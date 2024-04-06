@@ -19,7 +19,7 @@ export default function Email(): JSX.Element {
     return (
         <TooltipProvider delayDuration={0}>
             <ResizablePanelGroup direction='horizontal' className='h-full w-full rounded-lg border'>
-                <ResizablePanel defaultSize={20}>
+                <ResizablePanel defaultSize={15}>
                     <div className='flex w-full h-full flex-col items-center justify-start'>
                         <div className='flex w-full justify-center self-center items-center py-2 px-4'>
                             <AccountSwitcher isCollapsed={false} accounts={accounts} />
@@ -31,7 +31,7 @@ export default function Email(): JSX.Element {
 
                 <ResizableHandle withHandle />
 
-                <ResizablePanel defaultSize={40}>
+                <ResizablePanel defaultSize={45}>
                     <div className='flex w-full h-full flex-col items-center justify-start overflow-auto gap-4'>
                         <InboxContainer />
                         <MailList />

@@ -46,7 +46,7 @@ export default function Nav(): JSX.Element {
                             <TooltipContent side='right' className='flex items-center gap-4'>
                                 {link.title}
                                 {link.label && (
-                                    <span className='ml-auto text-muted-foreground'>
+                                    <span className='ml-auto text-muted-foreground text-lg'>
                                         {link.label}
                                     </span>
                                 )}
@@ -60,7 +60,7 @@ export default function Nav(): JSX.Element {
                                 buttonVariants({ variant: link.variant as VariantProps, size: 'sm' }),
                                 link.variant === 'default' &&
                                     'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
-                                'justify-start'
+                                'justify-start text-sm'
                             )}>
                             <link.icon className='mr-2 h-4 w-4' />
                             {link.title}
