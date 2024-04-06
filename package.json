@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.11.1",
+    "@azure/msal-react": "^2.0.14",
     "@firebase/analytics": "^0.10.2",
     "@hookform/resolvers": "^3.3.4",
     "@microsoft/microsoft-graph-client": "^3.0.7",
+    "@microsoft/microsoft-graph-types": "^2.40.0",
     "@nivo/calendar": "^0.85.1",
     "@nivo/line": "^0.85.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",

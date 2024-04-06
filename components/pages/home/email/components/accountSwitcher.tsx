@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
 import {
     Select,
@@ -10,6 +9,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { useAppContext } from '../EmailContext';
 
 interface AccountSwitcherProps {
     isCollapsed: boolean;
@@ -22,6 +23,30 @@ interface AccountSwitcherProps {
 
 export function AccountSwitcher({ isCollapsed, accounts }: AccountSwitcherProps) {
     const [selectedAccount, setSelectedAccount] = React.useState<string>(accounts[0].email);
+    const { user } = useAppContext();
+    const app = useAppContext();
+
+    const DisplayEmailAccounts = () => {
+        if (!user) {
+            return (
+                <Button onClick={app.signIn!} className='w-full'>
+                    Signin with Microsoft
+                </Button>
+            )
+        } else {
+            return accounts.map((account) => {
+                return (
+                    <SelectItem key={account.email} value={account.email}>
+                        <div className='flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground'>
+                            {account.icon}
+                            {account.email}
+                        </div>
+                    </SelectItem>
+                )
+            
+            })
+        }
+    };
 
     return (
         <Select defaultValue={selectedAccount} onValueChange={setSelectedAccount}>
@@ -40,14 +65,7 @@ export function AccountSwitcher({ isCollapsed, accounts }: AccountSwitcherProps)
                 </SelectValue>
             </SelectTrigger>
             <SelectContent>
-                {accounts.map((account) => (
-                    <SelectItem key={account.email} value={account.email}>
-                        <div className='flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground'>
-                            {account.icon}
-                            {account.email}
-                        </div>
-                    </SelectItem>
-                ))}
+                <DisplayEmailAccounts />
             </SelectContent>
         </Select>
     );
