@@ -11,13 +11,15 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { Separator } from "@/components/ui/separator"
 import { mails, accounts } from './exampledata';
 
+import { useEmailContext } from './EmailContext';
+
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 
 
 
 export default function Email(): JSX.Element {
-
-
+    const { emails } = useEmailContext();
+    
     return (
         <TooltipProvider delayDuration={0}>
             <ResizablePanelGroup direction='horizontal' className='h-full w-full rounded-lg border'>
@@ -37,14 +39,14 @@ export default function Email(): JSX.Element {
                     <div className='flex w-full h-full flex-col items-center justify-start overflow-auto gap-4'>
                         <InboxHeader />
                         <SearchBar />
-                        <MailList />
+                        <MailList items={emails} />
                     </div>
                 </ResizablePanel>
 
                 <ResizableHandle withHandle />
 
                 <ResizablePanel defaultSize={55}>
-                    <div className='flex h-full items-center justify-center '>
+                    <div className='flex h-full items-center justify-center overflow-hidden'>
                         <MailDisplay />
                     </div>
                 </ResizablePanel>

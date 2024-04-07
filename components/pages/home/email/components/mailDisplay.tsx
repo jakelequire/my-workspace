@@ -46,8 +46,11 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Mail, mails } from "../exampledata";
+import { useEmailContext } from "../EmailContext";
+import DOMPurify from 'dompurify';
+import parse from 'html-react-parser';
 
 interface MailDisplayProps {
     mail: Mail | null
@@ -58,8 +61,23 @@ export default function MailDisplay(): JSX.Element {
     const today = new Date()
     const mail = mails.find((mail) => mail)
 
+    const { openMail } = useEmailContext()
+
+    const EmailContent = ({ htmlContent }: { htmlContent: string }) => {
+        return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+    }
+
+
+    function sanitizeHtml(html: string) {
+        return DOMPurify.sanitize(html);
+    }
+
+    const EmailContentSanitized = ({ htmlContent }: { htmlContent: string }) => {
+        return <div className='w-full h-full px-4'>{parse(sanitizeHtml(htmlContent))}</div>
+    }
+
     return (
-        <div className='flex h-full flex-col'>
+        <div className='flex w-full h-full flex-col '>
             <div className='flex items-center p-2'>
                 <div className='flex items-center gap-2'>
                     <Tooltip>
@@ -192,40 +210,60 @@ export default function MailDisplay(): JSX.Element {
                 </DropdownMenu>
             </div>
             <Separator />
-            {mail ? (
-                <div className='flex flex-1 flex-col'>
-                    <div className='flex items-start p-4'>
+
+            {/* ------------------------------------------------------------ */}
+            {openMail ? (
+                <div className='flex flex-1 flex-col h-full'>
+                    <div className='flex items-start p-4 h-max'>
                         <div className='flex items-start gap-4 text-sm'>
                             <Avatar>
-                                <AvatarImage alt={mail.name} />
+                                <AvatarImage alt={openMail.from.emailAddress.name} />
                                 <AvatarFallback>
-                                    {mail.name
+                                    {openMail.from.emailAddress.name
                                         .split(' ')
                                         .map((chunk) => chunk[0])
                                         .join('')}
                                 </AvatarFallback>
                             </Avatar>
                             <div className='grid gap-1'>
-                                <div className='font-semibold'>{mail.name}</div>
-                                <div className='line-clamp-1 text-xs'>{mail.subject}</div>
+                                <div className='font-semibold'>{openMail.from.emailAddress.name}</div>
+                                <div className='line-clamp-1 text-xs'>{openMail.subject}</div>
                                 <div className='line-clamp-1 text-xs'>
-                                    <span className='font-medium'>Reply-To:</span> {mail.email}
+                                    <span className='font-medium'>Reply-To:</span> {openMail.sender.emailAddress.address}
                                 </div>
                             </div>
                         </div>
-                        {mail.date && (
+                        {openMail.receivedDateTime && (
                             <div className='ml-auto text-xs text-muted-foreground'>
-                                {format(new Date(mail.date), 'PPpp')}
+                                {format(new Date(openMail.receivedDateTime), 'PPpp')}
                             </div>
                         )}
                     </div>
                     <Separator />
-                    <div className='flex-1 whitespace-pre-wrap p-4 text-sm'>{mail.text}</div>
+
+                    <div className='flex-1 whitespace-pre-wrap p-4 text-sm overflow-x-hidden overflow-scroll h-[55%] w-full'>
+                        <EmailContentSanitized htmlContent={openMail.body.content} />
+                    </div>
+
                     <Separator className='mt-auto' />
-                    <div className='p-4'>
+                    <div className='p-4 flex flex-col w-full h-[30%]'>
                         <form>
                             <div className='grid gap-4'>
-                                <Textarea className='p-4' placeholder={`Reply ${mail.name}...`} />
+
+                                {/* -------------------------------------
+                                *   TODO
+                                *       - Add attachments
+                                *       - Add CC/BCC
+                                *       - Add subject
+                                *       - Able to write in markdown
+                                *       - Add labels
+                                ---------------------------------------- */}
+                                <Textarea 
+                                    className='p-4 whitespace-pre-wrap resize-none h-[125px] overflow-auto' 
+                                    placeholder={`Reply to ${openMail.from.emailAddress.name}...`} 
+                                />
+                                {/* ----------------------------------------------------------------------- */}
+
                                 <div className='flex items-center'>
                                     <Label
                                         htmlFor='mute'
@@ -247,6 +285,8 @@ export default function MailDisplay(): JSX.Element {
             ) : (
                 <div className='p-8 text-center text-muted-foreground'>No message selected</div>
             )}
+            {/*  ------------------------------------------------------------ */}
+
         </div>
     );
 }

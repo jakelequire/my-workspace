@@ -48,6 +48,7 @@ export interface EmailResponse {
     subject: string,
     toRecipients: Array<any>,
     webLink: string,
+    isOpen?: boolean,
 }
 
 

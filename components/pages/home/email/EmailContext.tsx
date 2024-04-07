@@ -4,21 +4,29 @@ import { useAppContext } from './AppContext';
 import GraphService from './graphApi/NewGraphService';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
+import { EmailResponse } from './types';
 
 
 interface EmailContext {
-    emails: any;
-    setEmails: React.Dispatch<any>;
+    emails: EmailResponse[];
+    setEmails: React.Dispatch<EmailResponse[]>;
+    openMail: EmailResponse;
+    setOpenMail: React.Dispatch<EmailResponse>;
+    openEmail: (email: EmailResponse) => void;
 }
 
 const EmailContext = createContext<EmailContext>({
     emails: [],
     setEmails: () => { },
+    openMail: {} as EmailResponse,
+    setOpenMail: () => { },
+    openEmail: () => { },
 });
 
-
 function useEmailProvider() {
-    const [emails, setEmails] = useState<any>([]);
+    const [emails, setEmails] = useState<EmailResponse[] | []>([]);
+    const [openMail, setOpenMail] = useState<EmailResponse>();
+
     const { authProvider } = useAppContext();
     
     const graphService = useMemo(() => new GraphService(authProvider as any), [authProvider]);
@@ -37,9 +45,17 @@ function useEmailProvider() {
         }
     }, [inProgress, isAuthenticated, graphService]);
 
+
+    const openEmail = (email: EmailResponse) => {
+        setOpenMail(email);
+    }
+
     return {
         emails,
         setEmails,
+        openMail,
+        setOpenMail,
+        openEmail,
     };
 }
 

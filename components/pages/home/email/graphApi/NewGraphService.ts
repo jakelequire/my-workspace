@@ -57,7 +57,10 @@ export default class GraphService {
         }
     }
 
-    public async getUserEmails(): Promise<any> {
+    /**
+     * @description Get user emails from Microsoft Graph API
+     */
+    public async getUserEmails(): Promise<EmailResponse[]> {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
@@ -68,9 +71,8 @@ export default class GraphService {
                 .get();
             
             const mailItems: EmailResponse[] = mail.value;
-            //console.log('[GraphService] getUserEmails mail: ', mail);
             console.log("[GraphService] getUserEmails mailItems: ", mailItems);
-            return mail;
+            return mailItems;
         }
     }
 }
