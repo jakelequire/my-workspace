@@ -49,6 +49,27 @@ export async function getUser(
 
 /* -------------------------------------------------------------------------- */
 
+export async function getUserEmails(
+    authProvider: AuthCodeMSALBrowserAuthenticationProvider
+): Promise<any> {
+    ensureClient(authProvider);
+
+    // Return the /me API endpoint result as a User object
+    const user: User = await graphClient!
+        .api('/me/messages')
+        .get()
+        .then((res) => {
+            console.log("[GraphService] getUserEmails res: ", res)
+            return res;
+        }).catch((err) => {
+            console.log("[GraphService] getUserEmails err: ", err)
+            return err;
+        });
+    return user;
+}
+
+
+
 // <GetUserWeekCalendarSnippet>
 export async function getUserWeekCalendar(
     authProvider: AuthCodeMSALBrowserAuthenticationProvider,

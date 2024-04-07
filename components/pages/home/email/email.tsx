@@ -33,7 +33,7 @@ export default function Email(): JSX.Element {
 
                 <ResizableHandle withHandle />
 
-                <ResizablePanel defaultSize={45}>
+                <ResizablePanel defaultSize={30}>
                     <div className='flex w-full h-full flex-col items-center justify-start overflow-auto gap-4'>
                         <InboxHeader />
                         <SearchBar />
@@ -43,7 +43,7 @@ export default function Email(): JSX.Element {
 
                 <ResizableHandle withHandle />
 
-                <ResizablePanel defaultSize={40}>
+                <ResizablePanel defaultSize={55}>
                     <div className='flex h-full items-center justify-center '>
                         <MailDisplay />
                     </div>

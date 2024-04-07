@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useAppContext } from '../EmailContext';
+import { useAppContext } from '../AppContext';
 
 interface AccountSwitcherProps {
     isCollapsed: boolean;
