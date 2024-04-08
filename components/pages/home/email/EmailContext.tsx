@@ -11,7 +11,7 @@ interface EmailContext {
     emails: EmailResponse[];
     setEmails: React.Dispatch<EmailResponse[]>;
     openMail: EmailResponse | undefined;
-    setOpenMail: React.Dispatch<EmailResponse>;
+    setOpenMail: React.Dispatch<EmailResponse | undefined>;
     openEmail: (email: EmailResponse) => void;
     folders: MailFolder[];
     currentFolder: CurrentFolder;
@@ -31,7 +31,7 @@ const EmailContext = createContext<EmailContext | undefined>(undefined);
 
 function useEmailProvider() {
     const [emails, setEmails] = useState<EmailResponse[] | []>([]);
-    const [openMail, setOpenMail] = useState<EmailResponse>();
+    const [openMail, setOpenMail] = useState<EmailResponse | undefined>();
     const [folders, setFolders] = useState<MailFolder[] | []>([]);
     const [currentFolder, setCurrentFolder] = useState({
         folder: 'Inbox',

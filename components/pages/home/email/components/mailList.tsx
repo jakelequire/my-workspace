@@ -32,9 +32,10 @@ interface MailListProps {
 
 export default function MailList({ items }: MailListProps): JSX.Element {
     const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
-    const { setOpenMail, deleteEmail, openMail} = useEmailContext();
+    const { setOpenMail, deleteEmail, openMail, readEmail } = useEmailContext();
 
     const setMail = (mail: EmailResponse) => {
+        readEmail(mail.id);
         setOpenMail(mail);
     }
 

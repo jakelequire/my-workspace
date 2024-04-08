@@ -47,21 +47,15 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Mail, mails } from "../exampledata";
 import { useEmailContext } from "../EmailContext";
 import DOMPurify from 'dompurify';
 import parse from 'html-react-parser';
 
-interface MailDisplayProps {
-    mail: Mail | null
-}
-
 
 export default function MailDisplay(): JSX.Element {
     const today = new Date()
-    const mail = mails.find((mail) => mail)
 
-    const { openMail } = useEmailContext()
+    const { openMail, deleteEmail, setOpenMail } = useEmailContext()
 
     const sanitizeHtml = (html: string) => {
         return DOMPurify.sanitize(html);
@@ -71,13 +65,20 @@ export default function MailDisplay(): JSX.Element {
         return <div className='w-full h-full px-4'>{parse(sanitizeHtml(htmlContent))}</div>
     }
 
+    const deleteMail = () => {
+        if(openMail) {
+            deleteEmail(openMail.id)
+            setOpenMail(undefined)
+        }
+    }
+
     return (
         <div className='flex w-full h-full flex-col '>
             <div className='flex items-center p-2'>
                 <div className='flex items-center gap-2'>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!mail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail}>
                                 <Archive className='h-4 w-4' />
                                 <span className='sr-only'>Archive</span>
                             </Button>
@@ -86,7 +87,7 @@ export default function MailDisplay(): JSX.Element {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!mail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail}>
                                 <ArchiveX className='h-4 w-4' />
                                 <span className='sr-only'>Move to junk</span>
                             </Button>
@@ -95,7 +96,7 @@ export default function MailDisplay(): JSX.Element {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!mail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail} onClick={deleteMail}>
                                 <Trash2 className='h-4 w-4' />
                                 <span className='sr-only'>Move to trash</span>
                             </Button>
@@ -107,7 +108,7 @@ export default function MailDisplay(): JSX.Element {
                         <Popover>
                             <PopoverTrigger asChild>
                                 <TooltipTrigger asChild>
-                                    <Button variant='ghost' size='icon' disabled={!mail}>
+                                    <Button variant='ghost' size='icon' disabled={!openMail}>
                                         <Clock className='h-4 w-4' />
                                         <span className='sr-only'>Snooze</span>
                                     </Button>
@@ -162,7 +163,7 @@ export default function MailDisplay(): JSX.Element {
                 <div className='ml-auto flex items-center gap-2'>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!mail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail}>
                                 <Reply className='h-4 w-4' />
                                 <span className='sr-only'>Reply</span>
                             </Button>
@@ -171,7 +172,7 @@ export default function MailDisplay(): JSX.Element {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!mail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail}>
                                 <ReplyAll className='h-4 w-4' />
                                 <span className='sr-only'>Reply all</span>
                             </Button>
@@ -180,7 +181,7 @@ export default function MailDisplay(): JSX.Element {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!mail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail}>
                                 <Forward className='h-4 w-4' />
                                 <span className='sr-only'>Forward</span>
                             </Button>
@@ -191,7 +192,7 @@ export default function MailDisplay(): JSX.Element {
                 <Separator orientation='vertical' className='mx-2 h-6' />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' size='icon' disabled={!mail}>
+                        <Button variant='ghost' size='icon' disabled={!openMail}>
                             <MoreVertical className='h-4 w-4' />
                             <span className='sr-only'>More</span>
                         </Button>
