@@ -1,5 +1,5 @@
 'use client';
-import MailList from './components/mailList';
+import MailTab from './components/mailTab';
 import MailDisplay from './components/mailDisplay';
 import Nav from './components/nav';
 import InboxHeader from './components/inboxHeader';
@@ -10,7 +10,6 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Separator } from "@/components/ui/separator"
 import { mails, accounts } from './exampledata';
-
 import { useEmailContext } from './EmailContext';
 
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
@@ -18,7 +17,7 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-reac
 
 
 export default function Email(): JSX.Element {
-    const { emails } = useEmailContext();
+    const { emails, tab } = useEmailContext();
     
     return (
         <TooltipProvider delayDuration={0}>
@@ -36,14 +35,12 @@ export default function Email(): JSX.Element {
                 <ResizableHandle withHandle />
 
                 <ResizablePanel defaultSize={30}>
-                    <div className='flex w-full h-full flex-col items-center justify-start overflow-auto gap-4'>
-                        <InboxHeader />
-                        <SearchBar />
-                        <MailList items={emails} />
+                    <div className='flex w-full h-full flex-col items-center justify-start overflow-y-scroll overflow-x-hidden gap-4'>
+                        <MailTab />
                     </div>
                 </ResizablePanel>
 
-                <ResizableHandle withHandle />
+                {/* <ResizableHandle withHandle /> */}
 
                 <ResizablePanel defaultSize={55}>
                     <div className='flex h-full items-center justify-center overflow-hidden'>

@@ -75,15 +75,3 @@ export default function MailList({ items }: MailListProps): JSX.Element {
         </div>
     );
 }
-
-function getBadgeVariantFromLabel(label: string) {
-    if (['work'].includes(label.toLowerCase())) {
-        return 'default';
-    }
-
-    if (['personal'].includes(label.toLowerCase())) {
-        return 'outline';
-    }
-
-    return 'secondary';
-}

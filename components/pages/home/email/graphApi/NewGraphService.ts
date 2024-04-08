@@ -57,6 +57,9 @@ export default class GraphService {
         }
     }
 
+    /* ----------------------------------------------------- */
+    /* ----------------- EMAIL RELATED METHODS ------------- */
+    /* ----------------------------------------------------- */
     /**
      * @description Get user emails from Microsoft Graph API
      */
@@ -68,6 +71,7 @@ export default class GraphService {
             throw new Error('Graph client is not initialized.');
         } else {
             const mail = await this.graphClient.api(`/me/mailFolders/${folderId}/messages`)
+                // .filter(`inferenceClassification eq 'focused'`)
                 .top(50)
                 .get();
             
@@ -79,7 +83,49 @@ export default class GraphService {
             return mailItems;
         }
     }
+    
+    /**
+     * @description Update email as read
+     */
+    public async messageRead(messageId: string) {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
 
+        if(!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            await this.graphClient.api(`/me/messages/${messageId}`)
+                .patch({
+                    isRead: true,
+                }).then((res) => {
+                    console.log("[GraphService] messageRead email marked as read", res);
+                }).catch((error) => {
+                    console.error("[GraphService] messageRead error", error);
+                })
+        }
+    }
+
+    /**
+     *  @description Deletes specific email from user's mailbox
+     */
+    public async deleteEmail(emailId: string): Promise<void> {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        if(!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            await this.graphClient.api(`/me/messages/${emailId}`)
+                .delete();
+        }
+    }
+
+    /* ----------------------------------------------------- */
+    /* --------------- FOLDER RELATED METHODS -------------- */
+    /* ----------------------------------------------------- */
+    /**
+     * @description Get user emails from Microsoft Graph API
+     */
     public async getMailFolders(): Promise<any> {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();

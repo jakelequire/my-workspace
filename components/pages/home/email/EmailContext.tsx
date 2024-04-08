@@ -16,6 +16,10 @@ interface EmailContext {
     folders: MailFolder[];
     currentFolder: CurrentFolder;
     changeFolder: (folder: string) => void;
+    deleteEmail: (emailId: string) => void;
+    readEmail: (messageId: string) => void;
+    tab: string;
+    setTab: React.Dispatch<string>;
 }
 
 interface CurrentFolder { 
@@ -23,16 +27,7 @@ interface CurrentFolder {
     id: string;
 }
 
-const EmailContext = createContext<EmailContext>({
-    emails: [],
-    setEmails: () => { },
-    openMail: undefined,
-    setOpenMail: () => { },
-    openEmail: () => { },
-    folders: [],
-    currentFolder: { folder: 'Inbox', id: '' },
-    changeFolder: () => { },
-});
+const EmailContext = createContext<EmailContext | undefined>(undefined);
 
 function useEmailProvider() {
     const [emails, setEmails] = useState<EmailResponse[] | []>([]);
@@ -42,11 +37,11 @@ function useEmailProvider() {
         folder: 'Inbox',
         id: '"AQMkADAwATNiZmYAZC02MDkzLWVjZjAtMDACLTAwCgAuAAADldBYTk_kRkGBgsGeuX5CcwEAKJcwiW9xEEKfi46JjdVRWAAAAgEMAAAA"',
     });
+    const [tab, setTab] = useState<string>('focused');
 
     const { authProvider } = useAppContext();
     
     const graphService = useMemo(() => new GraphService(authProvider as any), [authProvider]);
-
     const isAuthenticated = useIsAuthenticated();
     const { inProgress } = useMsal();
 
@@ -87,6 +82,27 @@ function useEmailProvider() {
         }));
     }
 
+    const deleteEmail = (emailId: string) => {
+        graphService.deleteEmail(emailId).then(() => {
+            setEmails(emails.filter((email) => email.id !== emailId));
+        });
+    }
+
+    const readEmail = (messageId: string) => {
+        const email = emails.find((email) => email.id === messageId);
+        if (email && email.isRead === false) {
+            setEmails(emails.map((e) => {
+                if (e.id === messageId) {
+                    e.isRead = true;
+                }
+                return e;
+            }));
+            graphService.messageRead(messageId);
+        } else {
+            console.log("Email is already read");
+        }
+    }
+
 
     const openEmail = (email: EmailResponse) => {
         setOpenMail(email);
@@ -101,6 +117,10 @@ function useEmailProvider() {
         folders,
         currentFolder,
         changeFolder,
+        deleteEmail,
+        readEmail,
+        tab,
+        setTab,
     };
 }
 

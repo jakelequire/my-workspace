@@ -18,24 +18,10 @@ type VariantProps =
     | null
     | undefined;
 
-/*
-export interface MailFolder {
-    childFolderCount: number;
-    displayName: string;
-    id: string;
-    isHidden: boolean;
-    parentFolderId: string;
-    sizeInBytes: number;
-    totalItemCount: number;
-    unreadItemCount: number;
-    isOpen?: boolean;
-}
-*/
 
 export default function Nav(): JSX.Element {
     const isCollapsed = false;
     const { folders, changeFolder } = useEmailContext();
-
 
     let folderConfig = [
         { displayName: 'Inbox', icon: Inbox, variant: 'ghost' },

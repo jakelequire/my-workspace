@@ -8,7 +8,7 @@ export const config = {
         'user.read', 
         'mailboxsettings.readwrite', 
         'calendars.readwrite',
-        'mail.read',
+        'mail.readwrite',
     ],
 };
 

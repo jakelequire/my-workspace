@@ -31,7 +31,7 @@ const home_life: { title: string; href: string; description: string, active: boo
         title: 'Email',
         href: '/home/email',
         description: 'Outlook email. Send, receive, and manage my email.',
-        active: false,
+        active: true,
     },
     {
         title: 'Tasks',

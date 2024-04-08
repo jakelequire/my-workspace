@@ -7,14 +7,16 @@ import {
 } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { useEmailContext } from "../EmailContext";
+import MailList from "./mailList";
+import SearchBar from "./searchbar";
 
-export default function InboxHeader(): JSX.Element {
-    const { currentFolder, setTab } = useEmailContext();   
+export default function MailTab(): JSX.Element {
+    const { currentFolder, setTab, emails } = useEmailContext();   
     const title = currentFolder.folder === "inbox" ? "Inbox" : currentFolder.folder;
 
-    const handleTabChange = (value: string) => {
-        setTab(value);
-    }
+    const focusedEmails = emails.filter((email) => email.inferenceClassification === 'focused');
+    const otherEmails = emails.filter((email) => email.inferenceClassification === 'other');
+    const unreadEmails = emails.filter((email) => !email.isRead);
 
     return (
         <Tabs defaultValue='focused' className='flex flex-col w-full'>
@@ -25,9 +27,6 @@ export default function InboxHeader(): JSX.Element {
                     <TabsTrigger 
                         value='focused' 
                         className='text-zinc-600 dark:text-zinc-200' 
-                        onClick={() => {
-                            handleTabChange('Focused');
-                        }}
                     >
                         Focused
                     </TabsTrigger>
@@ -35,9 +34,6 @@ export default function InboxHeader(): JSX.Element {
                     <TabsTrigger 
                         value='other' 
                         className='text-zinc-600 dark:text-zinc-200'
-                        onClick={() => {
-                            handleTabChange('Other');
-                        }}
                     >
                         Other
                     </TabsTrigger>
@@ -45,16 +41,30 @@ export default function InboxHeader(): JSX.Element {
                     <TabsTrigger 
                         value='unread' 
                         className='text-zinc-600 dark:text-zinc-200'
-                        onClick={() => {
-                            handleTabChange('Unread');
-                        }}
                     >
                         Unread
                     </TabsTrigger>
 
                 </TabsList>
             </div>
+
             <Separator />
+
+            <SearchBar />
+
+            <Separator />
+
+            <TabsContent value='focused'>
+                <MailList items={focusedEmails} />
+            </TabsContent>
+
+            <TabsContent value='other'>
+                <MailList items={otherEmails} />
+            </TabsContent>
+
+            <TabsContent value='unread'>
+                <MailList items={unreadEmails} />
+            </TabsContent>
         </Tabs>
     )
 }
