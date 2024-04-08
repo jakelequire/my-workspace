@@ -12,11 +12,13 @@ export const config = {
     ],
 };
 
+const redirectUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/home/email' : 'https://workspace-phi.vercel.app/home/email';
+
 export const msalConfig = {
     auth: {
         clientId: '1cf6318d-254e-4e01-bf91-9bc3e25dd772',
         authority: 'https://login.microsoftonline.com/common',
-        redirectUri: 'http://localhost:3000/home/email',
+        redirectUri: redirectUrl,
         clientSecret: '1c1b5a6d-c730-4fde-96a4-35e721cc3812',
         navigateToLoginRequestUrl: true,
     },
