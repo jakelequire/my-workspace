@@ -63,12 +63,7 @@ export default function MailDisplay(): JSX.Element {
 
     const { openMail } = useEmailContext()
 
-    const EmailContent = ({ htmlContent }: { htmlContent: string }) => {
-        return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-    }
-
-
-    function sanitizeHtml(html: string) {
+    const sanitizeHtml = (html: string) => {
         return DOMPurify.sanitize(html);
     }
 

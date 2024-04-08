@@ -1,40 +1,81 @@
 'use client';
 import Link from 'next/link';
 import { LucideIcon } from 'lucide-react';
-
+import { Archive, ArchiveX, File, Inbox, Send, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { links } from '../exampledata';
+import { useEmailContext } from '../EmailContext';
 
-interface NavProps {
-    isCollapsed: boolean;
-    links: {
-        title: string;
-        label?: string;
-        icon: LucideIcon;
-        variant: 'default' | 'ghost';
-    }[];
+type VariantProps =
+    | 'default'
+    | 'ghost'
+    | 'link'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | null
+    | undefined;
+
+/*
+export interface MailFolder {
+    childFolderCount: number;
+    displayName: string;
+    id: string;
+    isHidden: boolean;
+    parentFolderId: string;
+    sizeInBytes: number;
+    totalItemCount: number;
+    unreadItemCount: number;
+    isOpen?: boolean;
 }
-
-type VariantProps = "default" | "ghost" | "link" | "destructive" | "outline" | "secondary" | null | undefined;
+*/
 
 export default function Nav(): JSX.Element {
     const isCollapsed = false;
+    const { folders, changeFolder } = useEmailContext();
+
+
+    let folderConfig = [
+        { displayName: 'Inbox', icon: Inbox, variant: 'ghost' },
+        { displayName: 'Drafts', icon: File, variant: 'ghost' },
+        { displayName: 'Sent Items', icon: Send, variant: 'ghost' },
+        { displayName: 'Junk Email', icon: ArchiveX, variant: 'ghost' },
+        { displayName: 'Deleted Items', icon: Trash2, variant: 'ghost' },
+    ];
+    
+    const _links = folderConfig.map(config => {
+        const folder = folders.find(folder => folder.displayName === config.displayName);
+        return {
+            title: config.displayName,
+            label: folder ? folder.unreadItemCount.toString() : '',
+            icon: config.icon,
+            variant: folder?.isOpen ? 'default' : config.variant,
+        };
+    });
+
+    const handleFolderChange = (folder: string) => {
+        changeFolder(folder);
+    }
 
     return (
         <div
             data-collapsed={isCollapsed}
             className='group flex justify-start w-full h-full flex-col gap-4 py-2 data-[collapsed=true]:py-2'>
             <nav className='grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2'>
-                {links.map((link, index) =>
+                {_links.map((link, index) =>
                     isCollapsed ? (
                         <Tooltip key={index} delayDuration={0}>
                             <TooltipTrigger asChild>
                                 <Link
                                     href='#'
+                                    onClick={() => handleFolderChange(link.title)}
                                     className={cn(
-                                        buttonVariants({ variant: link.variant as VariantProps, size: 'icon' }),
+                                        buttonVariants({
+                                            variant: link.variant as VariantProps,
+                                            size: 'icon',
+                                        }),
                                         'h-9 w-9',
                                         link.variant === 'default' &&
                                             'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
@@ -56,8 +97,12 @@ export default function Nav(): JSX.Element {
                         <Link
                             key={index}
                             href='#'
+                            onClick={() => handleFolderChange(link.title)}
                             className={cn(
-                                buttonVariants({ variant: link.variant as VariantProps, size: 'sm' }),
+                                buttonVariants({
+                                    variant: link.variant as VariantProps,
+                                    size: 'sm',
+                                }),
                                 link.variant === 'default' &&
                                     'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
                                 'justify-start text-sm'

@@ -60,19 +60,40 @@ export default class GraphService {
     /**
      * @description Get user emails from Microsoft Graph API
      */
-    public async getUserEmails(): Promise<EmailResponse[]> {
+    public async getUserEmails(folderId: string, displayName: string): Promise<EmailResponse[]> {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
         if(!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
         } else {
-            const mail = await this.graphClient.api('/me/messages')
+            const mail = await this.graphClient.api(`/me/mailFolders/${folderId}/messages`)
+                .top(50)
                 .get();
             
             const mailItems: EmailResponse[] = mail.value;
+            mailItems.forEach((email) => {
+                email.folder = displayName;
+            })
             console.log("[GraphService] getUserEmails mailItems: ", mailItems);
             return mailItems;
         }
     }
+
+    public async getMailFolders(): Promise<any> {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        if(!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            const folders = await this.graphClient.api('/me/mailFolders')
+                .get();
+            
+            const mailFolders = folders.value;
+            console.log("[GraphService] getMailFolders folders: ", mailFolders);
+            return mailFolders;
+        }
+    }
+
 }

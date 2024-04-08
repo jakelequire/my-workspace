@@ -29,6 +29,8 @@ export default function MailList({ items }: MailListProps): JSX.Element {
         setOpenMail(mail);
     }
 
+    const currentFolder = items?.find((item) => item.folder === 'Drafts');
+
     return (
         <div className='flex flex-col gap-2 p-4 pt-0'>
             { items ? items.map((item) => (
@@ -41,7 +43,9 @@ export default function MailList({ items }: MailListProps): JSX.Element {
                     <div className='flex w-full flex-col gap-1'>
                         <div className='flex items-center'>
                             <div className='flex items-center gap-2'>
-                                <div className='font-semibold'>{item.from.emailAddress.name}</div>
+                                <div className='font-semibold'>
+                                    { currentFolder ? "" : item.from.emailAddress.name }
+                                </div>
                                 {!item.isRead && (
                                     <span className='flex h-2 w-2 rounded-full bg-blue-600' />
                                 )}
