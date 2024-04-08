@@ -13,7 +13,7 @@ export const config = {
 };
 
 const redirectUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/home/email' : 'https://workspace-phi.vercel.app/home/email';
-
+console.log('redirectUrl: ', redirectUrl);
 export const msalConfig = {
     auth: {
         clientId: '1cf6318d-254e-4e01-bf91-9bc3e25dd772',
