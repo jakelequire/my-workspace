@@ -2,8 +2,6 @@
 import MailTab from './components/mailTab';
 import MailDisplay from './components/mailDisplay';
 import Nav from './components/nav';
-import InboxHeader from './components/inboxHeader';
-import SearchBar from './components/searchbar';
 import { AccountSwitcher } from './components/accountSwitcher';
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
