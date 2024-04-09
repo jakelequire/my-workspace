@@ -3,6 +3,7 @@ import MailTab from './components/mailTab';
 import MailDisplay from './components/mailDisplay';
 import Nav from './components/nav';
 import { AccountSwitcher } from './components/accountSwitcher';
+import NewEmail from './components/newEmail';
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -15,7 +16,7 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-reac
 
 
 export default function Email(): JSX.Element {
-    const { emails, tab } = useEmailContext();
+    const { emails, tab, isNewEmailOpen } = useEmailContext();
     
     return (
         <TooltipProvider delayDuration={0}>
@@ -42,7 +43,7 @@ export default function Email(): JSX.Element {
 
                 <ResizablePanel defaultSize={55}>
                     <div className='flex h-full items-center justify-center overflow-hidden'>
-                        <MailDisplay />
+                        { isNewEmailOpen ? <NewEmail /> : ( <MailDisplay /> )}
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>

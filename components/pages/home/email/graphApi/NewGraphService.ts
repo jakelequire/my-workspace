@@ -8,6 +8,7 @@ import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-
 import { endOfWeek, startOfWeek } from 'date-fns';
 import { User, Event } from '@microsoft/microsoft-graph-types';
 import { EmailResponse } from '../types'
+import { NewEmail } from '../EmailContext';
 
 export default class GraphService {
     private graphClient: Client;
@@ -83,7 +84,7 @@ export default class GraphService {
             return mailItems;
         }
     }
-    
+
     /**
      * @description Update email as read
      */
@@ -102,6 +103,27 @@ export default class GraphService {
                 }).catch((error) => {
                     console.error("[GraphService] messageRead error", error);
                 })
+        }
+    }
+
+
+    public async sendNewEmail(email: NewEmail): Promise<void> {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        console.log("[GraphService] sendNewEmail email: ", email)
+
+        if(!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            await this.graphClient.api('/me/sendMail')
+                .post(email)
+                .then((res) => {
+                    console.log("[GraphService] sendNewEmail email sent", res);
+                })
+                .catch((error) => {
+                    console.error("[GraphService] sendNewEmail error", error);
+                });
         }
     }
 

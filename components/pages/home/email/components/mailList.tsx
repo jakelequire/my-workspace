@@ -1,7 +1,5 @@
 'use client';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
 import { EmailResponse } from '../types';
@@ -39,6 +37,7 @@ interface MailListProps {
 
 export default function MailList({ items }: MailListProps): JSX.Element {
     const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
+
     const { setOpenMail, deleteEmail, openMail, readEmail } = useEmailContext();
 
     const setMail = (mail: EmailResponse) => {
@@ -79,6 +78,7 @@ export default function MailList({ items }: MailListProps): JSX.Element {
                     <div className='flex w-full flex-col gap-1'>
                         <div className='flex w-full flex-col gap-1'>
                             <div className='flex items-center'>
+
                                 <div className='flex items-center gap-2'>
                                     <div className={`
                                         font-semibold 
@@ -90,9 +90,9 @@ export default function MailList({ items }: MailListProps): JSX.Element {
                                     {!item.isRead && (
                                         <span className='flex h-2 w-2 rounded-full bg-blue-600' />
                                     )}
-                                    {/* Hover for specific item and only display trash icon for that item */}
                                 
                                 </div>
+
                                 <div className={cn('ml-auto text-xs flex flex-row gap-4')}>
                                     {hoveredItemId === item.id && (
                                         <>
@@ -112,7 +112,7 @@ export default function MailList({ items }: MailListProps): JSX.Element {
                                     })}
                                 </div>
                             </div>
-                                
+                            
                             <div className={
                                 `text-xs font-medium 
                                 ${item.isRead ? 'brightness-75' : ''}

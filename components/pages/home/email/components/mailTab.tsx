@@ -19,14 +19,31 @@ import {
     MailPlus,
     RefreshCcw,
 } from "lucide-react";
+import { useState } from "react";
 
 export default function MailTab(): JSX.Element {
-    const { currentFolder, setTab, emails } = useEmailContext();   
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const { currentFolder, setTab, emails, refreshEmails, setIsNewEmailOpen } = useEmailContext();   
     const title = currentFolder.folder === "inbox" ? "Inbox" : currentFolder.folder;
 
     const focusedEmails = emails.filter((email) => email.inferenceClassification === 'focused');
     const otherEmails = emails.filter((email) => email.inferenceClassification === 'other');
     const unreadEmails = emails.filter((email) => !email.isRead);
+
+    const refreshEmail = () => {
+        const refresh = async () => {
+            refreshEmails()
+        };
+        setLoading(true);
+        refresh().then(() => {
+            setLoading(false);
+        })
+    }
+
+    const newEmail = () => {
+        setIsNewEmailOpen(true);
+    }
 
     return (
         <Tabs defaultValue='focused' className='flex flex-col w-full'>
@@ -59,7 +76,12 @@ export default function MailTab(): JSX.Element {
             </div>
 
             <div className='flex w-full justify-between items-center px-4 py-2 mb-1'>
-                <Button size={'sm'} variant={'default'} className='flex justify-between gap-2'>
+                <Button 
+                    size={'sm'} 
+                    variant={'default'} 
+                    className='flex justify-between gap-2'
+                    onClick={newEmail}
+                >
                     <MailPlus size={16}/>
                     New Email
                 </Button>
@@ -67,7 +89,12 @@ export default function MailTab(): JSX.Element {
                 <div className='flex gap-2'>
                 <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='outline' size='icon'>
+                            <Button 
+                                variant='outline'
+                                size='icon'
+                                onClick={refreshEmail}
+                                className={`${loading ? '' : ''}`}
+                            >
                                 <RefreshCcw size={16} />
                                 <span className='sr-only'>Refresh</span>
                             </Button>

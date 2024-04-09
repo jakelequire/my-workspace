@@ -9,6 +9,7 @@ export const config = {
         'mailboxsettings.readwrite', 
         'calendars.readwrite',
         'mail.readwrite',
+        'mail.send',
     ],
 };
 

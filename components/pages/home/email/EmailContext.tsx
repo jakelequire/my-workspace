@@ -7,6 +7,31 @@ import { InteractionStatus } from '@azure/msal-browser';
 import { EmailResponse, MailFolder } from './types';
 
 
+export interface NewEmail {
+    message: {
+        subject: string;
+        body: {
+            contentType: string;
+            content: string;
+        };
+        toRecipients: [
+            {
+                emailAddress: {
+                    address: string;
+                };
+            }
+        ];
+        ccRecipients: [
+            {
+                emailAddress: {
+                    address: string;
+                };
+            }
+        ];
+    };
+    saveToSentItems: string;
+}
+
 interface EmailContext {
     emails: EmailResponse[];
     setEmails: React.Dispatch<EmailResponse[]>;
@@ -20,6 +45,10 @@ interface EmailContext {
     readEmail: (messageId: string) => void;
     tab: string;
     setTab: React.Dispatch<string>;
+    sendNewEmail: (email: NewEmail) => void;
+    isNewEmailOpen: boolean;
+    setIsNewEmailOpen: React.Dispatch<boolean>;
+    refreshEmails: () => void;
 }
 
 interface CurrentFolder { 
@@ -38,7 +67,11 @@ function useEmailProvider() {
         id: '"AQMkADAwATNiZmYAZC02MDkzLWVjZjAtMDACLTAwCgAuAAADldBYTk_kRkGBgsGeuX5CcwEAKJcwiW9xEEKfi46JjdVRWAAAAgEMAAAA"',
     });
     const [tab, setTab] = useState<string>('focused');
+    const [createNewEmail, setCreateNewEmail] = useState<NewEmail | undefined>();
+    const [isNewEmailOpen, setIsNewEmailOpen] = useState<boolean>(false);
 
+
+    /* ----------------------------------------------------- */
     const { authProvider } = useAppContext();
     
     const graphService = useMemo(() => new GraphService(authProvider as any), [authProvider]);
@@ -104,8 +137,26 @@ function useEmailProvider() {
     }
 
 
+    const sendNewEmail = (email: NewEmail) => {
+        graphService.sendNewEmail(email).then(() => {
+            console.log("Email sent");
+        }).catch((error) => {
+            console.error("[useEmailProvider] newEmail error: ", error);
+        });
+    }
+
+
     const openEmail = (email: EmailResponse) => {
         setOpenMail(email);
+    }
+
+    const refreshEmails = async () => {
+        await graphService.getUserEmails(currentFolder.id, currentFolder.folder).then((emails) => {
+            setEmails(emails);
+        }).catch((error) => {
+            console.error("[useEmailProvider] refreshEmails error: ", error);
+            return [];
+        });
     }
 
     return {
@@ -121,6 +172,10 @@ function useEmailProvider() {
         readEmail,
         tab,
         setTab,
+        sendNewEmail,
+        isNewEmailOpen,
+        setIsNewEmailOpen,
+        refreshEmails,
     };
 }
 
