@@ -67,9 +67,8 @@ function useEmailProvider() {
         id: '"AQMkADAwATNiZmYAZC02MDkzLWVjZjAtMDACLTAwCgAuAAADldBYTk_kRkGBgsGeuX5CcwEAKJcwiW9xEEKfi46JjdVRWAAAAgEMAAAA"',
     });
     const [tab, setTab] = useState<string>('focused');
-    const [createNewEmail, setCreateNewEmail] = useState<NewEmail | undefined>();
     const [isNewEmailOpen, setIsNewEmailOpen] = useState<boolean>(false);
-
+    const [isReplyEmailOpen, setIsReplyEmailOpen] = useState<boolean>(false);
 
     /* ----------------------------------------------------- */
     const { authProvider } = useAppContext();
@@ -98,7 +97,12 @@ function useEmailProvider() {
         }
     }, [inProgress, isAuthenticated, graphService, currentFolder.folder, currentFolder.id]);
 
-
+    /**
+     * @public
+     * 
+     * @description Changes the current folder.
+     * 'Inbox' | 'Drafts' | 'Sent Items' | 'Junk Email' | 'Deleted Items'
+     */
     const changeFolder = (folder: string) => {
         const findFolderId = folders.find((f) => f.displayName === folder);
         setCurrentFolder({
@@ -115,12 +119,22 @@ function useEmailProvider() {
         }));
     }
 
+    /**
+     * @public
+     * 
+     * @description Deletes a specified email.
+     */
     const deleteEmail = (emailId: string) => {
         graphService.deleteEmail(emailId).then(() => {
             setEmails(emails.filter((email) => email.id !== emailId));
         });
     }
 
+    /**
+     * @public
+     * 
+     * @description Sets an email as read. Updates the API with the new status.
+     */
     const readEmail = (messageId: string) => {
         const email = emails.find((email) => email.id === messageId);
         if (email && email.isRead === false) {
@@ -136,7 +150,11 @@ function useEmailProvider() {
         }
     }
 
-
+    /**
+     * @public
+     * 
+     * @description Creation of a new email. [NOT A REPLY EMAIL]
+     */
     const sendNewEmail = (email: NewEmail) => {
         graphService.sendNewEmail(email).then(() => {
             console.log("Email sent");
@@ -145,11 +163,20 @@ function useEmailProvider() {
         });
     }
 
-
+    /**
+     * @public
+     * 
+     * @description Sets the current display to the email that was clicked.
+     */
     const openEmail = (email: EmailResponse) => {
         setOpenMail(email);
     }
 
+    /**
+     * @public
+     * 
+     * @description Manual refresh for emails.
+     */
     const refreshEmails = async () => {
         await graphService.getUserEmails(currentFolder.id, currentFolder.folder).then((emails) => {
             setEmails(emails);
