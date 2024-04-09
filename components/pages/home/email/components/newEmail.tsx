@@ -282,11 +282,21 @@ export default function NewEmail(): JSX.Element {
 
                     <Separator />
 
-                    <div className='p-2 flex flex-col w-full h-full'>
+                    <div className='p-4 flex flex-col w-full h-full'>
                         <Editor
                             editorState={editorState}
                             handleKeyCommand={handleKeyCommand}
                             onChange={onChange}
+                            spellCheck={true}
+                            autoComplete='on'
+                            onTab={(e) => {
+                                e.preventDefault();
+                                // make four spaces instead of a tab
+                                const newState = RichUtils.onTab(e, editorState, 4);
+                                if (newState) {
+                                    onChange(newState);
+                                }
+                            }}
                         />
                     </div>
                 </div>
