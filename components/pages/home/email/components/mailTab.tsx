@@ -4,13 +4,21 @@ import {
     TabsContent,
     TabsList,
     TabsTrigger,
-} from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/tabs";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
 import { useEmailContext } from "../EmailContext";
 import MailList from "./mailList";
 import SearchBar from "./searchbar";
 import { Button } from "@/components/ui/button";
-import { MailPlus } from "lucide-react";
+import { 
+    MailPlus,
+    RefreshCcw,
+} from "lucide-react";
 
 export default function MailTab(): JSX.Element {
     const { currentFolder, setTab, emails } = useEmailContext();   
@@ -55,6 +63,19 @@ export default function MailTab(): JSX.Element {
                     <MailPlus size={16}/>
                     New Email
                 </Button>
+
+                <div className='flex gap-2'>
+                <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant='outline' size='icon'>
+                                <RefreshCcw size={16} />
+                                <span className='sr-only'>Refresh</span>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Refresh</TooltipContent>
+                    </Tooltip>
+                </div>
+
             </div>
 
             <Separator />
