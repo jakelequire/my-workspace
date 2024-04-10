@@ -1,4 +1,14 @@
 
+const sendMail = {
+    message: {
+        subject: 'Meet for lunch?',
+        body: { contentType: 'Text', content: 'The new cafeteria is open.' },
+        toRecipients: [{ emailAddress: { address: 'garthf@contoso.com' } }],
+    },
+};
+
+
+
 /*
     This is the format of the email object that is returned from the Microsoft Graph API.
     This object is used to display the email in the email list.

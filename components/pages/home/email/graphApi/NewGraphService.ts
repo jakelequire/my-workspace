@@ -7,7 +7,7 @@ import {
 import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 import { endOfWeek, startOfWeek } from 'date-fns';
 import { User, Event } from '@microsoft/microsoft-graph-types';
-import { EmailResponse } from '../types'
+import { EmailResponse } from '../types';
 import { NewEmail } from '../EmailContext';
 
 export default class GraphService {
@@ -68,19 +68,20 @@ export default class GraphService {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
-        if(!isClientInitialized) {
+        if (!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
         } else {
-            const mail = await this.graphClient.api(`/me/mailFolders/${folderId}/messages`)
+            const mail = await this.graphClient
+                .api(`/me/mailFolders/${folderId}/messages`)
                 // .filter(`inferenceClassification eq 'focused'`)
                 .top(50)
                 .get();
-            
+
             const mailItems: EmailResponse[] = mail.value;
             mailItems.forEach((email) => {
                 email.folder = displayName;
-            })
-            console.log("[GraphService] getUserEmails mailItems: ", mailItems);
+            });
+            console.log('[GraphService] getUserEmails mailItems: ', mailItems);
             return mailItems;
         }
     }
@@ -92,37 +93,47 @@ export default class GraphService {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
-        if(!isClientInitialized) {
+        if (!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
         } else {
-            await this.graphClient.api(`/me/messages/${messageId}`)
+            await this.graphClient
+                .api(`/me/messages/${messageId}`)
                 .patch({
                     isRead: true,
-                }).then((res) => {
-                    console.log("[GraphService] messageRead email marked as read", res);
-                }).catch((error) => {
-                    console.error("[GraphService] messageRead error", error);
                 })
+                .then((res) => {
+                    console.log('[GraphService] messageRead email marked as read', res);
+                })
+                .catch((error) => {
+                    console.error('[GraphService] messageRead error', error);
+                });
         }
     }
-
 
     public async sendNewEmail(email: NewEmail): Promise<void> {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
-        console.log("[GraphService] sendNewEmail email: ", email)
+        console.log('[GraphService] sendNewEmail email: { PARAMETER }', email);
 
-        if(!isClientInitialized) {
+        if (
+            email.message.ccRecipients.length !== 0 &&
+            email.message.ccRecipients[0].emailAddress.address === ''
+        ) {
+            email.message.ccRecipients = [];
+        }
+
+        if (!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
         } else {
-            await this.graphClient.api('/me/sendMail')
+            await this.graphClient
+                .api('/me/sendMail')
                 .post(email)
                 .then((res) => {
-                    console.log("[GraphService] sendNewEmail email sent", res);
+                    console.log('[GraphService] sendNewEmail email sent', res);
                 })
                 .catch((error) => {
-                    console.error("[GraphService] sendNewEmail error", error);
+                    console.error('[GraphService] sendNewEmail error', error);
                 });
         }
     }
@@ -134,11 +145,10 @@ export default class GraphService {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
-        if(!isClientInitialized) {
+        if (!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
         } else {
-            await this.graphClient.api(`/me/messages/${emailId}`)
-                .delete();
+            await this.graphClient.api(`/me/messages/${emailId}`).delete();
         }
     }
 
@@ -152,16 +162,14 @@ export default class GraphService {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
-        if(!isClientInitialized) {
+        if (!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
         } else {
-            const folders = await this.graphClient.api('/me/mailFolders')
-                .get();
-            
+            const folders = await this.graphClient.api('/me/mailFolders').get();
+
             const mailFolders = folders.value;
-            console.log("[GraphService] getMailFolders folders: ", mailFolders);
+            console.log('[GraphService] getMailFolders folders: ', mailFolders);
             return mailFolders;
         }
     }
-
 }

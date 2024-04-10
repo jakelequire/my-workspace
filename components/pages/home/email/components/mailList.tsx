@@ -51,12 +51,16 @@ export default function MailList({ items }: MailListProps): JSX.Element {
 
     const currentFolder = items?.find((item) => item.folder === 'Drafts');
 
+    const handleButtonClick = (item: EmailResponse) => {
+        setMail(item)
+    }
+
     return (
         <div className='flex flex-col gap-2 p-4 pt-0'>
             { items ? items.map((item) => (
                 <button
                     key={item.id}
-                    onClick={() => setMail(item)}
+                    onClick={() => handleButtonClick(item)}
                     onMouseEnter={() => setHoveredItemId(item.id)}
                     onMouseLeave={() => setHoveredItemId(null)}
                     className={cn(

@@ -27,7 +27,7 @@ export interface NewEmail {
                     address: string;
                 };
             }
-        ];
+        ] | [];
     };
     saveToSentItems: string;
 }
@@ -155,8 +155,8 @@ function useEmailProvider() {
      * 
      * @description Creation of a new email. [NOT A REPLY EMAIL]
      */
-    const sendNewEmail = (email: NewEmail) => {
-        graphService.sendNewEmail(email).then(() => {
+    const sendNewEmail = async (email: NewEmail) => {
+        await graphService.sendNewEmail(email).then(() => {
             console.log("Email sent");
         }).catch((error) => {
             console.error("[useEmailProvider] newEmail error: ", error);
