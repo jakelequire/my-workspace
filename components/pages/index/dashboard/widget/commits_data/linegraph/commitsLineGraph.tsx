@@ -24,10 +24,32 @@ interface Data {
     }[];
 }
 
+type TimeRangeProps = 'ONE_MONTH' | 'TWO_MONTHS'| 'THREE_MONTHS' | 'SIX_MONTHS' | 'ONE_YEAR';
 
-export default function CommitsLineGraph(): JSX.Element {
+type Props = {
+    timeRange: TimeRangeProps;
+}
+
+export default function CommitsLineGraph( { timeRange }: Props ): JSX.Element {
     const { commitHistory } = useGlobalContext();
     const [graphData, setGraphData] = useState<Data[]>([]);
+
+    const timeValue = () => {
+        switch(timeRange) {
+            case "ONE_MONTH":
+                return 1;
+            case "TWO_MONTHS":
+                return 2;
+            case "THREE_MONTHS":
+                return 3
+            case "SIX_MONTHS":
+                return 6;
+            case "ONE_YEAR":
+                return 12;
+            default:
+                return 1;
+        }
+    }
 
     useEffect(() => {
         if (commitHistory) {
@@ -44,7 +66,7 @@ export default function CommitsLineGraph(): JSX.Element {
         const data: Data['data'] = [];
 
         const endDate = new Date(); // today's date
-        const startDate = subMonths(endDate, 1); // 1 months before today
+        const startDate = subMonths(endDate, timeValue()); // Time Range set by props
 
         commitHistory.forEach((week) => {
             week.weeks.forEach((weekInfo) => {

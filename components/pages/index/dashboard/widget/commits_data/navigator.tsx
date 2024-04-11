@@ -8,15 +8,30 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from '@/components/ui/carousel';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+import { useState } from 'react'
 import CommitsLineGraph from './linegraph/commitsLineGraph';
 
-export default function Navigator(): JSX.Element {
+type TimeRangeProps = 'ONE_MONTH' | 'TWO_MONTHS'| 'THREE_MONTHS' | 'SIX_MONTHS' | 'ONE_YEAR';
 
+type Props = {
+    timeRange: TimeRangeProps;
+}
+
+export default function Navigator( { timeRange }: Props ): JSX.Element {
 
     const carouselItem = [
         {
             id: 'linegraph',
-            content: <CommitsLineGraph />,
+            content: <CommitsLineGraph timeRange={timeRange} />,
         },
         {
             id: 'bargraph',
