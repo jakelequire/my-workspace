@@ -85,7 +85,7 @@ export default function CommitsData(): JSX.Element {
             </div>
 
             <div className='flex items-center justify-end w-full h-full pr-8'>
-                <Navigator timeRange={timeRange}/>
+                <Navigator timeRange={timeRange} key={timeRange} />
             </div>
         </div>
     );

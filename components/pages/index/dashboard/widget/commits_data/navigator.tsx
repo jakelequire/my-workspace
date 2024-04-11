@@ -31,7 +31,7 @@ export default function Navigator( { timeRange }: Props ): JSX.Element {
     const carouselItem = [
         {
             id: 'linegraph',
-            content: <CommitsLineGraph timeRange={timeRange} />,
+            content: <CommitsLineGraph timeRange={timeRange} key={timeRange} />,
         },
         {
             id: 'bargraph',
