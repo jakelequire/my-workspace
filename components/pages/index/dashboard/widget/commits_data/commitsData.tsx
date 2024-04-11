@@ -71,6 +71,9 @@ export default function CommitsData(): JSX.Element {
                 <a href='/home/code' className='flex flex-row justify-center'>
                     <h1 className='text-xl font-bold'>Commits Data</h1>
                     <BarChartIcon className='w-5 h-5 ml-4 self-center' />
+                    <div className='flex items-center w-fit h-full ml-2'>
+                        <SelectTimeRange />
+                    </div>
                 </a>
                 {/* TODO:
                     Implement a dropdown menu to choose from different widgets.
@@ -79,9 +82,6 @@ export default function CommitsData(): JSX.Element {
                 <a className='flex items-center self-end w-fit h-full'>
                     <HamburgerMenuIcon color={'#636363'} className='w-5 h-5 mr-4' />
                 </a>
-                <div className='flex items-center w-fit h-full ml-2'>
-                    <SelectTimeRange />
-                </div>
             </div>
 
             <div className='flex items-center justify-end w-full h-full pr-8'>

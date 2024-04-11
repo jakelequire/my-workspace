@@ -34,6 +34,8 @@ export default function CommitsLineGraph( { timeRange }: Props ): JSX.Element {
     const { commitHistory } = useGlobalContext();
     const [graphData, setGraphData] = useState<Data[]>([]);
 
+    console.log("[CommitsLineGraph] {PROPS} timeRange: ", timeRange)
+
     const timeValue = () => {
         switch(timeRange) {
             case "ONE_MONTH":

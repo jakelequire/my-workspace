@@ -27,7 +27,7 @@ type Props = {
 }
 
 export default function Navigator( { timeRange }: Props ): JSX.Element {
-
+    console.log("[Navigator] {PROPS} timeRange: ", timeRange)
     const carouselItem = [
         {
             id: 'linegraph',
