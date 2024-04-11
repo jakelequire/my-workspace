@@ -5,70 +5,28 @@ import GraphService from './graphApi/NewGraphService';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
 import { EmailResponse, MailFolder } from './types';
+import { IEmailContext, NewEmail, CurrentFolder, ReplyEmail } from '@/types/client/emailApp';
 
 
-export interface NewEmail {
-    message: {
-        subject: string;
-        body: {
-            contentType: string;
-            content: string;
-        };
-        toRecipients: [
-            {
-                emailAddress: {
-                    address: string;
-                };
-            }
-        ];
-        ccRecipients: [
-            {
-                emailAddress: {
-                    address: string;
-                };
-            }
-        ] | [];
-    };
-    saveToSentItems: string;
-}
-
-interface EmailContext {
-    emails: EmailResponse[];
-    setEmails: React.Dispatch<EmailResponse[]>;
-    openMail: EmailResponse | undefined;
-    setOpenMail: React.Dispatch<EmailResponse | undefined>;
-    openEmail: (email: EmailResponse) => void;
-    folders: MailFolder[];
-    currentFolder: CurrentFolder;
-    changeFolder: (folder: string) => void;
-    deleteEmail: (emailId: string) => void;
-    readEmail: (messageId: string) => void;
-    tab: string;
-    setTab: React.Dispatch<string>;
-    sendNewEmail: (email: NewEmail) => void;
-    isNewEmailOpen: boolean;
-    setIsNewEmailOpen: React.Dispatch<boolean>;
-    refreshEmails: () => void;
-}
-
-interface CurrentFolder { 
-    folder: string;
-    id: string;
-}
-
-const EmailContext = createContext<EmailContext | undefined>(undefined);
+const EmailContext = createContext<IEmailContext | undefined>(undefined);
 
 function useEmailProvider() {
+    // Handle the state of the emails displayed / open email.
     const [emails, setEmails] = useState<EmailResponse[] | []>([]);
-    const [openMail, setOpenMail] = useState<EmailResponse | undefined>();
+    const [openMail, setOpenMail] = useState<EmailResponse | undefined>(undefined);
+    // Handle the state of the folders displayed in the sidebar.
     const [folders, setFolders] = useState<MailFolder[] | []>([]);
     const [currentFolder, setCurrentFolder] = useState({
         folder: 'Inbox',
         id: '"AQMkADAwATNiZmYAZC02MDkzLWVjZjAtMDACLTAwCgAuAAADldBYTk_kRkGBgsGeuX5CcwEAKJcwiW9xEEKfi46JjdVRWAAAAgEMAAAA"',
     });
+    // Handle the state of the tab selected. (focused | other | unread)
     const [tab, setTab] = useState<string>('focused');
+    // Handle the state of the new email modal.
     const [isNewEmailOpen, setIsNewEmailOpen] = useState<boolean>(false);
+    // Handle the state of the reply email modal.
     const [isReplyEmailOpen, setIsReplyEmailOpen] = useState<boolean>(false);
+    const [replyEmailThread, setReplyEmailThread] = useState<ReplyEmail | undefined>()
 
     /* ----------------------------------------------------- */
     const { authProvider } = useAppContext();
@@ -101,7 +59,7 @@ function useEmailProvider() {
      * @public
      * 
      * @description Changes the current folder.
-     * 'Inbox' | 'Drafts' | 'Sent Items' | 'Junk Email' | 'Deleted Items'
+     * 'Inbox' | 'Drafts' | 'Sent Items' | 'dJunk Email' | 'Deleted Items'
      */
     const changeFolder = (folder: string) => {
         const findFolderId = folders.find((f) => f.displayName === folder);
@@ -124,9 +82,11 @@ function useEmailProvider() {
      * 
      * @description Deletes a specified email.
      */
-    const deleteEmail = (emailId: string) => {
+    const deleteEmail = async (emailId: string) => {
         graphService.deleteEmail(emailId).then(() => {
             setEmails(emails.filter((email) => email.id !== emailId));
+        }).catch((error) => {
+            throw new Error("Error deleting email", error)
         });
     }
 
@@ -153,6 +113,36 @@ function useEmailProvider() {
     /**
      * @public
      * 
+     * @description Flags an email as important.
+     * Updates the API with the new status.
+     */
+    const flagEmail = (messageId: string) => {
+        const email = emails.find((email) => email.id === messageId);
+        let flaggedStatus = '';
+        if (email && email.flag.flagStatus === 'notFlagged') {
+            flaggedStatus = 'flagged';
+            setEmails(emails.map((e) => {
+                if (e.id === messageId) {
+                    e.flag.flagStatus = 'flagged';
+                }
+                return e;
+            }));
+            graphService.messageFlagged(messageId, flaggedStatus);
+        } else {
+            flaggedStatus = 'notFlagged';
+            setEmails(emails.map((e) => {
+                if (e.id === messageId) {
+                    e.flag.flagStatus = 'notFlagged';
+                }
+                return e;
+            }));
+            graphService.messageFlagged(messageId, flaggedStatus);
+        }
+    }
+
+    /**
+     * @public
+     * 
      * @description Creation of a new email. [NOT A REPLY EMAIL]
      */
     const sendNewEmail = async (email: NewEmail) => {
@@ -162,6 +152,17 @@ function useEmailProvider() {
             console.error("[useEmailProvider] newEmail error: ", error);
         });
     }
+
+
+    const replyToEmail = async (email: NewEmail, messageId: string) => {
+        await graphService.replyToEmail(email, messageId).then(() => {
+            console.log("Email replied");
+        }).catch((error) => {
+            console.error("[useEmailProvider] replyToEmail error: ", error);
+            throw new Error("Error replying to email", error);
+        });
+    }
+
 
     /**
      * @public
@@ -186,6 +187,17 @@ function useEmailProvider() {
         });
     }
 
+
+    const retrieveOtherEmails = async () => {
+        await graphService.getOtherEmails().then((emails) => {
+            setEmails(emails);
+        }).catch((error) => {
+            console.error("[useEmailProvider] retrieveOtherEmails error: ", error);
+            return [];
+        })
+    }
+
+
     return {
         emails,
         setEmails,
@@ -203,6 +215,13 @@ function useEmailProvider() {
         isNewEmailOpen,
         setIsNewEmailOpen,
         refreshEmails,
+        isReplyEmailOpen,
+        setIsReplyEmailOpen,
+        replyEmailThread,
+        setReplyEmailThread,
+        replyToEmail,
+        flagEmail,
+        retrieveOtherEmails,
     };
 }
 

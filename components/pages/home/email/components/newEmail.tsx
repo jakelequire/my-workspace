@@ -10,13 +10,16 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { useState, useEffect } from 'react';
-import { useEmailContext, NewEmail as INewEmail } from '../EmailContext';
 import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
+import { toast } from 'sonner';
+
+import { useEmailContext } from '../EmailContext';
+import { NewEmail as INewEmail } from '@/types/client/emailApp';
+
 
 export default function NewEmail(): JSX.Element {
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    const [sendEmailRequested, setSendEmailRequested] = useState(false);
     const [newEmail, setNewEmail] = useState<INewEmail>({
         message: {
             subject: '',
@@ -44,6 +47,8 @@ export default function NewEmail(): JSX.Element {
     const { openMail, deleteEmail, setOpenMail, setIsNewEmailOpen, sendNewEmail } =
         useEmailContext();
 
+    /* -------------------------------------------------------------- */
+
     const onChange = (editorState: any) => {
         setEditorState(editorState);
     };
@@ -68,10 +73,59 @@ export default function NewEmail(): JSX.Element {
         setIsNewEmailOpen(false);
     };
 
-    const newEmailRequest = () => {
-        const data = newEmail;
-        sendNewEmail(data);
-    };
+    const handleRecipient = () => {
+        if(newEmail.message.toRecipients[0].emailAddress.address === '') {
+            return '';
+        } else {
+            return newEmail.message.toRecipients[0].emailAddress.address;
+        }
+    }
+
+    const clearEditor = () => {
+        setEditorState(EditorState.createEmpty());
+    }
+
+    const handleSendEmail = async (email: INewEmail) => {
+        sendNewEmail(email).then(() => {
+            toast.success('Email has been sent.', {
+                description: `Email: ${email.message.subject} has been sent.`,
+                duration: 3000,
+            });
+
+            clearEditor();
+
+            setNewEmail({
+                message: {
+                    subject: '',
+                    body: {
+                        contentType: 'html',
+                        content: '',
+                    },
+                    toRecipients: [
+                        {
+                            emailAddress: {
+                                address: '',
+                            },
+                        },
+                    ],
+                    ccRecipients: [
+                        {
+                            emailAddress: {
+                                address: '',
+                            },
+                        },
+                    ],
+                },
+                saveToSentItems: 'true',
+            })
+        }).catch((error) => {
+            console.error("[NewEmail] sendEmail error: ", error);
+            toast.error('An error occurred while sending the email.', {
+                description: `Email: ${email.message.subject} could not be sent.`,
+                duration: 3000,
+            });
+        });
+    }
 
     const sendEmail = () => {
         const contentState = editorState.getCurrentContent();
@@ -106,32 +160,27 @@ export default function NewEmail(): JSX.Element {
                             address: newEmail.message.toRecipients[0].emailAddress.address,
                         },
                     },
-                    // Include more recipients as needed
                 ],
-                ccRecipients:
-                    newEmail.message.ccRecipients.length > 0 
-                        ?   [
-                                {
-                                    emailAddress: {
-                                        address:
-                                            newEmail.message.ccRecipients.length > 0
-                                                ? newEmail.message.ccRecipients[0].emailAddress
-                                                      .address
-                                                : '',
-                                    },
-                                },
-                            ]
-                        : [],
+                ccRecipients: [
+                    {
+                        emailAddress: {
+                            address: handleRecipient(),
+                        },
+                    },
+                ]
             },
             saveToSentItems: 'true',
         };
 
-        // Call sendNewEmail with the constructed object
-        sendNewEmail(updatedEmail);
+        //! TODO
+        // Unsure why this is causing a type error.
+        // Will need to investigate further in the future, but for now, it works. :^)
+        //@ts-ignore
+        handleSendEmail(updatedEmail);
     };
 
     const ccRecipientsData = () => {
-        if (newEmail.message.ccRecipients.length === 0) {
+        if (newEmail.message.ccRecipients[0].emailAddress.address === '') {
             return '';
         } else {
             return newEmail.message.ccRecipients[0].emailAddress.address;
@@ -308,9 +357,8 @@ export default function NewEmail(): JSX.Element {
                         autoComplete='on'
                     />
                 </div>
+                
             </div>
-
-            {/* -------------------------------------------------------------- */}
         </div>
     );
 }

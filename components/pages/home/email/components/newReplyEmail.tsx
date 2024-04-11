@@ -7,8 +7,13 @@ import {
     Send,
     X,
 } from 'lucide-react';
-
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar";
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { format } from "date-fns/format"
 
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -17,17 +22,20 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { useState } from 'react';
-import { useEmailContext, NewEmail as INewEmail } from '../EmailContext';
+import { useEmailContext } from '../EmailContext';
+import { NewEmail as INewEmail } from '@/types/client/emailApp';
 import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js';
-import { stateToHTML } from 'draft-js-export-html';
-
+import DOMPurify from 'dompurify';
+import parse from 'html-react-parser';
 
 export default function NewReplyEmail(): JSX.Element {
+    const { openMail, deleteEmail, setOpenMail, setIsNewEmailOpen, setIsReplyEmailOpen, replyEmailThread, replyToEmail } = useEmailContext();
+
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
     const [newEmail, setNewEmail] = useState<INewEmail>({
         message: {
-            subject: '',
+            subject: replyEmailThread?.thread[0].subject || '',
             body: {
                 contentType: 'html',
                 content: editorState.getCurrentContent().getPlainText(),
@@ -35,7 +43,7 @@ export default function NewReplyEmail(): JSX.Element {
             toRecipients: [
                 {
                     emailAddress: {
-                        address: '',
+                        address: replyEmailThread?.thread[0].from.emailAddress.address || '',
                     },
                 },
             ],
@@ -51,10 +59,29 @@ export default function NewReplyEmail(): JSX.Element {
     
     });
 
-    const { openMail, deleteEmail, setOpenMail, setIsNewEmailOpen, sendNewEmail } = useEmailContext();
+    const sanitizeHtml = (html: string) => {
+        return DOMPurify.sanitize(html);
+    }
 
-    const onChange = (editorState: any) => {
+    const EmailContentSanitized = ({ htmlContent }: { htmlContent: string }) => {
+        return <div className='w-full h-full px-4'>{parse(sanitizeHtml(htmlContent))}</div>
+    }
+
+    const onChange = (editorState: EditorState) => {
         setEditorState(editorState);
+    
+        // Update the newEmail state with the latest editor content
+        const content = editorState.getCurrentContent().getPlainText();
+        setNewEmail((prevNewEmail) => ({
+            ...prevNewEmail,
+            message: {
+                ...prevNewEmail.message,
+                body: {
+                    ...prevNewEmail.message.body,
+                    content: content,
+                },
+            },
+        }));
     };
 
     const handleKeyCommand = (command: any, editorState: any) => {
@@ -66,13 +93,73 @@ export default function NewReplyEmail(): JSX.Element {
             return 'not-handled';
     };
 
+    const handleClose = () => {
+        setIsReplyEmailOpen(false);
+        setOpenMail(undefined);
+    }
+
+
+    const handleNewReplyEmail = async () => {
+        if(!replyEmailThread) return;
+        await replyToEmail(newEmail, replyEmailThread?.thread[0].id).then(() => {
+            setIsReplyEmailOpen(false);
+            setOpenMail(undefined);
+        }).catch((error) => {
+            console.error("[useEmailProvider] handleNewReplyEmail error: ", error);
+        });
+    }
+
+
+    const ThreadItems = () => {
+        if(replyEmailThread?.thread !== undefined) {
+            return replyEmailThread.thread.map((email: any, index: number) => {
+                return (
+                    <div className='flex flex-col items-start p-4 h-max gap-4 border' key={index}>
+                        <div className='flex flex-row justify-between w-full h-max'>
+                            <div className='flex items-start gap-4 text-sm'>
+                                <Avatar>
+                                    <AvatarImage alt={email.from.emailAddress.name} />
+                                    <AvatarFallback>
+                                        {email.from.emailAddress.name
+                                            .split(' ')
+                                            .map((chunk: any) => chunk[0])
+                                            .join('')}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className='grid gap-1'>
+                                    <div className='font-semibold'>{email.from.emailAddress.name}</div>
+                                    <div className='line-clamp-1 text-xs'>{email.subject}</div>
+                                    <div className='line-clamp-1 text-xs'>
+                                        <span className='font-medium'>Reply-To:</span> {email.sender.emailAddress.address}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='flex h-full w-max'>
+                                {email.receivedDateTime && (
+                                    <div className='ml-auto text-xs text-muted-foreground'>
+                                        {format(new Date(email.receivedDateTime), 'PPp')}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className='flex flex-col h-max w-full'>
+                            <EmailContentSanitized htmlContent={email.body.content} />
+                        </div>
+                    </div>
+                )
+            })
+        }
+    }
 
     return (
         <div className='flex w-full h-full flex-col '>
             <div className='flex items-center p-2'>
                 <div className='flex items-center gap-2'>
                     <h2 className='pl-2 pr-2 text-lg font-semibold text-white'>
-                        Reply to {/* reply name */}
+                        Reply to
+                        <span className='self-center ml-2 font-normal'>
+                            {replyEmailThread?.thread[0].from.emailAddress.name}
+                        </span>
                     </h2>
 
                     <Tooltip>
@@ -100,7 +187,7 @@ export default function NewReplyEmail(): JSX.Element {
                             <Button
                                 variant='ghost'
                                 size='icon'
-                                onClick={deleteMail}>
+                                onClick={() => {}}>
                                 <Trash2 className='h-4 w-4' />
                                 <span className='sr-only'>Move to trash</span>
                             </Button>
@@ -134,7 +221,7 @@ export default function NewReplyEmail(): JSX.Element {
                             variant='default'
                             size='icon'
                             className='flex w-max gap-2 px-8 h-8'
-                            onClick={sendEmail}
+                            onClick={handleNewReplyEmail}
                         >
                             <span className='font-semibold'>Send</span>
                             <Send size={16} />
@@ -145,7 +232,7 @@ export default function NewReplyEmail(): JSX.Element {
                 <Separator orientation='vertical' className='mx-2 h-6' />
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button variant={'ghost'} size={'icon'} onClick={closeNewEmail}>
+                        <Button variant={'ghost'} size={'icon'} onClick={handleClose}>
                             <X className='h-4 w-4' />
                             <span className='sr-only'>Close</span>
                         </Button>
@@ -234,27 +321,26 @@ export default function NewReplyEmail(): JSX.Element {
 
                     <Separator />
 
-                    <div className='p-4 flex flex-col w-full h-full'>
-                        <Editor
-                            editorState={editorState}
-                            handleKeyCommand={handleKeyCommand}
-                            onChange={onChange}
-                            spellCheck={true}
-                            autoComplete='on'
-                            onTab={(e) => {
-                                e.preventDefault();
-                                // make four spaces instead of a tab
-                                const newState = RichUtils.onTab(e, editorState, 4);
-                                if (newState) {
-                                    onChange(newState);
-                                }
-                            }}
-                        />
+                    <div className='p-4 flex flex-col w-full h-full gap-2 overflow-y-scroll overflow-x-hidden'>
+                        
+                        <div className='flex flex-col gap-2 w-full min-h-[60%] p-2 border overflow-x-hidden overflow-y-scroll'>
+                            <Editor
+                                editorState={editorState}
+                                handleKeyCommand={handleKeyCommand}
+                                onChange={onChange}
+                                spellCheck={true}
+                                autoComplete='on'
+                            />
+                        </div>
+
+                        <div className='flex flex-col gap-2 w-full h-max'>
+                            <ThreadItems />
+                        </div>
+
                     </div>
+
+
                 </div>
-            
-            {/* -------------------------------------------------------------- */}
         </div>
     );
 }
-

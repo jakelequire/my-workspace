@@ -47,28 +47,98 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { useEmailContext } from "../EmailContext";
 import DOMPurify from 'dompurify';
 import parse from 'html-react-parser';
 
+import { ReplyEmail } from "@/types/client/emailApp";
+import { useEmailContext } from "../EmailContext";
 
 export default function MailDisplay(): JSX.Element {
     const today = new Date()
 
-    const { openMail, deleteEmail, setOpenMail } = useEmailContext()
+    const { emails, openMail, deleteEmail, setOpenMail, setReplyEmailThread, setIsReplyEmailOpen } = useEmailContext()
 
     const sanitizeHtml = (html: string) => {
         return DOMPurify.sanitize(html);
     }
 
     const EmailContentSanitized = ({ htmlContent }: { htmlContent: string }) => {
-        return <div className='w-full h-full px-4'>{parse(sanitizeHtml(htmlContent))}</div>
+        return <div className='w-full h-max px-4'>{parse(sanitizeHtml(htmlContent))}</div>
     }
 
     const deleteMail = () => {
         if(openMail) {
             deleteEmail(openMail.id)
             setOpenMail(undefined)
+        }
+    }
+
+
+    const handleReply = () => {
+        if(openMail) {
+            setIsReplyEmailOpen(true)
+            const replyEmail = {
+                message: {
+                    subject: `Re: ${openMail.subject}`,
+                    body: {
+                        contentType: "text",
+                        content: `On ${format(new Date(openMail.receivedDateTime), 'PPpp')}, ${openMail.from.emailAddress.name} wrote: \n\n${openMail.body.content}`
+                    },
+                    toRecipients: [
+                        {
+                            emailAddress: {
+                                address: openMail.from.emailAddress.address
+                            }
+                        }
+                    ],
+                    ccRecipients: openMail.ccRecipients ? openMail.ccRecipients : [],
+                },
+                thread: [openMail]
+            }
+
+            //@ts-ignore
+            setReplyEmailThread(replyEmail)
+        }
+    }
+
+    const emailsWithSameConversationId = openMail?.conversationId ? emails.filter(email => email.conversationId === openMail.conversationId) : []
+    emailsWithSameConversationId.reverse().pop()
+
+    const ThreadItems = () => {
+        if(emailsWithSameConversationId !== undefined) {
+            return emailsWithSameConversationId.map((email: any, index: number ) => {
+                return (
+                    <div className='flex flex-col items-start p-4 h-max gap-4 border' key={index}>
+                        <div className='flex flex-row justify-between w-full h-max'>
+                            <div className='flex items-start gap-4 text-sm'>
+                                <Avatar>
+                                    <AvatarImage alt={email.from.emailAddress.name} />
+                                    <AvatarFallback>
+                                        {email.from.emailAddress.name
+                                            .split(' ')
+                                            .map((chunk: any) => chunk[0])
+                                            .join('')}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className='grid gap-1'>
+                                    <div className='font-semibold'>{email.from.emailAddress.name}</div>
+                                    <div className='line-clamp-1 text-xs'>{email.subject}</div>
+                                </div>
+                            </div>
+                            <div className='flex h-full w-max'>
+                                {email.receivedDateTime && (
+                                    <div className='ml-auto text-xs text-muted-foreground'>
+                                        {format(new Date(email.receivedDateTime), 'PPp')}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className='flex flex-col h-max w-full'>
+                            <EmailContentSanitized htmlContent={email.body.content} />
+                        </div>
+                    </div>
+                )
+            })
         }
     }
 
@@ -163,7 +233,7 @@ export default function MailDisplay(): JSX.Element {
                 <div className='ml-auto flex items-center gap-2'>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant='ghost' size='icon' disabled={!openMail}>
+                            <Button variant='ghost' size='icon' disabled={!openMail} onClick={handleReply}>
                                 <Reply className='h-4 w-4' />
                                 <span className='sr-only'>Reply</span>
                             </Button>
@@ -237,30 +307,19 @@ export default function MailDisplay(): JSX.Element {
                     </div>
                     <Separator />
 
-                    <div className='flex-1 whitespace-pre-wrap p-4 text-sm overflow-x-hidden overflow-scroll h-[55%] w-full'>
+                    <div className='flex flex-col whitespace-pre-wrap p-4 text-sm overflow-x-hidden overflow-scroll h-full w-full gap-4'>
                         <EmailContentSanitized htmlContent={openMail.body.content} />
+                        <br />
+                        <br />
+                        <ThreadItems />
                     </div>
 
                     <Separator className='mt-auto' />
-                    <div className='p-4 flex flex-col w-full h-[30%]'>
+
+                    <div className='p-4 flex flex-col w-full min-h-[15%]'>
                         <form>
                             <div className='grid gap-4'>
-
-                                {/* -------------------------------------
-                                *   TODO
-                                *       - Add attachments
-                                *       - Add CC/BCC
-                                *       - Add subject
-                                *       - Able to write in markdown
-                                *       - Add labels
-                                ---------------------------------------- */}
-                                <Textarea 
-                                    className='p-4 whitespace-pre-wrap resize-none h-[125px] overflow-auto' 
-                                    placeholder={`Reply to ${openMail.from.emailAddress.name}...`} 
-                                />
-                                {/* ----------------------------------------------------------------------- */}
-
-                                <div className='flex items-center'>
+                                <div className='flex items-center justify-center'>
                                     <Label
                                         htmlFor='mute'
                                         className='flex items-center gap-2 text-xs font-normal'>
@@ -268,10 +327,12 @@ export default function MailDisplay(): JSX.Element {
                                         thread
                                     </Label>
                                     <Button
-                                        onClick={(e) => e.preventDefault()}
+                                        onClick={(e) => {e.preventDefault(); handleReply()}}
+                                        variant={'outline'}
                                         size='sm'
-                                        className='ml-auto'>
-                                        Send
+                                        className='ml-auto gap-2'>
+                                        Reply
+                                        <Reply size={16} />
                                     </Button>
                                 </div>
                             </div>
@@ -281,8 +342,6 @@ export default function MailDisplay(): JSX.Element {
             ) : (
                 <div className='p-8 text-center text-muted-foreground'>No message selected</div>
             )}
-            {/*  ------------------------------------------------------------ */}
-
         </div>
     );
 }

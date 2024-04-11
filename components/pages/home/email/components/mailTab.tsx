@@ -24,7 +24,7 @@ import { useState } from "react";
 export default function MailTab(): JSX.Element {
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { currentFolder, setTab, emails, refreshEmails, setIsNewEmailOpen } = useEmailContext();   
+    const { currentFolder, setTab, emails, refreshEmails, setIsNewEmailOpen, retrieveOtherEmails} = useEmailContext();   
     const title = currentFolder.folder === "inbox" ? "Inbox" : currentFolder.folder;
 
     const focusedEmails = emails.filter((email) => email.inferenceClassification === 'focused');
@@ -61,6 +61,7 @@ export default function MailTab(): JSX.Element {
                     <TabsTrigger 
                         value='other' 
                         className='text-zinc-600 dark:text-zinc-200'
+                        onClick={retrieveOtherEmails}
                     >
                         Other
                     </TabsTrigger>

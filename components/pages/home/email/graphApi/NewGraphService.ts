@@ -8,7 +8,15 @@ import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-
 import { endOfWeek, startOfWeek } from 'date-fns';
 import { User, Event } from '@microsoft/microsoft-graph-types';
 import { EmailResponse } from '../types';
-import { NewEmail } from '../EmailContext';
+import { NewEmail } from '@/types/client/emailApp';
+
+
+interface Folder {
+    id: string;
+    displayName: string;
+    totalItemCount: number;
+    unreadItemCount: number;
+}
 
 export default class GraphService {
     private graphClient: Client;
@@ -61,6 +69,19 @@ export default class GraphService {
     /* ----------------------------------------------------- */
     /* ----------------- EMAIL RELATED METHODS ------------- */
     /* ----------------------------------------------------- */
+
+    private async getFolderIds(): Promise<any> {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        if (!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            const folders = await this.graphClient.api('/me/mailFolders').get();
+            return folders.value;
+        }
+    }
+
     /**
      * @description Get user emails from Microsoft Graph API
      */
@@ -86,6 +107,28 @@ export default class GraphService {
         }
     }
 
+
+
+
+    public async getOtherEmails(): Promise<EmailResponse[]> {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        if (!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            const mail = await this.graphClient
+            .api(`/me/messages?$select=id,receivedDateTime,subject,from&$filter=inferenceClassification eq 'other'`)
+            .top(50)
+                .get();
+
+            const mailItems: EmailResponse[] = mail.value;
+            console.log('[GraphService] getOtherEmails mailItems: ', mailItems);
+            return mailItems;
+        }
+    }
+
+
     /**
      * @description Update email as read
      */
@@ -110,18 +153,45 @@ export default class GraphService {
         }
     }
 
+    /**
+     * @description Flag email as important
+     */
+    public async messageFlagged(messageId: string, flaggedStatus: string) {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        if (!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            await this.graphClient
+                .api(`/me/messages/${messageId}`)
+                .patch({
+                    flag: {
+                        flagStatus: flaggedStatus,
+                    },
+                })
+                .then((res) => {
+                    console.log('[GraphService] messageFlagged email flagged', res);
+                })
+                .catch((error) => {
+                    console.error('[GraphService] messageFlagged error', error);
+                });
+        }
+    }
+
+    /**
+     * @description Sends a new email to the specified recipient.
+     */
     public async sendNewEmail(email: NewEmail): Promise<void> {
         this.ensureClient();
         const isClientInitialized = await this.isClientInitialized();
 
         console.log('[GraphService] sendNewEmail email: { PARAMETER }', email);
 
-        if (
-            email.message.ccRecipients.length !== 0 &&
-            email.message.ccRecipients[0].emailAddress.address === ''
-        ) {
+        if(!email.message.ccRecipients[0].emailAddress.address) {
+            //@ts-ignore
             email.message.ccRecipients = [];
-        }
+        } 
 
         if (!isClientInitialized) {
             throw new Error('Graph client is not initialized.');
@@ -134,6 +204,36 @@ export default class GraphService {
                 })
                 .catch((error) => {
                     console.error('[GraphService] sendNewEmail error', error);
+                });
+        }
+    }
+
+    /**
+     * @description Send a reply message to the specified email.
+     */
+    public async replyToEmail(email: NewEmail, emailId: string): Promise<void> {
+        this.ensureClient();
+        const isClientInitialized = await this.isClientInitialized();
+
+        console.log('[GraphService] replyToEmail email: { PARAMETER }', email);
+        console.log({'[GraphService] replyToEmail emailId': emailId});
+
+        if(!email.message.ccRecipients[0].emailAddress.address) {
+            //@ts-ignore
+            email.message.ccRecipients = [];
+        } 
+
+        if (!isClientInitialized) {
+            throw new Error('Graph client is not initialized.');
+        } else {
+            await this.graphClient
+                .api(`/me/messages/${emailId}/reply`)
+                .post(email)
+                .then((res) => {
+                    console.log('[GraphService] replyToEmail email sent', res);
+                })
+                .catch((error) => {
+                    console.error('[GraphService] replyToEmail error', error);
                 });
         }
     }
