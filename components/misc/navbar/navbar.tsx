@@ -17,6 +17,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { useRouter } from 'next/navigation';
 import ClearLocalData from './buttons/clearLocalData'
+import NavbarNotifications from '../notification_center/components/navbarNotifications';
 
 const auth = getAuth(firebase_app);
 
@@ -153,11 +154,11 @@ export default function Navbar(): JSX.Element {
     };
 
     return (
-        <div className='flex flex-row items-center justify-between w-full h-12 border-b border-b-zinc-600'>
-            <div className='flex justify-end flex-initial w-24 '>
-                {/* */}
+        <div className='flex flex-row items-center  w-full h-12 border-b border-b-zinc-600'>
+            <div className='flex justify-start w-[20%] h-full px-6'>
+                <NavbarNotifications />
             </div>
-            <div className='flex justify-center flex-grow'>
+            <div className='flex justify-center flex-grow h-full w-[60%]'>
                 {isLoggedIn ? (
                     <NavigationMenu className='justify-center'>
                         <NavigationMenuList>
@@ -224,7 +225,7 @@ export default function Navbar(): JSX.Element {
                     </NavigationMenu>
                 ) : null}
             </div>
-            <div className='flex justify-end flex-initial w-32 '>
+            <div className='flex justify-end items-center h-full w-[20%] '>
                 {(isLoggedIn ? <ClearLocalData className={navigationMenuTriggerStyle()}/> : null)}
                 {(isLoggedIn ? <LoginButton /> : null)}
             </div>

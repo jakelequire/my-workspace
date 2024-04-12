@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { AuthContextProvider } from '@/app/AuthContext';
 import { GlobalProvider } from '@/components/GlobalContext';
 import { ThemeProvider } from '@/components/theme-provider';
+import { NotificaionsProvider } from '@/components/misc/notification_center/NotificationsContext';
 import { Toaster } from 'sonner';
 
 import './globals.css';
@@ -31,7 +32,11 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange>
                     <AuthContextProvider>
-                        <GlobalProvider>{children}</GlobalProvider>
+                        <GlobalProvider>
+                            <NotificaionsProvider>
+                                {children}
+                            </NotificaionsProvider>
+                        </GlobalProvider>
                     </AuthContextProvider>
                 <Toaster richColors />
                 </ThemeProvider>
