@@ -9,16 +9,26 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-  } from "@/components/ui/select"
-import { useState } from 'react'
+} from "@/components/ui/select"
+import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useDashboardContext } from '../../../DashboardContext';
 
 type TimeRangeProps = 'ONE_MONTH' | 'TWO_MONTHS'| 'THREE_MONTHS' | 'SIX_MONTHS' | 'ONE_YEAR';
 
 export default function CommitsData(): JSX.Element {
-    const [timeRange, setTimeRange] = useState<TimeRangeProps>('ONE_MONTH')
+    const {timeRangeData, setTimeRangeData } = useDashboardContext();
 
     const timeValue = () => {
-        switch(timeRange) {
+        switch(timeRangeData) {
             case "ONE_MONTH":
                 return 'One Month';
             case "TWO_MONTHS":
@@ -35,33 +45,65 @@ export default function CommitsData(): JSX.Element {
         }
     }
 
+
+    const setTimeRange = (value: TimeRangeProps) => {
+        console.log('Hello from setCategory', value);
+        setTimeRangeData(value);
+    };
+
     const SelectTimeRange = () => {
         return (
-            <Select>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder={timeValue()} />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectLabel>Time Range</SelectLabel>
-                        <SelectItem value="One Month" onClick={() => setTimeRange("ONE_MONTH")}>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button className={`w-[100%]`} variant='outline'>
+                        {timeValue()}
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='w-56'>
+                    <DropdownMenuLabel>Set Time Range</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup value={timeValue()} onChange={(e) => {
+                        console.log('Hello from onChange');
+                        setTimeRange(e as unknown as TimeRangeProps);
+                    }}>
+                        <DropdownMenuRadioItem
+                            value='One Month'
+                            onSelect={(_) => {
+                                setTimeRange('ONE_MONTH');
+                            }}>
                             One Month
-                        </SelectItem>
-                        <SelectItem value="Two Months" onClick={() => setTimeRange("TWO_MONTHS")}>
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Two Months'
+                            onSelect={(_) => {
+                                setTimeRange('TWO_MONTHS');
+                            }}>
                             Two Months
-                        </SelectItem>
-                        <SelectItem value="Three Months" onClick={() => setTimeRange("THREE_MONTHS")}>
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Three Months'
+                            onSelect={(_) => {
+                                setTimeRange('THREE_MONTHS');
+                            }}>
                             Three Months
-                        </SelectItem>
-                        <SelectItem value="Six Months" onClick={() => setTimeRange("SIX_MONTHS")}>
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='Six Months'
+                            onSelect={(_) => {
+                                setTimeRange('SIX_MONTHS');
+                            }}>
                             Six Months
-                        </SelectItem>
-                        <SelectItem value="One Year" onClick={() => setTimeRange("ONE_YEAR")}>
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem
+                            value='One Year'
+                            onSelect={(_) => {
+                                setTimeRange('ONE_YEAR');
+                            }}>
                             One Year
-                        </SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
+                        </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
         )
     }
     return (
@@ -85,7 +127,7 @@ export default function CommitsData(): JSX.Element {
             </div>
 
             <div className='flex items-center justify-end w-full h-full pr-8'>
-                <Navigator timeRange={timeRange} key={timeRange} />
+                <Navigator />
             </div>
         </div>
     );

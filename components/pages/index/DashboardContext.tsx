@@ -1,13 +1,17 @@
+'use client';
 import React, { useContext, createContext, useState, useEffect, useMemo } from 'react';
-import { DashboardContextType } from '@/types/client/dashboardApp';
+import { DashboardContextType, TimeRangeProps } from '@/types/client/dashboardApp';
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
 function useDashboardProvider() {
-    const [timeRangeData, setTimeRangeData] = useState<string>('ONE_MONTH');
+    const [timeRangeData, setTimeRangeData] = useState<TimeRangeProps>('ONE_MONTH');
 
 
-    return undefined;
+    return {
+        timeRangeData,
+        setTimeRangeData
+    };
 }
 
 export const DashboardProvider = ({ children }: { children: React.ReactNode }) => {

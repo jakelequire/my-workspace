@@ -1,5 +1,4 @@
 'use client';
-
 import { Card, CardContent } from '@/components/ui/card';
 import {
     Carousel,
@@ -8,30 +7,13 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from '@/components/ui/carousel';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-import { useState } from 'react'
 import CommitsLineGraph from './linegraph/commitsLineGraph';
 
-type TimeRangeProps = 'ONE_MONTH' | 'TWO_MONTHS'| 'THREE_MONTHS' | 'SIX_MONTHS' | 'ONE_YEAR';
-
-type Props = {
-    timeRange: TimeRangeProps;
-}
-
-export default function Navigator( { timeRange }: Props ): JSX.Element {
-    console.log("[Navigator] {PROPS} timeRange: ", timeRange)
+export default function Navigator(): JSX.Element {
     const carouselItem = [
         {
             id: 'linegraph',
-            content: <CommitsLineGraph timeRange={timeRange} key={timeRange} />,
+            content: <CommitsLineGraph />,
         },
         {
             id: 'bargraph',

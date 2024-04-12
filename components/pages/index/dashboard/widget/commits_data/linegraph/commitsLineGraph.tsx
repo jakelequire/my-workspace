@@ -1,8 +1,10 @@
 'use client';
 import { ResponsiveLine } from '@nivo/line';
 import { useGlobalContext } from '@/components/GlobalContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { format, subMonths, isWithinInterval } from 'date-fns';
+import { useDashboardContext } from '@/components/pages/index/DashboardContext';
+import { TimeRangeProps } from '@/types/client/dashboardApp';
 
 interface CommitHistory {
     totalContributions: number;
@@ -24,54 +26,37 @@ interface Data {
     }[];
 }
 
-type TimeRangeProps = 'ONE_MONTH' | 'TWO_MONTHS'| 'THREE_MONTHS' | 'SIX_MONTHS' | 'ONE_YEAR';
-
-type Props = {
-    timeRange: TimeRangeProps;
-}
-
-export default function CommitsLineGraph( { timeRange }: Props ): JSX.Element {
+export default function CommitsLineGraph(): JSX.Element {
     const { commitHistory } = useGlobalContext();
+    const { timeRangeData } = useDashboardContext();
+
     const [graphData, setGraphData] = useState<Data[]>([]);
 
-    console.log("[CommitsLineGraph] {PROPS} timeRange: ", timeRange);
-
-    const timeValue = () => {
-        switch(timeRange) {
-            case "ONE_MONTH":
-                return 1;
-            case "TWO_MONTHS":
-                return 2;
-            case "THREE_MONTHS":
-                return 3
-            case "SIX_MONTHS":
-                return 6;
-            case "ONE_YEAR":
-                return 12;
-            default:
-                return 1;
+    const convertCommitHistoryToData = useCallback((commitHistory: CommitHistory[]) => {
+        const id = 'commits';
+        const color = 'hsl(178, 70%, 50%)';
+    
+        const timeValue = () => {
+            switch(timeRangeData) {  // Use timeRangeData directly
+                case "ONE_MONTH":
+                    return 1;
+                case "TWO_MONTHS":
+                    return 2;
+                case "THREE_MONTHS":
+                    return 3;
+                case "SIX_MONTHS":
+                    return 6;
+                case "ONE_YEAR":
+                    return 12;
+                default:
+                    return 1;
+            }
         }
-    }
-
-    useEffect(() => {
-        if (commitHistory) {
-            const convertedData = convertCommitHistoryToData(commitHistory);
-            setGraphData(convertedData);
-        }
-    }, [commitHistory]);
-
-    const convertCommitHistoryToData = (
-        commitHistory: CommitHistory[],
-        id: string = 'commits',
-        color: string = 'hsl(178, 70%, 50%)'
-    ): Data[] => {
-        const data: Data['data'] = [];
-
-        const endDate = new Date(); // today's date
-        const startDate = subMonths(endDate, timeValue()); // Time Range set by props
-
-        console.log("[CommitsLineGraph] {convertCommitHistoryToData} startDate: ", startDate, "endDate: ", endDate)
+    
+        const endDate = new Date();
+        const startDate = subMonths(endDate, timeValue());
         
+        const data: Data['data'] = [];
         commitHistory.forEach((week) => {
             week.weeks.forEach((weekInfo) => {
                 weekInfo.contributionDays.forEach((day) => {
@@ -85,9 +70,16 @@ export default function CommitsLineGraph( { timeRange }: Props ): JSX.Element {
                 });
             });
         });
-
+    
         return [{ id, color, data }];
-    };
+    }, [timeRangeData]);  // Updated dependency array to use timeRangeData
+    
+    useEffect(() => {
+        if (commitHistory) {
+            const convertedData = convertCommitHistoryToData(commitHistory);
+            setGraphData(convertedData);
+        }
+    }, [commitHistory, convertCommitHistoryToData]);
 
     return (
         <div style={{ scale: '1.1', marginLeft: '40px' }} className='flex w-full h-full'>
@@ -133,9 +125,9 @@ export default function CommitsLineGraph( { timeRange }: Props ): JSX.Element {
                     legendPosition: 'middle',
                     truncateTickAt: 0,
                 }}
-                pointSize={8}
+                pointSize={4}
                 pointColor={{ theme: 'background' }}
-                pointBorderWidth={2}
+                pointBorderWidth={3}
                 pointBorderColor={{ from: 'serieColor' }}
                 pointLabelYOffset={-12}
                 enableTouchCrosshair={true}
