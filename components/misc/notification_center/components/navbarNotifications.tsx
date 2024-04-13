@@ -13,6 +13,7 @@ import {
     NavigationMenuLink,
 } from '../../../ui/navigation-menu';
 import { cn } from '@/lib/utils';
+import NavTabs from './navTabs'
 import React, { useState, useRef } from 'react';
 
 export default function NavbarNotifications(): JSX.Element {
@@ -23,17 +24,7 @@ export default function NavbarNotifications(): JSX.Element {
                 <NavigationMenuItem>
                     <NavigationMenuTrigger>Notifications</NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        {/* <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
-                            {home_life.map((component) => (
-                                <ListItem
-                                    key={component.title}
-                                    className={component.active ? '' : 'text-accent'}
-                                    title={component.title}
-                                    href={component.href}>
-                                    {component.description}
-                                </ListItem>
-                            ))}
-                        </ul> */}
+                        <NavTabs />
                     </NavigationMenuContent>
                 </NavigationMenuItem>
 
