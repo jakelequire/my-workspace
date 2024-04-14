@@ -113,7 +113,7 @@ export default function CommitsData(): JSX.Element {
                 <a href='/home/code' className='flex flex-row justify-center'>
                     <h1 className='text-xl font-bold'>Commits Data</h1>
                     <BarChartIcon className='w-5 h-5 ml-4 self-center' />
-                    <div className='flex items-center w-fit h-full ml-2'>
+                    <div className='flex items-center w-fit h-full ml-8'>
                         <SelectTimeRange />
                     </div>
                 </a>
