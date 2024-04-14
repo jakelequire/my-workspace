@@ -1,7 +1,17 @@
 
 
+export type NotificationType = 'EMAIL' | 'TODO' | 'CODE' | 'REMINDER';
+export type NotificaitonSubCategory = 'NEW' | 'URGENT' | 'UNREAD' | 'READ';
+
+
 export interface Notification {
-    /* Grab data from unpublished branch at home */
+    id: string;
+    type: NotificationType;
+    subCategory: NotificaitonSubCategory;
+    title: string;
+    body: string;
+    date: string;
+    read: boolean;
 }
 
 export interface NotificaionsContextType {

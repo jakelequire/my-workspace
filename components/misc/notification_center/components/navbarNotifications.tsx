@@ -28,7 +28,7 @@ export default function NavbarNotifications(): JSX.Element {
                     </NavigationMenuContent>
                 </NavigationMenuItem>
 
-            </NavigationMenuList>
+            </NavigationMenuList> 
         </NavigationMenu>
     );
 }
