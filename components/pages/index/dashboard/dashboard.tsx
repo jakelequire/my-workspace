@@ -3,6 +3,7 @@ import { TodoWidget } from './widget/todo_widget/todoWidget';
 import { DashNav } from './navigation/dashNav';
 import MiniTodo from './widget/todo_widget/miniTodo';
 import CommitsCalendar from './widget/commits_calendar/commitsCalendar'
+import QuickAcess from './widget/quick_access/quickAccess'
 import MiniJobs from './widget/jobs_widget/miniJobs';
 import CommitsData from './widget/commits_data/commitsData';
 
@@ -32,10 +33,10 @@ export default function Dashboard(): JSX.Element {
 
             <div className={styles.top_widget_container}>
                 <div className={styles.mini_widget_one}>
-                    {/* <CommitsCalendar /> */}
+                    <QuickAcess />
                 </div>
                 <div className={styles.mini_widget_two}>
-
+                    {/* <CommitsCalendar /> */}
                 </div>
                 <div className={styles.mini_widget_three}>
                     <MiniJobs />
