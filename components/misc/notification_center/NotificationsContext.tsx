@@ -7,7 +7,7 @@ const NotificaionsContext = createContext<NotificaionsContextType | undefined>(u
 function useNotificaionsProvider() {
     const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
-    const [emailNotification, setEmailNotification] = useState<Notification>()
+    const [emailNotification, setEmailNotification] = useState<Notification[]>()
     const [unreadEmails, setUnreadEmails] = useState<number>(0);
 
 
@@ -61,6 +61,7 @@ function useNotificaionsProvider() {
 
 export const NotificaionsProvider = ({ children }: { children: React.ReactNode }) => {
     const value = useNotificaionsProvider();
+    //@ts-ignore
     return <NotificaionsContext.Provider value={value}>{children}</NotificaionsContext.Provider>;
 };
 
