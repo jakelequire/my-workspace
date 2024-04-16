@@ -6,7 +6,10 @@ import { firebase_app } from '@/lib/firebase-config';
 import { GlobalState, JobsApp, Todo, CodespaceApp } from '@/types/types';
 import { synchronizeDb } from '@/utils/dbSync';
 // import { InitDb } from '@/utils/initDb';
+import GlobalApi from './globalApi';
 import localForage from '@/localForageConfig';
+
+const globalApi = new GlobalApi();
 
 const GlobalContext = createContext<GlobalState.GlobalContextType | undefined>(undefined);
 
@@ -77,6 +80,74 @@ function useGlobalProvider() {
 
         return () => window.removeEventListener('online', handleOnline);
     }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+
+            // <todo items>
+            globalApi.getTodoItems().then((data) => {
+                if (data instanceof Error) {
+                    console.error('Error fetching todo items:', data);
+                    return;
+                }
+                globalApi.getLocalData('todoItems').then((localData) => {
+                    if (localData instanceof Error) {
+                        console.error('Error fetching local todo items:', localData);
+                        return;
+                    }
+                    if(!globalApi.dataCheck(data, localData)) {
+                        globalApi.setLocalData('todoItems', data);
+                    }
+                });
+
+                setTodoList(data);
+            });
+            // </todo items>
+
+            // <job items>
+            globalApi.getJobItems().then((data) => {
+                if (data instanceof Error) {
+                    console.error('Error fetching job items:', data);
+                    return;
+                }
+                globalApi.getLocalData('jobItems').then((localData) => {
+                    if (localData instanceof Error) {
+                        console.error('Error fetching local job items:', localData);
+                        return;
+                    }
+                    if(!globalApi.dataCheck(data, localData)) {
+                        globalApi.setLocalData('jobItems', data);
+                    }
+                });
+                setJobList(data);
+            });
+            // </job items>
+
+            // <user data>
+            if(!globalApi.isUserSignedIn()) {
+                globalApi.getUser().then((data) => {
+                    if (data instanceof Error) {
+                        console.error('Error fetching user data:', data);
+                        return;
+                    }
+                    const userId = data.userId.value;
+                
+                    globalApi.postUser(userId).then((response) => {
+                        if (response instanceof Error) {
+                            console.error('Error posting user data:', response);
+                            return;
+                        }
+                    });
+                
+                    setUser(data);
+                });
+            }
+            // </user data>
+
+        }, 1000 * 60 * 30);
+    
+        return () => clearInterval(intervalId);
+    })
 
     /* --------------------------------------------------------- */
     /* Fetch user and session                                    */
