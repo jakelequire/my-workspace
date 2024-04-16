@@ -1,5 +1,6 @@
 import { Todo } from "@/types/client/todoApp";
 import { JobsApp } from "@/types/client/jobApp";
+import { CodespaceApp } from "@/types/client/codespaceApp";
 import localForage from '@/localForageConfig';
 
 
@@ -8,6 +9,11 @@ interface ResponseObj {
     status: number;
     message: string;
     value: string;
+}
+
+type GetCommitReturn = {
+    commitData: CodespaceApp.CommitHistoryData[];
+    commitHistory: CodespaceApp.CommitHistory[];
 }
 
 export default class GlobalApi {
@@ -95,6 +101,24 @@ export default class GlobalApi {
         if (!response.ok) throw new Error('Failed to fetch job items');
         const data: JobsApp.JobItem[]  = await response.json();
         return data;
+    }
+
+
+    public async getCommits(): Promise<GetCommitReturn | Error> {
+        const response = await fetch('/api/services/github/commits');
+        const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
+        const _commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
+
+        const commitHistory = [data.data.user.contributionsCollection.contributionCalendar];
+
+        const commitData = _commitHistory.flatMap(commitHistory =>
+            commitHistory.contributionDays.map(day => ({
+                day: day.date,
+                value: day.contributionCount,
+            }))
+        );
+
+        return { commitData, commitHistory };
     }
     /* --------------------------------------------------------- */
 
