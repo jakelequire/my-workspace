@@ -4,9 +4,7 @@ import React, { useEffect, createContext } from 'react';
 import { getAuth } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { GlobalState, JobsApp, Todo, CodespaceApp } from '@/types/types';
-import { synchronizeDb } from '@/utils/dbSync';
 import GlobalApi from './globalApi';
-import localForage from '@/localForageConfig';
 
 const globalApi = new GlobalApi();
 
@@ -22,9 +20,6 @@ function useGlobalProvider() {
     const [commitData, setCommitData] = React.useState<CodespaceApp.CommitHistoryData[]>([]);
     const [commitHistory, setCommitHistory] = React.useState<CodespaceApp.CommitHistory[]>([]);
 
-    const auth = getAuth(firebase_app);
-    const userId = auth.currentUser?.uid;
-
 
     /* --------------------------------------------------------- */
     /* Increase Submission Count                                 */
@@ -34,23 +29,51 @@ function useGlobalProvider() {
     };
 
     /* --------------------------------------------------------- */
-    /* Commit data synchronization                               */
+    /* Data synchronization                                      */
     /* --------------------------------------------------------- */
-    // useEffect(() => {
-    //     // Set an interval for synchronization
-    //     const intervalId = setInterval(() => {
-    //         synchronizeDb();
-    //     }, 1000 * 60 * 30); // synchronize every 30 minutes
-    // 
-    //     // Clear the interval when the component unmounts
-    //     return () => clearInterval(intervalId);
-    // }, []);
+    useEffect(() => {
+        // Set an interval for synchronization
+        const intervalId = setInterval(() => {
+            if(!globalApi.compareDbToLocalStorage()) {
+                globalApi.fetchAllData().then((data) => {
+                    if (data instanceof Error) {
+                        console.error('Error fetching all data:', data);
+                        return;
+                    }
+
+                    const { todoItems, jobItems, commits } = data;
+
+                    if (todoItems instanceof Error || jobItems instanceof Error || commits instanceof Error) {
+                        console.error('Error fetching data:', todoItems || jobItems || commits);
+                        return;
+                    }
+
+                    const { commitData, commitHistory } = commits;
+                    
+                    if (todoItems instanceof Error || jobItems instanceof Error || commits instanceof Error) {
+                        console.error('Error fetching data:', todoItems || jobItems || commits);
+                        return;
+                    }
+
+                    globalApi.setLocalData('todoItems', todoItems);
+                    globalApi.setLocalData('jobItems', jobItems);
+                    globalApi.setLocalData('commits', commits);
+                    setTodoList(todoItems);
+                    setJobList(jobItems);
+                    setCommitData(commitData);
+                    setCommitHistory(commitHistory);
+                });
+            }
+        }, 1000 * 60 * 30); // synchronize every 30 minutes
+    
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, []);
 
     useEffect(() => {
-        // Immediately try to sync when coming online
         console.log("[GlobalContext.tsx] Adding event listener for 'online' event");
         console.log('[GlobalContext.tsx] Synchronizing database with Firebase...');
-        const handleOnline = () => synchronizeDb();
+        const handleOnline = () => {};
         window.addEventListener('online', handleOnline);
 
         return () => window.removeEventListener('online', handleOnline);
@@ -90,7 +113,7 @@ function useGlobalProvider() {
                         console.error('Error fetching local todo items:', localData);
                         return;
                     }
-                    if (!globalApi.dataCheck(data, localData)) {
+                    if (!globalApi.dataMatch(data, localData)) {
                         globalApi.setLocalData('todoItems', data);
                     }
                 });
@@ -110,7 +133,7 @@ function useGlobalProvider() {
                         console.error('Error fetching local job items:', localData);
                         return;
                     }
-                    if (!globalApi.dataCheck(data, localData)) {
+                    if (!globalApi.dataMatch(data, localData)) {
                         globalApi.setLocalData('jobItems', data);
                     }
                 });
