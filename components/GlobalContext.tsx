@@ -1,9 +1,7 @@
 'use client';
 // GlobalContext.tsx
 import React, { useEffect, createContext } from 'react';
-import { getAuth } from 'firebase/auth';
-import { firebase_app } from '@/lib/firebase-config';
-import { GlobalState, JobsApp, Todo, CodespaceApp } from '@/types/types';
+import { GlobalState, CodespaceApp } from '@/types/types';
 import GlobalApi from './globalApi';
 
 const globalApi = new GlobalApi();
