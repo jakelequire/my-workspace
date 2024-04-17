@@ -57,7 +57,7 @@ export default function NewItem(): JSX.Element {
             </div>
 
             <div className='flex flex-row justify-start items-center w-full h-[30%] gap-4 pb-2'>
-                <div className='flex h-full flex-row w-full gap-2 py-2 px-4 rounded-lg border'>
+                <div className='flex h-full flex-row w-full gap-2 py-2 px-4 border'>
 
                     <div className='flex flex-col w-[35%] h-full gap-2'>
                         {file ? (
@@ -66,7 +66,7 @@ export default function NewItem(): JSX.Element {
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         ) : (
-                            <Avatar>
+                            <Avatar className='h-20 w-20'>
                                 <AvatarFallback />
                             </Avatar>
                         )}
@@ -83,9 +83,8 @@ export default function NewItem(): JSX.Element {
                     </div>
 
                     <div className='flex flex-col h-full w-full p-2'>
-                        
                         <div className='flex w-full'>
-                            <p className='text-xl font-bold mb-1'>$5.99</p>
+                            <p className='text-xl font-bold mb-1'>$0.00</p>
                         </div>
 
                         <div className='flex w-full'>
@@ -99,7 +98,6 @@ export default function NewItem(): JSX.Element {
                         <div className='flex w-full text-gray-400'>
                             <p className='text-xs'>Next Payment: 12/12/2022</p>
                         </div>
-
                     </div>
                     
                 </div>
@@ -132,7 +130,7 @@ export default function NewItem(): JSX.Element {
                                     <FormItem>
                                         <FormLabel>Amount</FormLabel>
                                         <FormControl>
-                                            <Input type='number' placeholder='9.99' {...field} />
+                                            <Input placeholder='9.99' {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

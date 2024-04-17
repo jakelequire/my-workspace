@@ -12,8 +12,8 @@ export default function Navigator(): JSX.Element {
 
 
     return (
-        <Tabs defaultValue="subscriptions" className='flex flex-col h-full w-full'>
-            <TabsList className="grid w-[20%] grid-cols-2">
+        <Tabs defaultValue="subscriptions" className='flex flex-col h-[95%] w-full'>
+            <TabsList className="grid w-[20%] grid-cols-2 ml-4">
                 <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
             </TabsList>

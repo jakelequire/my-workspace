@@ -10,7 +10,7 @@ export default function Subscriptions(): JSX.Element {
 
 
     return (
-        <div className='flex h-full w-full'>
+        <div className='flex h-[100%] w-full'>
 
             <div className='flex flex-col w-[30%] h-full'>
                 <div className='flex w-full h-[30%] p-4'>
@@ -22,7 +22,7 @@ export default function Subscriptions(): JSX.Element {
             </div>
 
             <div className='flex flex-row w-[70%] h-full'>
-                <div className='flex w-[50%] h-full p-4'>
+                <div className='flex w-[50%] h-full max-h-[100%] p-4'>
                     <CurrentList />
                 </div>
                 <div className='flex flex-col w-[50%] h-full p-4 gap-8'>
