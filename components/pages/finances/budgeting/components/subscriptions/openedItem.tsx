@@ -11,7 +11,7 @@ export default function OpenedItem(): JSX.Element {
 
 
     return (
-        <div className='flex flex-col w-full h-full border rounded-lg py-6 px-6 gap-6'>
+        <div className='flex flex-col w-full h-full border-2 rounded-lg py-6 px-6 gap-6'>
 
             <div className='flex flex-row justify-center w-full h-[35%] border gap-4 p-4'>
                 <div className='flex items-center justify-center h-full'>

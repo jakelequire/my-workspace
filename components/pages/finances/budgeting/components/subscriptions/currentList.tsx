@@ -32,7 +32,7 @@ export default function CurrentList(): JSX.Element {
     }
 
     return (
-        <ScrollArea className='w-full h-full border rounded-lg'>
+        <ScrollArea className='w-full h-full border-2 rounded-lg'>
             <div className='flex flex-col w-full h-[100%] py-4 px-6 gap-6'>
                     <div className="flex w-full h-full flex-col gap-4">
                         <div className='flex flex-col w-full'>
@@ -49,8 +49,8 @@ export default function CurrentList(): JSX.Element {
                         <Separator />
 
                         <div className='flex flex-col w-full'>
-                            <h1 className='text-xl font-bold'>Recently Deactivated</h1>
-                            <p className='text-xs text-neutral-400 mb-2 italic'>Removed within 30 days</p>
+                            <h1 className='text-xl font-bold text-neutral-400'>Recently Deactivated</h1>
+                            <p className='text-xs text-neutral-500 mb-2 italic'>Removed within 30 days</p>
                         </div>
 
                         <div className='flex flex-col w-full h-max gap-2'>

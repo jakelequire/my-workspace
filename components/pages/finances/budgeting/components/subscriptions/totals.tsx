@@ -6,7 +6,7 @@ export default function Totals(): JSX.Element {
 
 
     return (
-        <div className='flex flex-col h-full w-full border rounded-lg py-4 px-6'>
+        <div className='flex flex-col h-full w-full border-2 rounded-lg py-4 px-6'>
             <div className='flex flex-col w-full'>
                 <h1 className='text-xl font-bold'>Total Monthly</h1>
             </div>
