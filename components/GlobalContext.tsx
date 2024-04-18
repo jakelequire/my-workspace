@@ -1,12 +1,10 @@
 'use client';
 // GlobalContext.tsx
 import React, { useEffect, createContext } from 'react';
-import { getAuth } from 'firebase/auth';
-import { firebase_app } from '@/lib/firebase-config';
-import { GlobalState, JobsApp, Todo, CodespaceApp } from '@/types/types';
-import { synchronizeDb } from '@/utils/dbSync';
-// import { InitDb } from '@/utils/initDb';
-import localForage from '@/localForageConfig';
+import { GlobalState, CodespaceApp } from '@/types/types';
+import GlobalApi from './globalApi';
+
+const globalApi = new GlobalApi();
 
 const GlobalContext = createContext<GlobalState.GlobalContextType | undefined>(undefined);
 
@@ -20,33 +18,6 @@ function useGlobalProvider() {
     const [commitData, setCommitData] = React.useState<CodespaceApp.CommitHistoryData[]>([]);
     const [commitHistory, setCommitHistory] = React.useState<CodespaceApp.CommitHistory[]>([]);
 
-    const auth = getAuth(firebase_app);
-    const userId = auth.currentUser?.uid;
-
-    /* --------------------------------------------------------- */
-    /* Fetch commit history from Github API                      */
-    /* --------------------------------------------------------- */
-    const filterCommitHistory = (weeks: CodespaceApp.CommitHistory['weeks']) => {
-        const filteredData = weeks.flatMap(week =>
-            week.contributionDays.map(day => ({
-                day: day.date,
-                value: day.contributionCount,
-            }))
-        );
-        // console.log('[CodeSpaceContext.tsx] filteredData: ', filteredData);
-        setCommitData(filteredData);
-    };
-    useEffect(() => {
-        const fetchCommits = async () => {
-            const response = await fetch('/api/services/github/commits');
-            const data: CodespaceApp.GitHubCommitHistoryResponse = await response.json();
-            const commitHistory = data.data.user.contributionsCollection.contributionCalendar.weeks;
-            const defaultCommitHistory = data.data.user.contributionsCollection.contributionCalendar;
-            setCommitHistory([defaultCommitHistory]);
-            filterCommitHistory(commitHistory);
-        };
-        fetchCommits();
-    }, []);
 
     /* --------------------------------------------------------- */
     /* Increase Submission Count                                 */
@@ -56,137 +27,143 @@ function useGlobalProvider() {
     };
 
     /* --------------------------------------------------------- */
-    /* Commit data synchronization                               */
+    /* Data synchronization                                      */
     /* --------------------------------------------------------- */
     useEffect(() => {
         // Set an interval for synchronization
         const intervalId = setInterval(() => {
-            synchronizeDb();
-        }, 1000 * 60 * 30); // synchronize every 30 minutes
+            if(!globalApi.compareDbToLocalStorage()) {
+                globalApi.fetchAllData().then((data) => {
+                    if (data instanceof Error) {
+                        console.error('Error fetching all data:', data);
+                        return;
+                    }
 
+                    const { todoItems, jobItems, commits } = data;
+
+                    if (todoItems instanceof Error || jobItems instanceof Error || commits instanceof Error) {
+                        console.error('Error fetching data:', todoItems || jobItems || commits);
+                        return;
+                    }
+
+                    const { commitData, commitHistory } = commits;
+                    
+                    if (todoItems instanceof Error || jobItems instanceof Error || commits instanceof Error) {
+                        console.error('Error fetching data:', todoItems || jobItems || commits);
+                        return;
+                    }
+
+                    globalApi.setLocalData('todoItems', todoItems);
+                    globalApi.setLocalData('jobItems', jobItems);
+                    globalApi.setLocalData('commits', commits);
+                    setTodoList(todoItems);
+                    setJobList(jobItems);
+                    setCommitData(commitData);
+                    setCommitHistory(commitHistory);
+                });
+            }
+        }, 1000 * 60 * 30); // synchronize every 30 minutes
+    
         // Clear the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
-        // Immediately try to sync when coming online
         console.log("[GlobalContext.tsx] Adding event listener for 'online' event");
         console.log('[GlobalContext.tsx] Synchronizing database with Firebase...');
-        const handleOnline = () => synchronizeDb();
+        const handleOnline = () => {};
         window.addEventListener('online', handleOnline);
 
         return () => window.removeEventListener('online', handleOnline);
     }, []);
 
-    /* --------------------------------------------------------- */
-    /* Fetch user and session                                    */
-    /* --------------------------------------------------------- */
     useEffect(() => {
-        const fetchUserAndSession = async () => {
-            try {
-                // Attempt to fetch user details
-                const userResponse = await fetch('/api/auth/user');
-                if (userResponse.ok) {
-                    const userData = await userResponse.json();
-                    console.log('User ID Response:', userData.userId.value);
-                    setUser({ id: userData.userId.value });
-
-                    // If user ID is found, attempt to initiate a session
-                    if (userData.userId.value) {
-                        const sessionResponse = await fetch('/api/auth/user', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ userId: userData.userId.value }),
-                            credentials: 'include',
-                        });
-
-                        if (sessionResponse.ok) {
-                            console.log('Session initiated');
-                        } else {
-                            console.error('Error initiating session');
-                        }
+        const fetchDataAndUpdateState = () => {
+            // <user data>
+            if (!globalApi.isUserSignedIn()) {
+                globalApi.getUser().then((data) => {
+                    if (data instanceof Error) {
+                        console.error('Error fetching user data:', data);
+                        return;
                     }
-                } else {
-                    console.log('No user ID found');
-                    await fetch('/api/auth/user', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userId: userId }),
-                        credentials: 'include',
+                    const userId = data.userId.value;
+
+                    globalApi.postUser(userId).then((response) => {
+                        if (response instanceof Error) {
+                            console.error('Error posting user data:', response);
+                            return;
+                        }
                     });
-                }
-            } catch (error) {
-                console.error('Error fetching user or session:', error);
+
+                    setUser(data);
+                });
             }
+            // </user data>
+
+            // <todo items>
+            globalApi.getTodoItems().then((data) => {
+                if (data instanceof Error) {
+                    console.error('Error fetching todo items:', data);
+                    return;
+                }
+                globalApi.getLocalData('todoItems').then((localData) => {
+                    if (localData instanceof Error) {
+                        console.error('Error fetching local todo items:', localData);
+                        return;
+                    }
+                    if (!globalApi.dataMatch(data, localData)) {
+                        globalApi.setLocalData('todoItems', data);
+                    }
+                });
+
+                setTodoList(data);
+            });
+            // </todo items>
+
+            // <job items>
+            globalApi.getJobItems().then((data) => {
+                if (data instanceof Error) {
+                    console.error('Error fetching job items:', data);
+                    return;
+                }
+                globalApi.getLocalData('jobItems').then((localData) => {
+                    if (localData instanceof Error) {
+                        console.error('Error fetching local job items:', localData);
+                        return;
+                    }
+                    if (!globalApi.dataMatch(data, localData)) {
+                        globalApi.setLocalData('jobItems', data);
+                    }
+                });
+                setJobList(data);
+            });
+            // </job items>
+
+            // <commits>
+            globalApi.getCommits().then((data) => {
+                if (data instanceof Error) {
+                    console.error('Error fetching commits:', data);
+                    return;
+                }
+                const { commitData, commitHistory } = data;
+
+                setCommitData(commitData);
+                setCommitHistory(commitHistory);
+            });
+            // </commits>
         };
 
-        fetchUserAndSession();
-    }, [userId]);
+        // Call the function immediately to run on mount.
+        fetchDataAndUpdateState();
 
-    /* --------------------------------------------------------- */
-    /* Fetch todo items from Firestore                           */
-    /* --------------------------------------------------------- */
-    useEffect(() => {
-        // Function to load todo items
-        const loadTodoItems = async () => {
-            try {
-                // Attempt to load todo items from localForage
-                let todoItems = await localForage.getItem('todoItems');
+        // Set the interval to keep running the function.
+        // synchronize every 5 minutes
+        const intervalId = setInterval(fetchDataAndUpdateState, 10000 * 60 * 5);
 
-                // If the cache is empty or null, fetch from Firebase and update the cache
-                if (!todoItems) {
-                    console.log('[GlobalContext.tsx] Fetching todo items from Firestore');
-                    const response = await fetch('/api/firestore/todo');
-                    if (!response.ok) throw new Error('Failed to fetch todo items');
-                    todoItems = await response.json();
+        // Clean up the interval on component unmount.
+        return () => clearInterval(intervalId);
+    }, []);
 
-                    // Cache the fetched todo items in localForage
-                    await localForage.setItem('todoItems', todoItems);
-                }
-
-                console.log('[GlobalContext.tsx] Loaded todo items from local storage:', todoItems);
-                // Update local state with either cached or fetched data
-                setTodoList(todoItems as Todo.TodoItem[]);
-            } catch (error) {
-                console.error('Error loading or fetching todo items:', error);
-            }
-        };
-        if (!user.id) return;
-        loadTodoItems();
-    }, [user.id]);
-
-    /* --------------------------------------------------------- */
-    /* Fetch job items from Firestore                            */
-    /* --------------------------------------------------------- */
-    useEffect(() => {
-        // Function to load job items
-        const loadJobItems = async () => {
-            try {
-                // Attempt to load job items from localForage
-                let jobItems = await localForage.getItem('jobItems');
-
-                // If the cache is empty or null, fetch from Firebase and update the cache
-                if (!jobItems) {
-                    console.log('[GlobalContext.tsx] Fetching job items from Firestore');
-                    const response = await fetch('/api/firestore/jobs');
-                    if (!response.ok) throw new Error('Failed to fetch job items');
-                    jobItems = await response.json();
-
-                    // Cache the fetched job items in localForage
-                    await localForage.setItem('jobItems', jobItems);
-                }
-
-                console.log('[GlobalContext.tsx] Loaded job items from local storage:', jobItems);
-                // Update local state with either cached or fetched data
-                setJobList(jobItems as JobsApp.JobItem[]);
-            } catch (error) {
-                console.error('Error loading or fetching job items:', error);
-            }
-        };
-        if (!user.id) return;
-        loadJobItems();
-    }, [user.id]);
-    /* --------------------------------------------------------- */
 
     return {
         user,
