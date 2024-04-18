@@ -49,7 +49,8 @@ export default function CurrentList(): JSX.Element {
                         <Separator />
 
                         <div className='flex flex-col w-full'>
-                            <h1 className='text-xl font-bold mb-2'>Recently Deactivated</h1>
+                            <h1 className='text-xl font-bold'>Recently Deactivated</h1>
+                            <p className='text-xs text-neutral-400 mb-2 italic'>Removed within 30 days</p>
                         </div>
 
                         <div className='flex flex-col w-full h-max gap-2'>
