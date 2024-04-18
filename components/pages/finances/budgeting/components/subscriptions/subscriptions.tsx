@@ -3,7 +3,7 @@ import Totals from "./totals";
 import NewItem from "./newItem";
 import CurrentList from "./currentList";
 import OpenedItem from "./openedItem";
-import Calendar from "./calendar";
+import CalendarPreview from "./calendar";
 
 export default function Subscriptions(): JSX.Element {
 
@@ -22,12 +22,12 @@ export default function Subscriptions(): JSX.Element {
             </div>
 
             <div className='flex flex-row w-[70%] h-full'>
-                <div className='flex w-[50%] h-full max-h-[100%] p-4'>
+                <div className='flex w-[55%] h-full max-h-[100%] p-4'>
                     <CurrentList />
                 </div>
-                <div className='flex flex-col w-[50%] h-full p-4 gap-8'>
+                <div className='flex flex-col w-[45%] h-full p-4 gap-8'>
                     <div className='flex w-full h-[40%]'>
-                        <Calendar />
+                        <CalendarPreview />
                     </div>
                     <div className='flex w-full h-[60%]'>
                         <OpenedItem />
