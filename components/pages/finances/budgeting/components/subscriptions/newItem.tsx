@@ -146,6 +146,7 @@ export default function NewItem(): JSX.Element {
                                     <FormItem className='w-full'>
                                         <FormLabel>Date</FormLabel>
                                         <FormControl>
+                                            {/*//@ts-ignore */}
                                             <Input type='date' {...field} />
                                         </FormControl>
                                         <FormMessage />
