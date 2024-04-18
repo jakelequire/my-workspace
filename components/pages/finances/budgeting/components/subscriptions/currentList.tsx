@@ -2,32 +2,45 @@
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useBudgetingContext, SubscriptionItem } from "../../BudgetingContext";
 
 
 export default function CurrentList(): JSX.Element {
+    const { subscriptions } = useBudgetingContext();
 
 
+    const ListItem = ({ ...props }: SubscriptionItem) => {
+        const {companyName, amount, date, frequency, pfpUrl } = props;
 
-    const ListItem = () => {
+        const url = pfpUrl ? pfpUrl : '';
+
         return (
-            <div className='flex h-20 w-full border rounded-lg py-4 px-6 gap-6 transition-all hover:bg-accent'>
+            <a className='flex h-20 w-full border rounded-lg py-4 px-6 gap-6 transition-all hover:bg-accent'>
                 <div className='flex h-full w-[10%]'>
                     <Avatar className='h-12 w-12'>
-                        <AvatarImage src={''} className='' />
+                        <AvatarImage src={url} className='' />
                         <AvatarFallback>FB</AvatarFallback>
                     </Avatar>
                 </div>
                 <div className='flex h-full w-[90%]'>
                     <div className='flex h-full w-[70%] flex-col'>
-                        <h1 className='text-lg font-bold'>Facebook</h1>
-                        <h2 className='text-sm font-base text-neutral-400'>Monthly</h2>
+                        <h1 className='text-lg font-bold'>
+                            {companyName}
+                        </h1>
+                        <h2 className='text-sm font-base text-neutral-400'>
+                            {frequency}
+                        </h2>
                     </div>
                     <div className='flex justify-end items-end h-full w-[30%] flex-col'>
-                        <h1 className='text-lg font-bold'>$0.00</h1>
-                        <h2 className='text-sm font-base text-neutral-400'>12/12/2022</h2>
+                        <h1 className='text-lg font-bold'>
+                            ${amount}
+                        </h1>
+                        <h2 className='text-sm font-base text-neutral-400'>
+                            {date}
+                        </h2>
                     </div>
                 </div>
-            </div>
+            </a>
         )
     }
 
@@ -40,10 +53,9 @@ export default function CurrentList(): JSX.Element {
                         </div>
 
                         <div className='flex flex-col w-full h-max gap-2'>
-                            <ListItem />
-                            <ListItem />
-                            <ListItem />
-                            <ListItem />
+                            {subscriptions ? subscriptions.map((item, index) => (
+                                <ListItem key={index} {...item} />
+                            )): null }
                         </div>
 
                         <Separator />
@@ -54,11 +66,7 @@ export default function CurrentList(): JSX.Element {
                         </div>
 
                         <div className='flex flex-col w-full h-max gap-2'>
-                            <ListItem />
-                            <ListItem />
-                            <ListItem />
-                            <ListItem />
-                            <ListItem />
+
                         </div>
                     </div>
             </div>

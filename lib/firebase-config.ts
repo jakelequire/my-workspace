@@ -3,8 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from "firebase/auth";
 import { getApps, getApp } from "firebase/app";
 import { GoogleAuthProvider } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -24,6 +23,7 @@ Object.entries(firebaseConfig).forEach(([key, value]) => {
 
 // Initialize Firebase
 const firebase_app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const storage = getStorage(firebase_app, 'gs://' + process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
 const auth = getAuth(firebase_app);
 
-export { firebase_app, auth };
+export { firebase_app, auth, storage };

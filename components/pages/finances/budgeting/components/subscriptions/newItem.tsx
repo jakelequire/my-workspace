@@ -14,7 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState } from 'react';
-import { useBudgetingContext } from '../../BudgetingContext';
+import { useBudgetingContext, SubscriptionItem } from '../../BudgetingContext';
 
 const formSchema = z.object({
     company: z.string().min(2).max(50),
@@ -25,8 +25,14 @@ const formSchema = z.object({
 });
 
 export default function NewItem(): JSX.Element {
-    const [file, setFile] = useState<File | null>(null);
-    const { subscriptions, setSubscriptions } = useBudgetingContext();
+    const [subscription, setSubscription] = useState<SubscriptionItem>();
+
+    const { 
+        addNewSubscription,
+        uploadPhoto,
+        setUploadPhoto,
+        handleUploadPhoto
+    } = useBudgetingContext();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -39,32 +45,44 @@ export default function NewItem(): JSX.Element {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values);
-        setSubscriptions((prev) => [
-            ...prev,
-            {
-                id: '',
-                companyName: values.company as any,
-                amount: values.amount as any,
-                date: values.date.toString() as any,
-                frequency: values.frequency || '',
-                url: values.url || '',
-                pfp: file || null,
-            },
-        ]);
+
+        const uploadPhotoDb = async () => {
+            if (uploadPhoto?.file) {
+                const data = await handleUploadPhoto(uploadPhoto);
+                if (data) {
+                    return data.url;
+                }
+            }
+            return '';
+        }
+
+        const pfpUrl = await uploadPhotoDb();
+
+        setSubscription({
+            id: '',
+            companyName: values.company as any,
+            amount: values.amount as any,
+            date: values.date.toString() as any,
+            frequency: values.frequency || '',
+            url: values.url || '',
+            pfpUrl: pfpUrl,
+        })
 
         form.reset();
 
-        console.log(subscriptions);
+        addNewSubscription(subscription as any);
+
+        console.log(subscription);
     }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            setFile(files[0]);
+        const file = event.target.files?.[0];
+        if (file) {
+            setUploadPhoto({ id: '', url: '', file });
         }
     };
 
@@ -78,9 +96,9 @@ export default function NewItem(): JSX.Element {
                 <div className='flex h-full flex-row w-full gap-2 py-2 px-4 border'>
 
                     <div className='flex flex-col w-[35%] h-full gap-2'>
-                        {file ? (
+                        {uploadPhoto?.file ? (
                             <Avatar className='h-20 w-20'>
-                                <AvatarImage src={URL.createObjectURL(file)} className='' />
+                                <AvatarImage src={URL.createObjectURL(uploadPhoto?.file)} className='' />
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         ) : (
@@ -134,7 +152,10 @@ export default function NewItem(): JSX.Element {
                                     <FormItem>
                                         <FormLabel>Company</FormLabel>
                                         <FormControl>
-                                            <Input placeholder='Netflix' {...field} />
+                                            <Input 
+                                                placeholder='Netflix'
+                                                {...field} 
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
