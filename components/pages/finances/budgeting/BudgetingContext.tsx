@@ -1,14 +1,32 @@
 'use client';
 import React, { useContext, createContext, useState, useEffect, useMemo } from 'react';
 
-interface BudgetingContextType {
-    
+interface SubscriptionItem {
+    id: string;
+    companyName: string;
+    amount: number;
+    date: string;
+    frequency: string;
+    url: string;
+    pfp: File | null;
 }
 
-const BudgetingContext = createContext<undefined>(undefined);
+interface BudgetingContextType {
+    subscriptions: SubscriptionItem[];
+    setSubscriptions: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
+}
+
+const BudgetingContext = createContext<BudgetingContextType | undefined>(undefined);
 
 function useBudgetingProvider() {
-    return undefined;
+    const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>([]);
+
+
+
+    return {
+        subscriptions,
+        setSubscriptions,
+    };
 }
 
 export const BudgetingProvider = ({ children }: { children: React.ReactNode }) => {

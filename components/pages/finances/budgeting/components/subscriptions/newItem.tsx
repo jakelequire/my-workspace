@@ -14,24 +14,26 @@ import {
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState } from 'react';
+import { useBudgetingContext } from '../../BudgetingContext';
 
 const formSchema = z.object({
     company: z.string().min(2).max(50),
-    amount: z.number().min(0.01),
-    date: z.date(),
+    amount: z.string().min(2).max(50),
+    date: z.string().min(2).max(50),
     frequency: z.string().min(2).max(50),
     url: z.string().url().optional(),
 });
 
 export default function NewItem(): JSX.Element {
     const [file, setFile] = useState<File | null>(null);
+    const { subscriptions, setSubscriptions } = useBudgetingContext();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             company: '',
-            amount: 0,
-            date: new Date(),
+            amount: '',
+            date: '',
             frequency: '',
             url: '',
         },
@@ -41,6 +43,22 @@ export default function NewItem(): JSX.Element {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values);
+        setSubscriptions((prev) => [
+            ...prev,
+            {
+                id: '',
+                companyName: values.company as any,
+                amount: values.amount as any,
+                date: values.date.toString() as any,
+                frequency: values.frequency || '',
+                url: values.url || '',
+                pfp: file || null,
+            },
+        ]);
+
+        form.reset();
+
+        console.log(subscriptions);
     }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
