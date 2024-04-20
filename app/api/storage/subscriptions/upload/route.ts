@@ -24,12 +24,11 @@ export async function POST(request: Request) {
     financeService.setUserId(userId.value);
 
     try {
-        const body = await request.formData();
-        console.log("{DEBUG} [POST] /api/storage/subscriptions/upload\n", body)
-        const file = body.get('value');
-        console.log("{DEBUG} [POST] /api/storage/subscriptions/upload\n", file)
-        const data = await financeService.pfpUpload(file);
-        console.log("{DEBUG} [POST] /api/storage/subscriptions/upload\n", data)
+        const body = await request.arrayBuffer();
+        console.log("{DEBUG} [POST] body: ", body)
+        const data = await financeService.pfpUpload(body);
+        console.log("{DEBUG} [POST] data: ", data)
+
         return new Response(JSON.stringify(data), {
             status: 200,
         });

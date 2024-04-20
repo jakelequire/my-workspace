@@ -80,11 +80,14 @@ function useBudgetingProvider() {
     // <handleUploadPhoto>
     const handleUploadPhoto = async (fileData: FileData) => {
         const { file } = fileData;
-        const formData = new FormData();
-        formData.append('file', file);
+        const data = await file.arrayBuffer()
+        console.log("[handleUploadPhoto] data: ", data)
         const response = await fetch('/api/storage/subscriptions/upload', {
             method: 'POST',
-            body: formData,
+            body: data,
+            headers: {
+                'Content-Type': 'application/octet-stream',
+            }
         });
         if(response.ok) {
             console.log('Photo uploaded');

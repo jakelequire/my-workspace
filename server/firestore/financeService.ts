@@ -53,17 +53,27 @@ export default class FinanceService {
         };
     }
 
-    
+
     public async pfpUpload(file: any): Promise<any> {
         console.warn("\n[firestore] {!API ENDPOINT CALLED!} <pfpUpload>");
+        console.log("{DEBUG} [pfpUpload] file: ", file)
 
         // Upload the file to the storage
-        const storageRef = this.storage.bucket();
-        const fileRef = storageRef.file(`users/${this.userId}/assets/subscriptions/${file.name}`);
+        const storageRef = this.storage.bucket('gs://my-workspace-8b9e9.appspot.com');
+        console.log("{DEBUG} [pfpUpload] storageRef: ", storageRef)
+
+        const fileRef = storageRef.file(`users/${this.userId}/assets/subscriptions/`);
+        console.log("{DEBUG} [pfpUpload] fileRef: ", fileRef)
+
         if(!file.buffer) {
             throw new Error('No file buffer found');
         }
-        await fileRef.save(file.buffer);
+
+        await fileRef.save(file.buffer).then(() => {
+            console.log(`[financeService] {pfpUpload} File uploaded successfully: ${file.name}`);
+        }).catch((error) => {
+            console.error(`[financeService] {pfpUpload} Error uploading file: ${error}`);
+        })
 
         // Get the download URL
         const downloadUrl = await fileRef.getSignedUrl({
