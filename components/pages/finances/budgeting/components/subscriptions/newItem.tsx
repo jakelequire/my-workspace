@@ -50,17 +50,19 @@ export default function NewItem(): JSX.Element {
         // ✅ This will be type-safe and validated.
         console.log(values);
 
-        const uploadPhotoDb = async () => {
+        const uploadPhotoDb = async (): Promise<string> => {
             if (uploadPhoto?.file) {
                 const data = await handleUploadPhoto(uploadPhoto);
                 if (data) {
-                    return data.url;
+                    return data;
                 }
+                return data;
             }
-            return '';
+            return 'ERROR';
         }
 
         const pfpUrl = await uploadPhotoDb();
+        console.log("{DEBUG} [NewItem] pfpUrl: ", pfpUrl)
 
         setSubscription({
             id: '',
@@ -69,7 +71,7 @@ export default function NewItem(): JSX.Element {
             date: values.date.toString() as any,
             frequency: values.frequency || '',
             url: values.url || '',
-            pfpUrl: pfpUrl,
+            pfpUrl: pfpUrl[0],
         })
 
         form.reset();

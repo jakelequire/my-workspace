@@ -3,7 +3,11 @@ import { InitApp } from '@/lib/firebase-admin-config';
 
 InitApp();
 
-
+interface FileData {
+    id: string;
+    url: string;
+    file: File;
+}
 
 export default class FinanceService {
     private db: firestore.Firestore;
@@ -54,22 +58,23 @@ export default class FinanceService {
     }
 
 
-    public async pfpUpload(file: any): Promise<any> {
+    public async pfpUpload({ ...props }: FileData): Promise<any> {
         console.warn("\n[firestore] {!API ENDPOINT CALLED!} <pfpUpload>");
+        const { file } = props;
         console.log("{DEBUG} [pfpUpload] file: ", file)
+
+        const fileBuf = await file.arrayBuffer();
+
+        const fileBuffer = Buffer.from(fileBuf);
 
         // Upload the file to the storage
         const storageRef = this.storage.bucket('gs://my-workspace-8b9e9.appspot.com');
         console.log("{DEBUG} [pfpUpload] storageRef: ", storageRef)
 
-        const fileRef = storageRef.file(`users/${this.userId}/assets/subscriptions/`);
-        console.log("{DEBUG} [pfpUpload] fileRef: ", fileRef)
+        const fileRef = storageRef.file(`users/${this.userId}/assets/subscriptions/test.jpg`);
+        //console.log("{DEBUG} [pfpUpload] fileRef: ", fileRef)
 
-        if(!file.buffer) {
-            throw new Error('No file buffer found');
-        }
-
-        await fileRef.save(file.buffer).then(() => {
+        await fileRef.save(fileBuffer).then(() => {
             console.log(`[financeService] {pfpUpload} File uploaded successfully: ${file.name}`);
         }).catch((error) => {
             console.error(`[financeService] {pfpUpload} Error uploading file: ${error}`);

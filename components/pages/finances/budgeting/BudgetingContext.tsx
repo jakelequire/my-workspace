@@ -28,7 +28,7 @@ interface BudgetingContextType {
     setSelectedSubscription: (subscription: SubscriptionItem) => void;
     uploadPhoto: FileData | null;
     setUploadPhoto: (file: FileData) => void;
-    handleUploadPhoto: (file: FileData) => Promise<FileResponse>;
+    handleUploadPhoto: (file: FileData) => Promise<string>;
 }
 
 const BudgetingContext = createContext<BudgetingContextType | undefined>(undefined);
@@ -38,7 +38,6 @@ function useBudgetingProvider() {
     const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>([]);
     const [selectedSubscription, setSelectedSubscription] = useState<SubscriptionItem | null>(null);
 
-
     useEffect(() => {
         fetchSubscriptions();
     }, []);
@@ -46,7 +45,7 @@ function useBudgetingProvider() {
     // <fetchSubscriptions>
     const fetchSubscriptions = async () => {
         const response = await fetch('/api/firestore/finances/budgeting');
-        if(response.ok) {
+        if (response.ok) {
             const data = await response.json();
             setSubscriptions(data);
         } else {
@@ -54,9 +53,8 @@ function useBudgetingProvider() {
             const error = await response.json();
             console.error(error);
         }
-    }
+    };
     // </fetchSubscriptions>
-
 
     // <NewSubscriptionItem>
     const addNewSubscription = async (newSubscription: SubscriptionItem) => {
@@ -64,7 +62,7 @@ function useBudgetingProvider() {
             method: 'POST',
             body: JSON.stringify(newSubscription),
         });
-        if(response.ok) {
+        if (response.ok) {
             console.log('New subscription added');
             const data = await response.json();
             setSubscriptions([...subscriptions, data]);
@@ -73,33 +71,40 @@ function useBudgetingProvider() {
             const error = await response.json();
             console.error(error);
         }
-    }
+    };
     // <NewSubscriptionItem />
 
-
     // <handleUploadPhoto>
-    const handleUploadPhoto = async (fileData: FileData) => {
-        const { file } = fileData;
-        const data = await file.arrayBuffer()
-        console.log("[handleUploadPhoto] data: ", data)
+    const handleUploadPhoto = async (fileData: FileData): Promise<string> => {
+        const { id, url, file } = fileData;
+        // Create FormData object to hold the file and metadata
+        const formData = new FormData();
+
+        // Append the file; 'file' is the key used by the server to retrieve the binary file
+        formData.append('file', file, file.name);
+
+        // Append the metadata
+        formData.append('id', id);
+        formData.append('url', url);
+
+        // Send request to the server
         const response = await fetch('/api/storage/subscriptions/upload', {
             method: 'POST',
-            body: data,
-            headers: {
-                'Content-Type': 'application/octet-stream',
-            }
+            body: formData, // Send the FormData object
+            // No need to set 'Content-Type': 'application/octet-stream'
+            // The browser will automatically set 'Content-Type' to 'multipart/form-data'
         });
-        if(response.ok) {
-            console.log('Photo uploaded');
-            const data = await response.json();
-            return data;
+
+        if (response.ok) {
+            console.log('Upload successful');
         } else {
-            console.error('Failed to upload photo');
-            const error = await response.json();
-            console.error(error);
-            return error;
+            console.error('Upload failed', response.statusText);
         }
-    }
+
+        const data = await response.json();
+        console.log("[handleUploadPhoto] data: ", data)
+        return data
+    };
     // </handleUploadPhoto>
 
     return {

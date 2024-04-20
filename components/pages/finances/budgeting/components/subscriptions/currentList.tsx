@@ -11,14 +11,12 @@ export default function CurrentList(): JSX.Element {
 
     const ListItem = ({ ...props }: SubscriptionItem) => {
         const {companyName, amount, date, frequency, pfpUrl } = props;
-
-        const url = pfpUrl ? pfpUrl : '';
-
+        console.log("{DEBUG} [ListItem] props: ", props)
         return (
             <a className='flex h-20 w-full border rounded-lg py-4 px-6 gap-6 transition-all hover:bg-accent'>
                 <div className='flex h-full w-[10%]'>
                     <Avatar className='h-12 w-12'>
-                        <AvatarImage src={url} className='' />
+                        <AvatarImage src={pfpUrl} className='' />
                         <AvatarFallback>FB</AvatarFallback>
                     </Avatar>
                 </div>
