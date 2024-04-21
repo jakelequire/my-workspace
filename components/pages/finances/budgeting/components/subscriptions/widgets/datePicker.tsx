@@ -27,7 +27,7 @@ const FormSchema = z.object({
 
 
 export default function DatePicker(): JSX.Element {
-    const { setSubscriptions } = useBudgetingContext();
+    // const { setSubscriptions } = useBudgetingContext();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -68,7 +68,7 @@ export default function DatePicker(): JSX.Element {
                                     onSelect={(date) => {
                                         field.onChange(date);
                                         if(!date) return;
-                                        setSubscriptions({ ...subscriptions, date: format(date, 'PP') });
+                                        // setSubscriptions({ ...subscriptions, date: format(date, 'PP') });
                                     }}
                                     initialFocus
                                 />
