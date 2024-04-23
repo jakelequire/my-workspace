@@ -1,5 +1,5 @@
 'use client';
-import styles from './index.module.css'
+import styles from './repos.module.css'
 import { ReposProvider } from './ReposContext'
 
 
