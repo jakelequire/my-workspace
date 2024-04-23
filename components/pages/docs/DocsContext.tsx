@@ -14,7 +14,7 @@ function useDocsProvider() {
 
 export const DocsProvider = ({ children }: { children: React.ReactNode }) => {
     const value = useDocsProvider();
-    return <DashboardContext.Provider value={value}>{children}</DashboardContext.Provider>;
+    return <DocsContext.Provider value={value}>{children}</DocsContext.Provider>;
 };
 
 
