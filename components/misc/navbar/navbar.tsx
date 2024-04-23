@@ -107,6 +107,15 @@ const tools: { title: string; href: string; description: string, active: boolean
     }
 ]
 
+const docs: {  title: string; href: string; description: string, active: boolean }[] = [
+    {
+        title: 'Docs',
+        href: '/docs',
+        description: 'Programming documentation notes and resources.',
+        active: false,
+    }
+]
+
 export default function Navbar(): JSX.Element {
     const { isLoggedIn, setIsLoggedIn } = useAuthContext();
     const router = useRouter();
@@ -209,6 +218,23 @@ export default function Navbar(): JSX.Element {
                                 <NavigationMenuContent>
                                     <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
                                         {tools.map((component) => (
+                                            <ListItem
+                                                key={component.title}
+                                                className={component.active ? '' : 'text-accent'}
+                                                title={component.title}
+                                                href={component.href}>
+                                                {component.description}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger>Docs</NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                                        {docs.map((component) => (
                                             <ListItem
                                                 key={component.title}
                                                 className={component.active ? '' : 'text-accent'}
