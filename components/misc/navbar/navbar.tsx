@@ -116,6 +116,16 @@ const docs: {  title: string; href: string; description: string, active: boolean
     }
 ]
 
+const repos: {  title: string; href: string; description: string, active: boolean }[] = [
+    {
+        title: 'Repos',
+        href: '/repos',
+        description: 'List of active repositories from GitHub.',
+        active: false,
+    }
+]
+
+
 export default function Navbar(): JSX.Element {
     const { isLoggedIn, setIsLoggedIn } = useAuthContext();
     const router = useRouter();
@@ -218,6 +228,23 @@ export default function Navbar(): JSX.Element {
                                 <NavigationMenuContent>
                                     <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
                                         {tools.map((component) => (
+                                            <ListItem
+                                                key={component.title}
+                                                className={component.active ? '' : 'text-accent'}
+                                                title={component.title}
+                                                href={component.href}>
+                                                {component.description}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger>Repos</NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                                        {repos.map((component) => (
                                             <ListItem
                                                 key={component.title}
                                                 className={component.active ? '' : 'text-accent'}
