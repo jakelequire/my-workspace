@@ -14,6 +14,7 @@ export default function LoginInterface(): JSX.Element {
     const [password, setPassword] = useState('');
     const [error, setError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const { setIsLoggedIn } = useAuthContext();
 
@@ -21,6 +22,7 @@ export default function LoginInterface(): JSX.Element {
     const loginService = new LoginService();
 
     const signIn = async (email: string, password: string) => {
+        setLoading(true);
         try {
             if (!email) {
                 setError(true);
@@ -60,13 +62,14 @@ export default function LoginInterface(): JSX.Element {
                 loginService.signInError();
                 throw new Error('<!> Error in signin.');
             } else {
+                setLoading(false);
                 setIsLoggedIn(true);
                 router.push('/');
                 router.refresh();
             }
         } catch (error: any) {
             const errorMsg = error.message;
-
+            setLoading(false);
             setError(true);
             setErrorMessage(errorMsg);
             throw new Error('Error in signin.');
@@ -75,9 +78,20 @@ export default function LoginInterface(): JSX.Element {
 
     const handleForm = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const signin = await signIn(email, password);
+        const signin = await signIn(email, password).then((res) => {
+            console.log("\n[handleForm] res: ", res);
+            setEmail('');
+            setPassword('');
+            router.push('/');
+            router.refresh();
+            return res;
+        }).catch((err) => {
+            console.log("\n<!>Error in handleForm<!>\n", err);
+        });
         return signin;
     };
+
+    const loadingMessage = loading ? 'Signing in...' : '';
 
     return (
         <div className={styles.login_container}>
@@ -117,7 +131,13 @@ export default function LoginInterface(): JSX.Element {
                                 </span>
                             ) : (
                                 <span className='text-gray-400'>
-                                    Please enter your email and password
+                                    {loading ? (
+                                        <span>{loadingMessage}</span>
+                                    ) : (
+                                        <span>
+                                            Please enter your email and password
+                                        </span>
+                                    )}
                                 </span>
                             )}
                         </p>
