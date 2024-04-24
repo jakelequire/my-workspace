@@ -5,80 +5,77 @@ import { useState } from 'react';
 import { useAuthContext } from '@/app/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import LoginService from './loginService';
+
 import styles from './login.module.css';
 
 export default function LoginInterface(): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [error, setError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
     const { setIsLoggedIn } = useAuthContext();
 
     const router = useRouter();
+    const loginService = new LoginService();
 
     const signIn = async (email: string, password: string) => {
-        let result: any = null,
-            error = null;
         try {
-            result = await signInWithEmailAndPassword(auth, email, password);
-            console.log('\n<!>signInWithEmailAndPassword result<!>\n', result);
-            const idToken = await result.user.getIdToken(); // Directly obtain the ID token
+            if (!email) {
+                setError(true);
+                throw new Error('No email provided');
+            }
+            if (!password) {
+                setError(true);
+                throw new Error('No password provided');
+            }
+            if (!auth) {
+                setError(true);
+                throw new Error('No auth object found');
+            }
 
-            // !If no token is found, send a POST request to /api/login
-            // !with the error message
-            /*!*/ if(!idToken) {
-            /*!*/     return await fetch('/api/login', {
-            /*!*/         method: 'POST',
-            /*!*/         headers: {
-            /*!*/             'Content-Type': 'application/json',
-            /*!*/         },
-            /*!*/         body: JSON.stringify({ error: 'No token found'}),
-            /*!*/         credentials: 'include',
-            /*!*/     }).then((res) => {
-            /*!*/         if(res.status === 200) {
-            /*!*/             setIsLoggedIn(true);
-            /*!*/             router.push('/');
-            /*!*/         } else {
-            /*!*/             setIsLoggedIn(false);
-            /*!*/             router.push('/login');
-            /*!*/         }
-            /*!*/     }).catch((er) => {
-            /*!*/         console.log('\n<!>Error in fetch /api/auth<!>\n', er);
-            /*!*/     });
-            /*!*/ }
-            //! --------------------------------------------
+            const signInResult = await signInWithEmailAndPassword(auth, email, password)
+                .then((res) => {
+                    return res;
+                })
+                .catch((err: Error) => {
+                    console.log('\n<!>Error in signInWithEmailAndPassword<!>\n', err);
+                    setError(true);
+                    throw new Error('Username / Password is incorrect.');
+                });
 
-            // Send POST request to /api/auth with the ID token in the Authorization header
-            // If the status is 200, set isLoggedIn to true
-            return await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${idToken}`,
-                },
-                body: JSON.stringify({ token: idToken }),
-                credentials: 'include',
-            }).then((res) => {
-                if(res.status === 200) {
-                    setIsLoggedIn(true);
-                    router.push('/');
-                } else {
-                    setIsLoggedIn(false);
-                    router.push('/login');
-                }
-            }).catch((er) => {
-                console.log('\n<!>Error in fetch /api/auth<!>\n', er);
-            });
-        } catch (e) {
-            error = e;
-            console.log('\n Error in signInWithEmailAndPassword: \n', e);
+            const idToken = await signInResult.user.getIdToken();
+            if (idToken) {
+                setError(true);
+                setErrorMessage('No id token');
+                throw new Error('No id token');
+            }
+
+            const signIn = loginService.handleSignIn(idToken);
+            if(signIn instanceof Error) {
+                setError(true);
+                // Send server that an error occurred and to clean up the session
+                loginService.signInError();
+                throw new Error('Error in signin.');
+            } else {
+                setIsLoggedIn(true);
+                router.push('/dashboard');
+            }
+        } catch (error: any) {
+            const errorMsg = error.message;
+
+            setError(true);
+            setErrorMessage(errorMsg);
+            throw new Error('Error in signin.');
         }
     };
 
     const handleForm = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const foo = await signIn(email, password);
-        
-        return foo;
+        const signin = await signIn(email, password);
+        return signin;
     };
 
     return (
@@ -106,8 +103,23 @@ export default function LoginInterface(): JSX.Element {
                         required
                         onChange={(e) => setPassword(e.target.value)}
                     />
+
                     <div className={styles.button_container}>
                         <Button type='submit'>Login</Button>
+                    </div>
+
+                    <div className='flex w-full justify-center mt-3'>
+                        <p className='text-sm italic max-w-[50%] self-center text-center'>
+                            {error ? (
+                                <span className='text-red-500'>
+                                    {errorMessage}
+                                </span>
+                            ) : (
+                                <span className='text-gray-400'>
+                                    Please enter your email and password
+                                </span>
+                            )}
+                        </p>
                     </div>
                 </form>
             </div>
