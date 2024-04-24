@@ -64,8 +64,6 @@ export default function LoginInterface(): JSX.Element {
             } else {
                 setLoading(false);
                 setIsLoggedIn(true);
-                router.push('/');
-                router.refresh();
             }
         } catch (error: any) {
             const errorMsg = error.message;
@@ -76,14 +74,18 @@ export default function LoginInterface(): JSX.Element {
         }
     };
 
+    
+
     const handleForm = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const signin = await signIn(email, password).then((res) => {
-            console.log("\n[handleForm] res: ", res);
             setEmail('');
             setPassword('');
+
             router.push('/');
             router.refresh();
+            window.history.pushState(null, '', '/')
+
             return res;
         }).catch((err) => {
             console.log("\n<!>Error in handleForm<!>\n", err);

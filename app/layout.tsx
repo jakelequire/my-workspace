@@ -26,6 +26,9 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
+    const fallback = <div>Loading...</div>;
+    
     return (
         <html lang='en'>
             <body className={inter.className}>
@@ -38,7 +41,9 @@ export default function RootLayout({
                         <GlobalProvider>
                             <NotificaionsProvider>
                                 <Navbar />
-                                {children}
+                                <Suspense fallback={fallback}>
+                                    {children}
+                                </Suspense>
                                 <Suspense fallback={null}>
                                     <NavigationEvents />
                                 </Suspense>

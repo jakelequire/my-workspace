@@ -55,11 +55,14 @@ export default function SettingsButton({ ...props }: Props): JSX.Element {
                     /*DEBUG*/ console.log('[Navbar] Redirecting to { /login } ');
                     router.push('/login');
                     router.refresh();
+                    window.history.pushState(null, '', '/login')
                 }
             })
             .catch((err) => {
                 console.log('\n<!>Error in fetch /api/auth/logout<!>\n', err);
                 router.push('/login');
+                router.refresh();
+                window.history.pushState(null, '', '/login')
             });
     };
 
