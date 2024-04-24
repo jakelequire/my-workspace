@@ -1,4 +1,3 @@
-import Navbar from '@/components/misc/navbar/navbar';
 import EmailInterface from '@/components/pages/home/email/emailInterface';
 import styles from '../../page.module.css';
 import { IPublicClientApplication } from '@azure/msal-browser';
@@ -15,7 +14,6 @@ type AppProps = {
 export default function Email() {
     return (
         <main className={styles.main}>
-            <Navbar />
             <EmailInterface />
         </main>
     );

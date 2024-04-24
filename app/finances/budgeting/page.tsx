@@ -1,4 +1,3 @@
-import Navbar from '@/components/misc/navbar/navbar';
 import BudgetingInterface from '@/components/pages/finances/budgeting/budgetingInterface';
 import styles from '../../page.module.css';
 import { Metadata } from 'next';
@@ -9,7 +8,6 @@ export const metadata: Metadata = {
 export default function Budgeting() {
     return (
         <main className={styles.main}>
-            <Navbar />
             <BudgetingInterface />
         </main>
     );

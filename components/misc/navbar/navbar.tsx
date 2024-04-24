@@ -137,9 +137,9 @@ export default function Navbar(): JSX.Element {
 
 
     return (
-        <div className='flex flex-row items-center  w-full h-12 border-b border-b-zinc-600'>
+        <div className='flex flex-row items-center w-full h-[5vh] border-b border-b-zinc-600'>
             <div className='flex justify-center w-[20%] h-full'>
-                <CurrentPath />
+                <CurrentPath /> 
             </div>
 
             <div className='flex justify-center flex-grow h-full w-[60%]'>

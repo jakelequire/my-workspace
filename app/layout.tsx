@@ -7,6 +7,8 @@ import { GlobalProvider } from '@/components/GlobalContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { NotificaionsProvider } from '@/components/misc/notification_center/NotificationsContext';
 import NavigationEvents from '@/components/navigationEvents';
+import Navbar from '@/components/misc/navbar/navbar';
+
 import { Toaster } from 'sonner';
 
 import './globals.css';
@@ -35,6 +37,7 @@ export default function RootLayout({
                     <AuthContextProvider>
                         <GlobalProvider>
                             <NotificaionsProvider>
+                                <Navbar />
                                 {children}
                                 <Suspense fallback={null}>
                                     <NavigationEvents />
