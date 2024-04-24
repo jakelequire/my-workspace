@@ -1,10 +1,12 @@
 import React from 'react';
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { AuthContextProvider } from '@/app/AuthContext';
 import { GlobalProvider } from '@/components/GlobalContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { NotificaionsProvider } from '@/components/misc/notification_center/NotificationsContext';
+import NavigationEvents from '@/components/navigationEvents';
 import { Toaster } from 'sonner';
 
 import './globals.css';
@@ -34,6 +36,9 @@ export default function RootLayout({
                         <GlobalProvider>
                             <NotificaionsProvider>
                                 {children}
+                                <Suspense fallback={null}>
+                                    <NavigationEvents />
+                                </Suspense>
                             </NotificaionsProvider>
                         </GlobalProvider>
                     </AuthContextProvider>

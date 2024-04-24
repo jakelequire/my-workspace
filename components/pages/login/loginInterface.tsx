@@ -12,7 +12,6 @@ import styles from './login.module.css';
 export default function LoginInterface(): JSX.Element {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const [error, setError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -62,7 +61,8 @@ export default function LoginInterface(): JSX.Element {
                 throw new Error('<!> Error in signin.');
             } else {
                 setIsLoggedIn(true);
-                router.push('/dashboard');
+                router.push('/');
+                router.refresh();
             }
         } catch (error: any) {
             const errorMsg = error.message;

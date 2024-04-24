@@ -18,11 +18,11 @@ import React, { useState, useRef } from 'react';
 
 export default function NavbarNotifications(): JSX.Element {
     return (
-        <NavigationMenu className='justify-center'>
+        <NavigationMenu className='justify-center '>
             <NavigationMenuList>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger>Notifications</NavigationMenuTrigger>
+                    <NavigationMenuTrigger className='text-xs text-gray-400'>Notifications</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <NavTabs />
                     </NavigationMenuContent>

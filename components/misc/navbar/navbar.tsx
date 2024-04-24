@@ -16,8 +16,10 @@ import { cn } from '@/lib/utils';
 import { getAuth, signOut } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-config';
 import { useRouter } from 'next/navigation';
-import ClearLocalData from './buttons/clearLocalData'
+import ClearLocalData from './items/clearLocalData'
 import NavbarNotifications from '../notification_center/components/navbarNotifications';
+import SettingsButton from './items/settingsButton';
+import CurrentPath from './items/currentPath';
 
 const auth = getAuth(firebase_app);
 
@@ -133,50 +135,13 @@ export default function Navbar(): JSX.Element {
     const isUserLoggedIn: string = isLoggedIn ? 'Logged In' : 'Logged Out';
     console.log('Is user logged in? ', isUserLoggedIn);
 
-    const handleSignOut = async () => {
-        await signOut(auth);
-        return fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include', // For cookies
-        })
-            .then((res) => {
-                if (res.status === 200) {
-                    /*DEBUG*/ console.log('[Navbar] Redirecting to { /login } ');
-                    setIsLoggedIn(false);
-                    router.push('/login');
-                }
-            })
-            .catch((er) => {
-                console.log('\n<!>Error in fetch /api/logout<!>\n', er);
-            });
-    };
-
-    const LoginButton = () => {
-        if (isLoggedIn) {
-            return (
-                <Link href='/login' legacyBehavior passHref>
-                    <Button className={navigationMenuTriggerStyle()} onClick={handleSignOut}>
-                        Logout
-                    </Button>
-                </Link>
-            );
-        } else {
-            return (
-                <Link href='/login' legacyBehavior passHref>
-                    <Button className={navigationMenuTriggerStyle()}>Login</Button>
-                </Link>
-            );
-        }
-    };
 
     return (
         <div className='flex flex-row items-center  w-full h-12 border-b border-b-zinc-600'>
-            <div className='flex justify-start w-[20%] h-full px-6'>
-                <NavbarNotifications />
+            <div className='flex justify-center w-[20%] h-full'>
+                <CurrentPath />
             </div>
+
             <div className='flex justify-center flex-grow h-full w-[60%]'>
                 {isLoggedIn ? (
                     <NavigationMenu className='justify-center'>
@@ -274,13 +239,16 @@ export default function Navbar(): JSX.Element {
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
 
+                            {/* <NavigationMenuItem>
+                                <NavbarNotifications />
+                            </NavigationMenuItem> */}
+
                         </NavigationMenuList>
                     </NavigationMenu>
                 ) : null}
             </div>
-            <div className='flex justify-end items-center h-full w-[20%] '>
-                {(isLoggedIn ? <ClearLocalData className={navigationMenuTriggerStyle()}/> : null)}
-                {(isLoggedIn ? <LoginButton /> : null)}
+            <div className='flex justify-end items-center h-full w-[20%] px-6'>
+                <SettingsButton loggedIn={isLoggedIn} />
             </div>
         </div>
     );

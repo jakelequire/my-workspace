@@ -2,6 +2,7 @@
 import * as admin from 'firebase-admin';
 import { cookies } from 'next/headers';
 import { InitApp } from '@/lib/firebase-admin-config';
+import { NextResponse } from 'next/server';
 import { DebugLogger } from '@/lib/logger/debuglogger';
 
 const logger = new DebugLogger();
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
             httpOnly: true,
         })
         
-        return new Response(JSON.stringify({ message: 'Token verified' }));
+        return NextResponse.redirect(new URL('/').href);
     } catch (error) {
         /*DEBUG*/ console.log("\n[POST /api/login] error: ", error);
         return new Response(JSON.stringify({ message: 'Token verification failed', error: error }));
