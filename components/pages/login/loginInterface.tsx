@@ -38,6 +38,7 @@ export default function LoginInterface(): JSX.Element {
 
             const signInResult = await signInWithEmailAndPassword(auth, email, password)
                 .then((res) => {
+                    console.log('\n[signInWithEmailAndPassword] res: ', res);
                     return res;
                 })
                 .catch((err: Error) => {
@@ -47,10 +48,10 @@ export default function LoginInterface(): JSX.Element {
                 });
 
             const idToken = await signInResult.user.getIdToken();
-            if (idToken) {
+            if (!idToken) {
                 setError(true);
-                setErrorMessage('No id token');
-                throw new Error('No id token');
+                setErrorMessage('No ID token');
+                throw new Error('No ID token');
             }
 
             const signIn = loginService.handleSignIn(idToken);
@@ -58,7 +59,7 @@ export default function LoginInterface(): JSX.Element {
                 setError(true);
                 // Send server that an error occurred and to clean up the session
                 loginService.signInError();
-                throw new Error('Error in signin.');
+                throw new Error('<!> Error in signin.');
             } else {
                 setIsLoggedIn(true);
                 router.push('/dashboard');
