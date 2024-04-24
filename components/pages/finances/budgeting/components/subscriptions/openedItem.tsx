@@ -4,11 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { useState } from 'react';
 
-
+type Variant = "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
+type HoverId = 'save' | 'delete' | null;
 
 export default function OpenedItem(): JSX.Element {
+    const [hoverId, setHoverId] = useState<HoverId>(null);
 
+
+    const handleHover = (id: HoverId) => {
+        setHoverId(id);
+    }
+
+    const setSaveVariant = hoverId === 'save' ? 'solid' : 'outline';
+    const setDeleteVariant = hoverId === 'delete' ? 'border-2' : 'bg-transparent border-2 border-red-800';
 
     return (
         <div className='flex flex-col w-full h-full border-2 rounded-lg py-6 px-6 gap-6'>
@@ -62,11 +72,19 @@ export default function OpenedItem(): JSX.Element {
                     <Input placeholder='https://www.facebook.com' />
                 </div>
 
-                <div className='flex flex-row w-full gap-2 mt-6'>
-                    <Button className='w-full' variant={'secondary'}>
+                <div className='flex flex-row w-full gap-2 mt-6 transition-all'>
+                    <Button
+                        onMouseEnter={() => handleHover('save')}
+                        onMouseLeave={() => handleHover(null)}
+                        className='w-full'
+                        variant={'outline'}>
                         Save Changes
                     </Button>
-                    <Button className='w-full' variant={'destructive'}>
+                    <Button 
+                        onMouseEnter={() => handleHover('delete')}
+                        onMouseLeave={() => handleHover(null)}
+                        className={`w-full  ${setDeleteVariant}`}
+                        variant={'destructive'}>
                         Delete Subscription
                     </Button>
                 </div>
