@@ -248,7 +248,7 @@ export default function Navbar(): JSX.Element {
                     </NavigationMenu>
                 ) : null}
             </div>
-            <div className='flex justify-end items-center h-full w-[20%] px-6'>
+            <div className='flex scale-90 justify-end items-center h-full w-[20%] px-6'>
                 <NotificationsButton />
                 <SettingsButton loggedIn={isLoggedIn} />
             </div>
