@@ -18,6 +18,7 @@ import { firebase_app } from '@/lib/firebase-config';
 import { useRouter } from 'next/navigation';
 import ClearLocalData from './items/clearLocalData'
 import NavbarNotifications from '../notification_center/components/navbarNotifications';
+import NotificationsButton from './items/notificationsButton';
 import SettingsButton from './items/settingsButton';
 import CurrentPath from './items/currentPath';
 
@@ -248,6 +249,7 @@ export default function Navbar(): JSX.Element {
                 ) : null}
             </div>
             <div className='flex justify-end items-center h-full w-[20%] px-6'>
+                <NotificationsButton />
                 <SettingsButton loggedIn={isLoggedIn} />
             </div>
         </div>
