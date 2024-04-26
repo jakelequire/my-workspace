@@ -1,4 +1,9 @@
 import { cookies } from 'next/headers';
+import { DebugLogger } from '@/lib/logger/debuglogger'
+import { NextResponse } from 'next/server';
+
+const logger = new DebugLogger();
+
 
 interface ResponseObj {
     status: number;
@@ -33,3 +38,43 @@ export async function GET(request: Request) {
         );
     }
 }
+
+
+export async function POST(request: Request) {
+    logger.endpointHit('[/api/auth/cookies]', 'POST');
+
+    if (!request.body) {
+        return NextResponse.json({ message: 'No body provided' });
+    }
+
+    const userId = cookies().get('userId');
+    const session = cookies().get('session');
+
+    //
+    // Delete the current userId cookie.
+    //
+    if(userId) {
+        console.log("\n[POST /api/cookies] userId cookie deleted\n");
+        cookies().delete('userId');
+    } else {
+        console.log("\n[POST /api/cookies] userId cookie not found\n");
+        return NextResponse.redirect(new URL('/login').href);
+    }
+
+    //
+    // Delete the current session cookie.
+    //
+    if(session) {
+        console.log("\n[POST /api/logout] session cookie found\n")
+        cookies().delete('session');
+    } else {
+        console.log("\n[POST /api/logout] session cookie not found\n")
+        return NextResponse.redirect(new URL('/login').href);
+    }
+
+
+
+}
+
+
+

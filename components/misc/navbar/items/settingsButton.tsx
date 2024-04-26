@@ -18,6 +18,9 @@ import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
 import { firebase_app } from '@/lib/firebase-config';
 import { getAuth, signOut } from 'firebase/auth';
+import ButtonFn from './buttonFunctions'
+
+
 
 const auth = getAuth(firebase_app);
 
@@ -35,6 +38,7 @@ export default function SettingsButton({ ...props }: Props): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
 
     const router = useRouter();
+    const buttonFn = new ButtonFn();
     const { loggedIn } = props;
 
     useEffect(() => {
@@ -74,12 +78,12 @@ export default function SettingsButton({ ...props }: Props): JSX.Element {
         {
             text: 'Clear Local DB',
             Icon: DatabaseBackup,
-            onClick: () => {},
+            onClick: buttonFn.clearLocalDb(),
         },
         {
             text: 'Clear Cache',
             Icon: Eraser,
-            onClick: () => {},
+            onClick: buttonFn.clearCache(),
         },
         {
             text: 'Logout',
@@ -97,7 +101,7 @@ export default function SettingsButton({ ...props }: Props): JSX.Element {
         {
             text: 'Clear Cache',
             Icon: Eraser,
-            onClick: () => {},
+            onClick: buttonFn.clearCache(),
         },
     ]
 

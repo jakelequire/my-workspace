@@ -240,10 +240,6 @@ export default function Navbar(): JSX.Element {
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
 
-                            {/* <NavigationMenuItem>
-                                <NavbarNotifications />
-                            </NavigationMenuItem> */}
-
                         </NavigationMenuList>
                     </NavigationMenu>
                 ) : null}
