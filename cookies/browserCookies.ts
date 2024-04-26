@@ -40,41 +40,57 @@ export default class BrowserCookieService {
     /* ------------------------------------------------ */
     /* ############ User ID Cookie Methods ############ */
     /* ------------------------------------------------ */
-    public async setUserId(userId: string) {
-
-
+    public async setUserId(userId: string): Promise<void>  {
+        cookies().set('userId', userId, {
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/',
+            sameSite: 'lax',
+            secure: true,
+            httpOnly: true,
+        })
     }
 
 
-    public async deleteUserId(userId: string) {
-
-
+    public async deleteUserId(userId: string): Promise<void>  {
+        const userId = cookies().get('userId');
+        if(userId) {
+            cookies().delete('userId');
+        } else {
+            console.log("<BrowserCookies> [deleteUserId] Session Not Found:\n")
+        };
     }
 
 
     public readonly viewUserId() {
-
-
+        // TODO
     }
 
     /* ------------------------------------------------ */
     /* ############ Session Cookie Methods ############ */
     /* ------------------------------------------------ */
-    public async setSession(session: any) {
-
-
+    public async setSession(session: any): Promise<void>  {
+        cookies().set('session', session, {
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/',
+            sameSite: 'lax',
+            secure: true,
+            httpOnly: true,
+        });
     }
 
 
-    public async deleteSession(session: any) {
-
-
+    public async deleteSession(session: any): Promise<void> {
+        const session = cookies().get('session');
+        if(session) {
+            cookies().delete('session');
+        } else {
+            console.log("<BrowserCookies> [deleteSession] Session Not Found:\n")
+        };
     }
 
 
     public readonly viewSession() {
-
-
+        // TODO
     }
 
 

@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     logger.endpointHit('\n[/api/login]', 'POST');
 
     const authorization = request.headers.get('Authorization');
+    // Note: Need this type information for BrowserCookies class *important*
     const token = authorization?.split('Bearer ')[1];
 
     /*DEBUG*/ console.log("\n[POST /api/login] token: ", token);
@@ -38,6 +39,8 @@ export async function POST(request: Request) {
             new Error('No token provided');
             return new Response(JSON.stringify({ message: 'No token provided' }));
         }
+
+        // Note: Need this type information for BrowserCookies class *important*
         const decodedToken = await admin.auth().verifyIdToken(token)
 
         /*DEBUG*/ console.log("\n[POST /api/login] decodedToken: ", decodedToken);
@@ -45,6 +48,8 @@ export async function POST(request: Request) {
         checkUserIdCookie();
         checkSessionCookie();
 
+
+        // decodedToken.uid is what will be being passed to the new Browser Cookies class.
         cookies().set('userId', decodedToken.uid, {
             maxAge: 60 * 60 * 24 * 7, // 1 week
             path: '/',
