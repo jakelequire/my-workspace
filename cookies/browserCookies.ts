@@ -35,6 +35,12 @@ export default class BrowserCookieService {
 
     constructor() {};
 
+    /* ------------------------------------------------ */
+    /* ############## Cookie Validation ############### */
+    /* ------------------------------------------------ */
+
+    private async foo() {};
+
 
 
     /* ------------------------------------------------ */
@@ -51,7 +57,7 @@ export default class BrowserCookieService {
     }
 
 
-    public async deleteUserId(userId: string): Promise<void>  {
+    public async deleteUserId(): Promise<void>  {
         const userId = cookies().get('userId');
         if(userId) {
             cookies().delete('userId');
@@ -79,7 +85,7 @@ export default class BrowserCookieService {
     }
 
 
-    public async deleteSession(session: any): Promise<void> {
+    public async deleteSession(): Promise<void> {
         const session = cookies().get('session');
         if(session) {
             cookies().delete('session');

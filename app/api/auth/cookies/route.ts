@@ -1,8 +1,10 @@
 import { cookies } from 'next/headers';
 import { DebugLogger } from '@/lib/logger/debuglogger'
+import BrowserCookieService from '@/cookies/browserCookies';
 import { NextResponse } from 'next/server';
 
 const logger = new DebugLogger();
+const browserCookies = new BrowserCookieService();
 
 
 interface ResponseObj {
@@ -11,6 +13,13 @@ interface ResponseObj {
     value: string;
 }
 
+
+/* ---------------------------------------- /
+ * ######################################## /
+ *          GET /api/auth/cookies           /
+ * ######################################## /
+ * ---------------------------------------- /
+*/
 export async function GET(request: Request) {
     const cookie = cookies().get('session');
     if (cookie) {
@@ -40,6 +49,13 @@ export async function GET(request: Request) {
 }
 
 
+
+/* ---------------------------------------- /
+ * ######################################## /
+ *         POST /api/auth/cookies           /
+ * ######################################## /
+ * ---------------------------------------- /
+*/
 export async function POST(request: Request) {
     logger.endpointHit('[/api/auth/cookies]', 'POST');
 
@@ -55,7 +71,7 @@ export async function POST(request: Request) {
     //
     if(userId) {
         console.log("\n[POST /api/cookies] userId cookie deleted\n");
-        cookies().delete('userId');
+        browserCookies.deleteUserId();
     } else {
         console.log("\n[POST /api/cookies] userId cookie not found\n");
         return NextResponse.redirect(new URL('/login').href);
@@ -66,7 +82,7 @@ export async function POST(request: Request) {
     //
     if(session) {
         console.log("\n[POST /api/logout] session cookie found\n")
-        cookies().delete('session');
+        browserCookies.deleteSession();
     } else {
         console.log("\n[POST /api/logout] session cookie not found\n")
         return NextResponse.redirect(new URL('/login').href);
