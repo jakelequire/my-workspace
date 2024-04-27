@@ -44,6 +44,28 @@ export default class BrowserCookieService {
 
 
     /* ------------------------------------------------ */
+    /* ###(DRAFT)#### User ID Cookie Methods ########## */
+    /* ------------------------------------------------ */
+
+    
+    public userId() {
+        // Note: Will these work as methods to make grouping of the methods easier to work with / add more in the future
+        const setUserId = (): Promise<void> => {
+
+        }
+
+        const deleteUserId = (): Promise<void> => {
+
+        }
+
+        const viewUserId = '';
+
+    }
+
+
+
+
+    /* ------------------------------------------------ */
     /* ############ User ID Cookie Methods ############ */
     /* ------------------------------------------------ */
     public async setUserId(userId: string): Promise<void>  {
