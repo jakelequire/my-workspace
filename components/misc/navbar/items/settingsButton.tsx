@@ -12,6 +12,7 @@ import {
     Eraser,
     UserRound,
     DatabaseBackup,
+    Cookie,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -28,6 +29,7 @@ interface ReusableLinkProps {
     onClick: () => void;
     text: string;
     Icon: LucideIcon;
+    children?: React.ReactNode;
 }
 
 type Props = {
@@ -78,12 +80,17 @@ export default function SettingsButton({ ...props }: Props): JSX.Element {
         {
             text: 'Clear Local DB',
             Icon: DatabaseBackup,
-            onClick: buttonFn.clearLocalDb(),
+            onClick: buttonFn.clearLocalDb,
         },
         {
             text: 'Clear Cache',
             Icon: Eraser,
-            onClick: buttonFn.clearCache(),
+            onClick: buttonFn.clearCache,
+        },
+        {
+            text: 'Clear Cookies',
+            Icon: Cookie,
+            onClick: buttonFn.clearCookies,
         },
         {
             text: 'Logout',
@@ -101,7 +108,7 @@ export default function SettingsButton({ ...props }: Props): JSX.Element {
         {
             text: 'Clear Cache',
             Icon: Eraser,
-            onClick: buttonFn.clearCache(),
+            onClick: buttonFn.clearCache,
         },
     ]
 

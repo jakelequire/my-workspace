@@ -1,26 +1,22 @@
 import { cookies } from 'next/headers';
-import { DebugLogger } from '@/lib/logger/debuglogger'
-import BrowserCookieService from '@/cookies/browserCookies';
+import { DebugLogger } from '@/lib/logger/debuglogger';
 import { NextResponse } from 'next/server';
 
 const logger = new DebugLogger();
-const browserCookies = new BrowserCookieService();
-
-
-interface ResponseObj {
-    status: number;
-    message: string;
-    value: string;
-}
-
 
 /* ---------------------------------------- /
  * ######################################## /
  *          GET /api/auth/cookies           /
  * ######################################## /
  * ---------------------------------------- /
-*/
+ */
 export async function GET(request: Request) {
+    if (request.mode !== 'same-origin') {
+        return new Response(JSON.stringify({ message: 'Invalid request, Same Origin Policy' }), {
+            status: 400,
+        });
+    }
+
     const cookie = cookies().get('session');
     if (cookie) {
         return new Response(
@@ -48,49 +44,69 @@ export async function GET(request: Request) {
     }
 }
 
-
-
+//
+// Note: This route is to manage the cookies for the user.
+// type CookieActions = 'clear_cookies' | 'clear_cache' | 'clear_local_db';
+//
 /* ---------------------------------------- /
  * ######################################## /
  *         POST /api/auth/cookies           /
  * ######################################## /
  * ---------------------------------------- /
-*/
+ */
 export async function POST(request: Request) {
-    logger.endpointHit('[/api/auth/cookies]', 'POST');
+    /**/ logger.endpointHit('[/api/auth/cookies]', 'POST');
 
     if (!request.body) {
         return NextResponse.json({ message: 'No body provided' });
     }
 
-    const userId = cookies().get('userId');
-    const session = cookies().get('session');
-
-    //
-    // Delete the current userId cookie.
-    //
-    if(userId) {
-        console.log("\n[POST /api/cookies] userId cookie deleted\n");
-        browserCookies.deleteUserId();
-    } else {
-        console.log("\n[POST /api/cookies] userId cookie not found\n");
-        return NextResponse.redirect(new URL('/login').href);
+    if (request.credentials !== 'same-origin') {
+        return new Response(JSON.stringify({ message: 'Invalid request, Same Origin Policy' }), {
+            status: 400,
+        });
     }
 
-    //
-    // Delete the current session cookie.
-    //
-    if(session) {
-        console.log("\n[POST /api/logout] session cookie found\n")
-        browserCookies.deleteSession();
-    } else {
-        console.log("\n[POST /api/logout] session cookie not found\n")
-        return NextResponse.redirect(new URL('/login').href);
+    try {
+        const session = cookies().get('session');
+        if(session) {
+            console.log("\n[<POST> /api/auth/cookies] session cookie deleted.\n")
+            cookies().delete('session');
+        } else {
+            console.log("\n[<POST> /api/auth/cookies] session cookie not found.\n")
+            return NextResponse.redirect(new URL('/login').href);
+        }
+
+        const userId = cookies().get('userId');
+        if(userId) {
+            console.log("\n[POST /api/logout] userId cookie deleted\n")
+            cookies().delete('userId');
+        } else {
+            console.log("\n[POST /api/logout] userId cookie not found\n")
+            return NextResponse.redirect(new URL('/login').href);
+        }
+
+        return new Response(
+            JSON.stringify({
+                status: 200,
+                message: 'POST request successful',
+            }),
+            {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+    } catch (error) {
+        console.log('ERROR: {/api/auth/cookies} POST request failed.\n', error);
+
+        return new Response(
+            JSON.stringify({
+                status: 400,
+                message: 'POST request failed',
+            }),
+            { status: 400 }
+        );
     }
-
-
-
 }
-
-
-

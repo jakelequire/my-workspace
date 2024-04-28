@@ -1,10 +1,8 @@
-import { cookies } from 'next/headers';
-
 /*
 Notes:
     - Not sure where to implement / how, but making the class below typesafe.
-      Having an interface for each cookie (`userId`, `session`, etc), but
-      flattening out the methods into one working interface being `BrowserCookies`.
+    Having an interface for each cookie (`userId`, `session`, etc), but
+    flattening out the methods into one working interface being `BrowserCookies`.
 */
 
 // Maybe?
@@ -12,13 +10,13 @@ Notes:
 type UserIdCookie = {
     setUserId: (userId: string) => void;
     deleteUserId: (userId: string) => void;
-    viewUserId: () => readonly string;
+    viewUserId: () => string;
 };
 
 type SessionCookie = {
     setSession: (userId: string) => void;
     deleteSession: (userId: string) => void;
-    viewSession: () => readonly string;
+    viewSession: () => string;
 };
 
 interface BrowserCookies {
@@ -28,102 +26,105 @@ interface BrowserCookies {
 
 // TODO:
 // This should be the interface to satisfy the `BrowserCookieService` class.
-interface CookieService {}; 
+interface CookieService {}
 
+type CookieOptions = {
+    maxAge?: number;
+    path?: string;
+    httpOnly?: boolean;
+    secure?: boolean;
+    sameSite?: 'strict' | 'lax' | 'none';
+};
+
+interface Cookie {
+    name: string;
+    value: string;
+    path: string;
+}
 
 export default class BrowserCookieService {
+    private headers: Headers;
 
-    constructor() {};
+    constructor(headers: Headers) {
+        this.headers = headers;
+    }
+
+    getCookie(name: string): string | undefined {
+        const cookies = this.headers
+            .get('cookie')
+            ?.split(';')
+            .reduce((acc, cookie) => {
+                const [key, value] = cookie.split('=').map((c) => c.trim());
+                acc[key] = decodeURIComponent(value);
+                return acc;
+            }, {} as Record<string, string>);
+        return cookies?.[name];
+    }
+
+    setCookie(name: string, value: string, options: CookieOptions): void {
+        const opts: string[] = [
+            `Path=${options.path ?? '/'}`,
+            `Max-Age=${options.maxAge ?? 3600}`, // Default to 1 hour
+            options.httpOnly ? 'HttpOnly' : '',
+            options.secure ? 'Secure' : '',
+            `SameSite=${options.sameSite ?? 'lax'}`,
+        ];
+        this.headers.append(
+            'Set-Cookie',
+            `${name}=${encodeURIComponent(value)}; ${opts.join('; ')}`
+        );
+        console.log("[DEBUG] [BrowserCookieService] Successfully set cookie.");
+    }
+
+    deleteCookie(name: string): void {
+        this.setCookie(name, '', { maxAge: -1 });
+    }
 
     /* ------------------------------------------------ */
     /* ############## Cookie Validation ############### */
     /* ------------------------------------------------ */
-
-    private async foo() {};
-
-
-
-    /* ------------------------------------------------ */
-    /* ###(DRAFT)#### User ID Cookie Methods ########## */
-    /* ------------------------------------------------ */
-
-    
-    public userId() {
-        // Note: Will these work as methods to make grouping of the methods easier to work with / add more in the future
-        const setUserId = (): Promise<void> => {
-
-        }
-
-        const deleteUserId = (): Promise<void> => {
-
-        }
-
-        const viewUserId = '';
-
-    }
-
-
-
+    private async foo() {}
 
     /* ------------------------------------------------ */
     /* ############ User ID Cookie Methods ############ */
     /* ------------------------------------------------ */
-    public async setUserId(userId: string): Promise<void>  {
-        cookies().set('userId', userId, {
-            maxAge: 60 * 60 * 24 * 7, // 1 week
-            path: '/',
-            sameSite: 'lax',
-            secure: true,
-            httpOnly: true,
-        })
-    }
-
-
-    public async deleteUserId(): Promise<void>  {
-        const userId = cookies().get('userId');
-        if(userId) {
-            cookies().delete('userId');
-        } else {
-            console.log("<BrowserCookies> [deleteUserId] Session Not Found:\n")
+    public userId() {
+        // Note: Will these work as methods to make grouping of the methods easier to work with / add more in the future
+        const setUserId = (): Promise<void> => {
+            return Promise.resolve();
         };
-    }
 
+        const deleteUserId = (): Promise<void> => {
+            return Promise.resolve();
+        };
 
-    public readonly viewUserId() {
-        // TODO
+        const viewUserId = '';
+
+        return {
+            setUserId,
+            deleteUserId,
+            viewUserId,
+        };
     }
 
     /* ------------------------------------------------ */
     /* ############ Session Cookie Methods ############ */
     /* ------------------------------------------------ */
-    public async setSession(session: any): Promise<void>  {
-        cookies().set('session', session, {
-            maxAge: 60 * 60 * 24 * 7, // 1 week
-            path: '/',
-            sameSite: 'lax',
-            secure: true,
-            httpOnly: true,
-        });
-    }
+    public session() {
+        const setSession = (): Promise<void> => {
+            return Promise.resolve();
+        };
 
+        const deleteSession = (): Promise<void> => {
+            return Promise.resolve();
+        };
 
-    public async deleteSession(): Promise<void> {
-        const session = cookies().get('session');
-        if(session) {
-            cookies().delete('session');
-        } else {
-            console.log("<BrowserCookies> [deleteSession] Session Not Found:\n")
+        const viewSession = '';
+
+        return {
+            setSession,
+            deleteSession,
+            viewSession,
         };
     }
-
-
-    public readonly viewSession() {
-        // TODO
-    }
-
-
-
 }
-
-
-
