@@ -1,5 +1,5 @@
 import CodeDocsInterface from '@/components/pages/docs/code_docs/codeDocsInterface';
-import styles from '../page.module.css';
+import styles from '../../page.module.css';
 
 import { Metadata } from 'next';
 
