@@ -116,6 +116,12 @@ const docs: {  title: string; href: string; description: string, active: boolean
         href: '/docs',
         description: 'Programming documentation notes and resources.',
         active: false,
+    },
+    {
+        title: 'Code Documentation',
+        href: '/codedocs',
+        description: 'Programming documentation notes and resources.',
+        active: false,
     }
 ]
 
