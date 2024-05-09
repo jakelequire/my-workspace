@@ -130,20 +130,24 @@ export class GitHubService {
             body: JSON.stringify(body),
         });
 
+        if(!res.ok) {
+            throw new Error("")
+        }
         const response: ExternalApi.GitHub.CommitsData = await res.json();
 
-        const clientResponse = {
-            totalContributions:
-                response.data.user.contributionsCollection.contributionCalendar.totalContributions,
-            weeks: response.data.user.contributionsCollection.contributionCalendar.weeks,
-        };
+        // const clientResponse = {
+        //     totalContributions:
+        //         response.data.user.contributionsCollection.contributionCalendar.totalContributions,
+        //     weeks: response.data.user.contributionsCollection.contributionCalendar.weeks,
+        // };
+        // 
+        // const commitHistory = clientResponse.weeks.flatMap((week) => {
+        //     return week.contributionDays.map((day) => ({
+        //         day: day.date,
+        //         value: day.contributionCount,
+        //     }));
+        // });
 
-        const commitHistory = clientResponse.weeks.flatMap((week) => {
-            return week.contributionDays.map((day) => ({
-                day: day.date,
-                value: day.contributionCount,
-            }));
-        });
         return response;
     }
 
