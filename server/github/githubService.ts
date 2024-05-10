@@ -77,7 +77,7 @@ query ($userName: String!, $from: DateTime!, $to: DateTime!) {
 `;
 
 
-const nullData: ExternalApi.GitHub.CommitsData = {
+const nullCommitData: ExternalApi.GitHub.CommitsData = {
     data: {
         user: {
             contributionsCollection: {
@@ -97,6 +97,15 @@ const nullData: ExternalApi.GitHub.CommitsData = {
         }
     }
 };
+
+const nullContributionData: GitHubApi.ContributionCount = {
+    total: -1,
+    year: {
+        '2022': -1,
+        '2023': -1,
+        '2024': -1,
+    },
+}
 
 export class GitHubService {
     octokit = octokit;
@@ -153,7 +162,7 @@ export class GitHubService {
         });
 
         if(!res.ok) {
-            return nullData;
+            return nullCommitData;
         }
         const response: ExternalApi.GitHub.CommitsData = await res.json();
 
@@ -208,7 +217,7 @@ export class GitHubService {
                 });
 
                 if(!res.ok) {
-                    return nullData;
+                    return nullContributionData;
                 }
 
                 const response: ExternalApi.GitHub.CommitsData = await res.json();
