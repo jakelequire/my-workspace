@@ -7,11 +7,12 @@ export async function GET(request: Request) {
     logger.endpointHit('/api/services/github/commits', 'GET')
 
     const githubService = new GitHubService();
-    const data = await githubService.totalContributions();
-
-    return new Response(JSON.stringify(data), {
-        headers: {
-            'content-type': 'application/json',
-        },
+    return await githubService.totalContributions()
+    .then((contributions) => {
+        return new Response(JSON.stringify(contributions))
+    })
+    .catch((error) => {
+        console.log("[/api/services/github/commits] Error is listing GitHub Contributions.", error)
+        return new Response(JSON.stringify('<!> Error fetching GitHub Contributions'))
     });
 }

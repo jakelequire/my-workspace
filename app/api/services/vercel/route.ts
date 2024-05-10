@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     })
     .catch((error) => {
         console.log("[/api/services/vercel] Error is listing vercel deployments.", error)
-        return new Response(JSON.stringify('Error fetching deployment statuses'))
+        return new Response(JSON.stringify('<!> Error fetching deployment statuses'))
     });
 }
 
