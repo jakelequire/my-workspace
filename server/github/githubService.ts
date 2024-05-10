@@ -76,6 +76,28 @@ query ($userName: String!, $from: DateTime!, $to: DateTime!) {
 }
 `;
 
+
+const nullData: ExternalApi.GitHub.CommitsData = {
+    data: {
+        user: {
+            contributionsCollection: {
+                contributionCalendar: {
+                    totalContributions: 'NO DATA FOUND',
+                    weeks: [{
+                        contributionDays: [{
+                            color: 'NO DATA FOUND',
+                            contributionCount: 'NO DATA FOUND',
+                            date: 'NO DATA FOUND',
+                            weekday: 'NO DATA FOUND',
+                        }],
+                        firstDay: 'NO DATA FOUND',
+                    }]
+                }
+            }
+        }
+    }
+};
+
 export class GitHubService {
     octokit = octokit;
     repoitories: GitHubApi.RepoData[];
@@ -131,7 +153,7 @@ export class GitHubService {
         });
 
         if(!res.ok) {
-            throw new Error("<viewCommitsData> !res.ok")
+            return nullData;
         }
         const response: ExternalApi.GitHub.CommitsData = await res.json();
 
@@ -184,6 +206,10 @@ export class GitHubService {
                     },
                     body: JSON.stringify(body),
                 });
+
+                if(!res.ok) {
+                    return nullData;
+                }
 
                 const response: ExternalApi.GitHub.CommitsData = await res.json();
                 const contributionNum =
