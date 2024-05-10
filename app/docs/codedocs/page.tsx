@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     title: 'Documentation | Jakes Workspace',
 };
 
-export default function Docs() {
+export default function Codedocs() {
     return (
         <main className={styles.main}>
             <CodeDocsInterface />
