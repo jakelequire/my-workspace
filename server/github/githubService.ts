@@ -88,7 +88,7 @@ const nullData: ExternalApi.GitHub.CommitsData = {
                             color: 'NO DATA FOUND',
                             contributionCount: -1,
                             date: 'NO DATA FOUND',
-                            weekday: 'NO DATA FOUND',
+                            weekday: -1,
                         }],
                         firstDay: 'NO DATA FOUND',
                     }]
