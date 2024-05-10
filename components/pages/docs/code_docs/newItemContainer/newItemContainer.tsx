@@ -2,15 +2,14 @@
 
 
 
-export default function TopNavbar(): JSX.Element {
 
+export default function NewItemContainer(): JSX.Element {
 
 
     return (
         <div className='flex h-full w-full border'>
-            
+        
         </div>
     )
 }
-
 

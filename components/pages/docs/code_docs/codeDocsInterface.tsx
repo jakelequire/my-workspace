@@ -2,7 +2,11 @@
 
 import TopNavbar from './topNavbar/topNavbar';
 import Sidebar from './sidebar/sidebar';
+import NewItemContainer from './newItemContainer/newItemContainer';
 import PrimaryContent from './primaryContent/primaryContent';
+
+
+
 
 export default function CodeDocsInterface(): JSX. Element {
 
@@ -12,7 +16,7 @@ export default function CodeDocsInterface(): JSX. Element {
         <div className='flex flex-col h-full w-full'>
 
             <div className='flex h-[10%] w-full'>
-                <div className='flex w-[20%] h-full border'>
+                <div className='flex w-[20%] h-full'>
                     
                 </div>
                 <div className='flex w-[80%] h-full'>
