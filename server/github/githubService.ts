@@ -82,11 +82,11 @@ const nullData: ExternalApi.GitHub.CommitsData = {
         user: {
             contributionsCollection: {
                 contributionCalendar: {
-                    totalContributions: 'NO DATA FOUND',
+                    totalContributions: -1,
                     weeks: [{
                         contributionDays: [{
                             color: 'NO DATA FOUND',
-                            contributionCount: 'NO DATA FOUND',
+                            contributionCount: -1,
                             date: 'NO DATA FOUND',
                             weekday: 'NO DATA FOUND',
                         }],
