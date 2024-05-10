@@ -17,7 +17,7 @@ export default function CodeDocsInterface(): JSX. Element {
 
             <div className='flex h-[10%] w-full'>
                 <div className='flex w-[20%] h-full'>
-                    
+                    <NewItemContainer />
                 </div>
                 <div className='flex w-[80%] h-full'>
                     <TopNavbar />
