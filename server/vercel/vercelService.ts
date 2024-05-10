@@ -6,6 +6,24 @@ const timestampToDate = (timestamp: number) => {
     return format(new Date(timestamp), 'MM/dd/yy hh:mm a');
 };
 
+
+const nullDeploymentData: VercelApi.DeploymentResponse = {
+    name: 'NO DATA FOUND',
+    url: 'NO DATA FOUND',
+    created: 'NO DATA FOUND',
+    state: 'NO DATA FOUND',
+    inspectorUrl: 'NO DATA FOUND',
+    meta : {
+        githubCommitMessage: 'NO DATA FOUND',
+        githubRepo: 'NO DATA FOUND',
+        githubRepoVisibility: 'NO DATA FOUND',
+    },
+    target: 'NO DATA FOUND',
+    created_at: 'NO DATA FOUND',
+    building_at: 'NO DATA FOUND',
+    ready_at: 'NO DATA FOUND',
+}
+
 export class VercelService {
     API_TOKEN = process.env.NEXT_PUBLIC_VERCEL_API_TOKEN;
     PROJECT_ID = process.env.NEXT_PUBLIC_VERCEL_PROJECT_ID;
@@ -73,7 +91,7 @@ export class VercelService {
         );
         const data: ExternalApi.Vercel.ListDeploymentResponse = await response.json();
         if (!response.ok) {
-            throw new Error('Error in fetching data.');
+            return [nullDeploymentData];
         }
 
         if (data.deployments[0].aliasError) {
