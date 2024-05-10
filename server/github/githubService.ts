@@ -99,7 +99,7 @@ export class GitHubService {
     /**
      * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
      */
-    async fullCommitHistory() {
+    public async fullCommitHistory() {
         const res = await this.octokit.rest.repos.listCommits({
             owner: 'jakelequire',
             repo: 'my-workspace',
@@ -110,7 +110,7 @@ export class GitHubService {
         return res.data;
     }
 
-    async viewCommitsData() {
+    public async viewCommitsData() {
         const TOKEN = GITHUB_AUTH_TOKEN;
         const query = QUERY;
         const variables = `
@@ -131,9 +131,13 @@ export class GitHubService {
         });
 
         if(!res.ok) {
-            throw new Error("")
+            throw new Error("<viewCommitsData> !res.ok")
         }
         const response: ExternalApi.GitHub.CommitsData = await res.json();
+
+        if(response === undefined) {
+            throw new Error("<viewCommitsData> `response` undefined")
+        }
 
         // const clientResponse = {
         //     totalContributions:
