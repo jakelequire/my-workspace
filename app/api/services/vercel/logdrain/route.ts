@@ -9,5 +9,5 @@ export async function GET(request: Request) {
     //     };
     // });
     // console.log("[GET] /api/services/vercel/logdrain/route.ts", foo)
-    // return new Response(JSON.stringify(foo));
+    return new Response(JSON.stringify("Unimplemented"));
 }
