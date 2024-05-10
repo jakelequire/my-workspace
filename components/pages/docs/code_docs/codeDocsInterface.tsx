@@ -9,13 +9,13 @@ export default function CodeDocsInterface(): JSX. Element {
 
 
     return (
-        <div className='flex flex-col h-full w-full border'>
+        <div className='flex flex-col h-full w-full'>
 
-            <div className='flex h-[10%] w-full border'>
+            <div className='flex h-[10%] w-full'>
                 <TopNavbar />
             </div>
 
-            <div className='flex h-[90%] w-full border'>
+            <div className='flex h-[90%] w-full'>
                 <div className='flex w-[20%] h-full'>
                     <Sidebar />
                 </div>
