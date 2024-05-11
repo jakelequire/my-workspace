@@ -2,14 +2,23 @@
 import React, { useContext, createContext, useState, useEffect, useMemo } from 'react';
 
 
-const DocsContext = createContext<undefined>(undefined);
+
+interface IDocsContext {
+    currentDoc: JSX.Element;
+    setCurrentDoc: (doc: JSX.Element) => void;
+}
+
+const DocsContext = createContext<IDocsContext | undefined>(undefined);
 
 
 function useDocsProvider() {
+    const [currentDoc, setCurrentDoc] = useState<JSX.Element>(<></>);
 
 
-
-    return undefined;
+    return {
+        currentDoc,
+        setCurrentDoc
+    };
 }
 
 export const DocsProvider = ({ children }: { children: React.ReactNode }) => {

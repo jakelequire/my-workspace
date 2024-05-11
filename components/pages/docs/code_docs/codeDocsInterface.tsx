@@ -1,9 +1,10 @@
 'use client';
 
-import TopNavbar from './topNavbar/topNavbar';
-import Sidebar from './sidebar/sidebar';
-import NewItemContainer from './newItemContainer/newItemContainer';
-import PrimaryContent from './primaryContent/primaryContent';
+import DisplayUi from './displayUi';
+import TopNavbar from './containers/topNavbar';
+import Sidebar from './containers/sidebar';
+import NewItemContainer from './containers/newItemContainer';
+import PrimaryContent from './containers/primaryContent';
 
 
 
@@ -30,7 +31,9 @@ export default function CodeDocsInterface(): JSX. Element {
                 </div>
 
                 <div className='flex w-[80%] h-full'>
-                    <PrimaryContent />
+                    <PrimaryContent>
+                        <span className='foo'>test</span>
+                    </PrimaryContent>
                 </div>
             </div>
         </div>
