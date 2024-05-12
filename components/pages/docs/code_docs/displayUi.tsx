@@ -12,7 +12,7 @@ export default function DisplayUi(): JSX.Element {
 
 
     return (
-        <div className='flex h-full w-full border'>
+        <div className='flex flex-col h-full w-full border'>
         
         <div className='flex h-[10%] w-full'>
                 <div className='flex w-[20%] h-full'>
