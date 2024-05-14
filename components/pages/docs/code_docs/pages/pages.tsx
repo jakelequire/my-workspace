@@ -2,8 +2,9 @@ import Homepage from "./homepage/homepage";
 import HomepageMenu from "./homepage/homepageMenu";
 import NewItemPage from "./newItem/newItemPage";
 import NewItemMenu from "./newItem/newItemMenu";
-import References from "./references/references";
-import ReferencesMenu from "./references/referencesMenu";
+import StyledComponents from "./styledComponents/styledComponents";
+import StyledcomponentsMenu from "./styledComponents/styledComponentsMenu";
+
 
 export const pages = {
     homepage: {
@@ -16,12 +17,10 @@ export const pages = {
         page: <NewItemPage />,
         menu: <NewItemMenu />,
     },
-    references: {
-        title: 'References',
-        page: <References />,
-        menu: <ReferencesMenu />,
+    styledComponents: {
+        title: 'Styled Components',
+        page: <StyledComponents />,
+        menu: <StyledcomponentsMenu />,
     },
-}
-
-
+} as const;
 
