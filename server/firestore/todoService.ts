@@ -58,10 +58,12 @@ export class TodoService {
             .collection('items')
             .doc(id)
             .get();
+
         if (doc.exists) {
             return { id: doc.id, ...doc.data() } as Todo.TodoItem;
         } else {
             return undefined;
+
         }
     }
 
